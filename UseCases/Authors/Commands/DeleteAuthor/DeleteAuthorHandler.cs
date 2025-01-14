@@ -1,6 +1,7 @@
 ﻿using Core.Abstractions;
 using UseCases.Abstractions.Messaging;
-using UseCases.Authors.Commands.DeleteAuthor;
+
+namespace UseCases.Authors.Commands.DeleteAuthor;
 
 internal sealed class DeleteAuthorCommandHandler : ICommandHandler<DeleteAuthorCommand, bool>
 {

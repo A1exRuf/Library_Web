@@ -23,7 +23,7 @@ internal sealed class GetBookQueryHandler : IQueryHandler<GetBookByIdQuery, Book
 
         if (book is null)
         {
-            throw new AuthorNotFoundException(request.BookId);
+            throw new BookNotFoundException(request.BookId);
         }
 
         return book;

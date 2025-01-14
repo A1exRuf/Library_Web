@@ -1,12 +1,11 @@
 ﻿using FluentValidation;
 
-namespace UseCases.Authors.Commands.DeleteAuthor
+namespace UseCases.Authors.Commands.DeleteAuthor;
+
+public sealed class DeleteAuthorCommandValidator : AbstractValidator<DeleteAuthorCommand>
 {
-    public sealed class DeleteAuthorCommandValidator : AbstractValidator<DeleteAuthorCommand>
+    public DeleteAuthorCommandValidator()
     {
-        public DeleteAuthorCommandValidator()
-        {
-            RuleFor(x => x.AuthorId).NotEmpty();
-        }
+        RuleFor(x => x.AuthorId).NotEmpty();
     }
 }
