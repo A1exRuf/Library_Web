@@ -1,8 +1,6 @@
-using Infrastructure;
 using Library_Web;
-using Microsoft.EntityFrameworkCore;
 
-namespace WebAPI;
+namespace Library_Web;
 
 public class Program
 {

@@ -1,19 +1,11 @@
-using System;
 using System.Data;
-using System.IO;
 using UseCases.Behaviors;
 using Core.Abstractions;
 using FluentValidation;
 using Infrastructure;
 using Infrastructure.Repositories;
 using MediatR;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
 using Library_Web.Middleware;
 
 namespace Library_Web;

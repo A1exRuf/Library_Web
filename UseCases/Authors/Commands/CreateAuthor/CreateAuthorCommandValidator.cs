@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 
-
 namespace UseCases.Authors.Commands.CreateAuthor;
 
 public sealed class CreateAuthorCommandValidator : AbstractValidator<CreateAuthorCommand>
