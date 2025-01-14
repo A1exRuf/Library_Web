@@ -38,6 +38,8 @@ public class Startup
 
         services.AddScoped<IAuthorRepository, AuthorRepository>();
 
+        services.AddScoped<IBookRepository, BookRepository>();
+
         services.AddScoped<IUnitOfWork>(
             factory => factory.GetRequiredService<ApplicationDbContext>());
 

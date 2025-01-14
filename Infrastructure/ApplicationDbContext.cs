@@ -15,4 +15,6 @@ public sealed class ApplicationDbContext : DbContext, IUnitOfWork
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
     public DbSet<Author> Authors { get; set; }
+
+    public DbSet<Book> Books { get; set; }
 }

@@ -1,6 +1,5 @@
 ﻿using Core.Primitives;
 
-
 namespace Core.Entities;
 
 public sealed class Author : Entity
@@ -20,6 +19,7 @@ public sealed class Author : Entity
         SecondName = secondName;
         DateOfBirth = dateOfBirth;
         Country = country;
-        
     }
+
+    public Author() { }
 }
