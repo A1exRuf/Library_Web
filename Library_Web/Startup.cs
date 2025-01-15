@@ -1,4 +1,5 @@
 using System.Data;
+using System.Text;
 using UseCases.Behaviors;
 using Core.Abstractions;
 using FluentValidation;
@@ -7,8 +8,11 @@ using Infrastructure.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Library_Web.Middleware;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Infrastructure.Services;
+using Infrastructure.Authentication;
+using Microsoft.OpenApi.Models;
 
 namespace Library_Web;
 
@@ -33,7 +37,32 @@ public class Startup
 
         services.AddValidatorsFromAssembly(applicationAssembly);
 
-        services.AddSwaggerGen();
+        services.AddSwaggerGen(options =>
+        {
+            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                In = ParameterLocation.Header,
+                Description = "Please enter token",
+                Name = "Authorization",
+                Type = SecuritySchemeType.Http,
+                BearerFormat = "JWT",
+                Scheme = "bearer"
+            });
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    new string[]{}
+                }
+            });
+        });
 
         services.AddDbContext<ApplicationDbContext>(builder =>
             builder.UseNpgsql(Configuration.GetConnectionString("Application")));
@@ -52,22 +81,32 @@ public class Startup
 
         services.AddScoped<IPasswordHasher, PasswordHasher>();
 
+        services.AddScoped<ITokenService, TokenService>();
+
         services.AddTransient<ExceptionHandlingMiddleware>();
 
-        services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddCookie(option =>
-            {
-                option.LogoutPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
-            });
+        services.Configure<JwtSettings>(Configuration.GetSection("JwtSettings"));
 
-        services.AddAuthorization(opts => {
-            opts.AddPolicy("OnlyForAdmin", policy => {
-                policy.RequireClaim("role", "Admin");
-            });
-            opts.AddPolicy("OnlyForUser", policy =>
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(o =>
+        {
+            var jwtSettings = Configuration.GetSection("JwtSettings").Get<JwtSettings>();
+            o.TokenValidationParameters = new TokenValidationParameters
             {
-                policy.RequireClaim("role", "User");
-            });
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = jwtSettings.Issuer,
+                ValidAudience = jwtSettings.Audience,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key)),
+                ClockSkew = TimeSpan.Zero
+            };
+        });
+
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("OnlyForAdmin", policy => policy.RequireRole("Admin"));
+            options.AddPolicy("OnlyForUser", policy => policy.RequireRole("User"));
         });
     }
 

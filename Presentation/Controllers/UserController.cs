@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using UseCases.Users.Commands.Register;
 using UseCases.Users.Commands.Login;
 using UseCases.Users.Queries.GetUserById;
+using MediatR;
 
 namespace Presentation.Controllers;
 
@@ -21,7 +22,7 @@ public sealed class UserController : ApiController
         return Ok(book);
     }
 
-    [HttpPost]
+    [HttpPost("register")]
     [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Register(
@@ -40,29 +41,14 @@ public sealed class UserController : ApiController
         return CreatedAtAction(nameof(GetUser), new { userId }, userId);
     }
 
-    [HttpPost]
-    [ProducesResponseType(typeof(Guid), StatusCodes.Status200OK)]
+    [HttpPost("login")]
+    [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-    public async Task<IActionResult> Login(
-        [FromBody] LoginRequest request,
-        CancellationToken cancellationToken)
+    public async Task<IActionResult> Login([FromBody] LoginCommand command, CancellationToken cancellationToken)
     {
-        if (!ModelState.IsValid)
-        {
-            return BadRequest(ModelState);
-        }
+        var response = await Sender.Send(command, cancellationToken);
 
-        var command = request.Adapt<LoginCommand>();
-
-        try
-        {
-            var userId = await Sender.Send(command, cancellationToken);
-            return Ok(new { UserId = userId });
-        }
-        catch (UnauthorizedAccessException)
-        {
-            return Unauthorized(new { message = "Invalid email or password." });
-        }
+        return Ok(response);
     }
 }
