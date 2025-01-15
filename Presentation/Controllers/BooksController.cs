@@ -5,6 +5,7 @@ using UseCases.Books.Queries.GetBookById;
 using UseCases.Books.Commands.CreateBook;
 using UseCases.Books.Commands.DeleteBook;
 using UseCases.Books.Commands.UpdateBook;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Presentation.Controllers;
 public sealed class BooksController : ApiController
@@ -22,6 +23,7 @@ public sealed class BooksController : ApiController
     }
 
     [HttpPost]
+    [Authorize(Policy = "OnlyForAdmin")]
     [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
@@ -37,6 +39,7 @@ public sealed class BooksController : ApiController
     }
 
     [HttpDelete]
+    [Authorize(Policy = "OnlyForAdmin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
 
@@ -55,6 +58,7 @@ public sealed class BooksController : ApiController
     }
 
     [HttpPut("{bookId:guid}")]
+    [Authorize(Policy = "OnlyForAdmin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

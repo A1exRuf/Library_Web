@@ -7,6 +7,8 @@ using Infrastructure.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Library_Web.Middleware;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Infrastructure.Services;
 
 namespace Library_Web;
 
@@ -40,13 +42,33 @@ public class Startup
 
         services.AddScoped<IBookRepository, BookRepository>();
 
+        services.AddScoped<IUserRepository, UserRepository>();
+
         services.AddScoped<IUnitOfWork>(
             factory => factory.GetRequiredService<ApplicationDbContext>());
 
         services.AddScoped<IDbConnection>(
             factory => factory.GetRequiredService<ApplicationDbContext>().Database.GetDbConnection());
 
+        services.AddScoped<IPasswordHasher, PasswordHasher>();
+
         services.AddTransient<ExceptionHandlingMiddleware>();
+
+        services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(option =>
+            {
+                option.LogoutPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+            });
+
+        services.AddAuthorization(opts => {
+            opts.AddPolicy("OnlyForAdmin", policy => {
+                policy.RequireClaim("role", "Admin");
+            });
+            opts.AddPolicy("OnlyForUser", policy =>
+            {
+                policy.RequireClaim("role", "User");
+            });
+        });
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -65,6 +87,8 @@ public class Startup
         app.UseHttpsRedirection();
 
         app.UseRouting();
+
+        app.UseAuthentication();
 
         app.UseAuthorization();
 

@@ -5,6 +5,7 @@ using UseCases.Authors.Queries.GetAuthorById;
 using Mapster;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Presentation.Controllers;
 
@@ -23,6 +24,7 @@ public sealed class AuthorsController : ApiController
     }
 
     [HttpPost]
+    [Authorize(Policy = "OnlyForAdmin")]
     [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
@@ -38,6 +40,7 @@ public sealed class AuthorsController : ApiController
     }
 
     [HttpDelete]
+    [Authorize(Policy = "OnlyForAdmin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
 
@@ -56,6 +59,7 @@ public sealed class AuthorsController : ApiController
     }
 
     [HttpPut("{authorId:guid}")]
+    [Authorize(Policy = "OnlyForAdmin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
