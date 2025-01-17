@@ -13,6 +13,13 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Infrastructure.Services;
 using Infrastructure.Authentication;
 using Microsoft.OpenApi.Models;
+using Azure.Storage.Blobs;
+using System;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Azure;
+using Azure.Data.Tables;
+using Azure.Storage.Queues;
+using Azure.Core.Extensions;
 
 namespace Library_Web;
 
@@ -82,6 +89,15 @@ public class Startup
         services.AddScoped<IPasswordHasher, PasswordHasher>();
 
         services.AddScoped<ITokenService, TokenService>();
+
+        services.AddScoped<IBlobService, BlobService>();
+
+        services.AddSingleton(provider =>
+        {
+            var configuration = provider.GetRequiredService<IConfiguration>();
+            string connectionString = configuration.GetConnectionString("BlobStorage");
+            return new BlobServiceClient(connectionString);
+        });
 
         services.AddTransient<ExceptionHandlingMiddleware>();
 

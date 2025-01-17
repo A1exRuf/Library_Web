@@ -6,6 +6,7 @@ using UseCases.Books.Commands.CreateBook;
 using UseCases.Books.Commands.DeleteBook;
 using UseCases.Books.Commands.UpdateBook;
 using Microsoft.AspNetCore.Authorization;
+using UseCases.Books.Commands.AddBookImage;
 
 namespace Presentation.Controllers;
 public sealed class BooksController : ApiController
@@ -80,5 +81,28 @@ public sealed class BooksController : ApiController
         }
 
         return NoContent();
+    }
+
+    [HttpPost("{bookId:guid}/image")]
+    [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> AddBookImage(
+        Guid bookId,
+        IFormFile file,
+        CancellationToken cancellationToken)
+    {
+        if (file.Length == 0)
+        {
+            return BadRequest("The file is empty.");
+        }
+
+        using var stream = file.OpenReadStream();
+
+        var command = new AddBookImageCommand(bookId, stream, file.ContentType);
+
+        var imageId = await Sender.Send(command, cancellationToken);
+
+        return CreatedAtAction(nameof(GetBook), new { bookId }, imageId);
     }
 }

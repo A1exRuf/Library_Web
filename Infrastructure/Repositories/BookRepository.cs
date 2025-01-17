@@ -1,5 +1,6 @@
 ﻿using Core.Abstractions;
 using Core.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
@@ -14,6 +15,11 @@ public sealed class BookRepository : IBookRepository
     public void Delete(Book book)
     {
         _dbContext.Set<Book>().Remove(book);
+    }
+
+    public void Update(Book book)
+    {
+        _dbContext.Set<Book>().Update(book);
     }
 
     public async Task<Book?> GetByIdAsync(Guid bookId, CancellationToken cancellationToken)

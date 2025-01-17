@@ -23,5 +23,7 @@ internal sealed class BookrConfiguration : IEntityTypeConfiguration<Book>
         builder.Property(book => book.AuthorId);
 
         builder.Property(book => book.TakenAt);
+
+        builder.Property(book => book.ImageId);
     }
 }
