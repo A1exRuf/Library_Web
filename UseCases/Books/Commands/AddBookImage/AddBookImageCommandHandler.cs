@@ -31,6 +31,11 @@ internal sealed class AddBookImageCommandHandler : ICommandHandler<AddBookImageC
             throw new BookNotFoundException(request.BookId);
         }
 
+        if (book.ImageId.HasValue)
+        {
+            await _blobService.DeleteAsync(book.ImageId.Value);
+        }
+
         var imageId = await _blobService.UploadAsync(request.ImageStream, request.ContentType, cancellationToken);
 
         book.ImageId = imageId;

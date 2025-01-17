@@ -7,6 +7,7 @@ using UseCases.Books.Commands.DeleteBook;
 using UseCases.Books.Commands.UpdateBook;
 using Microsoft.AspNetCore.Authorization;
 using UseCases.Books.Commands.AddBookImage;
+using UseCases.Books.Queries.GetImageByItsId;
 
 namespace Presentation.Controllers;
 public sealed class BooksController : ApiController
@@ -21,6 +22,18 @@ public sealed class BooksController : ApiController
         var book = await Sender.Send(query, cancellationToken);
 
         return Ok(book);
+    }
+
+    [HttpGet("{imageId:guid}/image")]
+    [ProducesResponseType(typeof(BookResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetBookImage(Guid imageId, CancellationToken cancellationToken)
+    {
+        var query = new GetImageByItsIdQuery(imageId);
+
+        var image = await Sender.Send(query, cancellationToken);
+
+        return File(image.FileResponse.Stream, image.FileResponse.ContentType);
     }
 
     [HttpPost]
