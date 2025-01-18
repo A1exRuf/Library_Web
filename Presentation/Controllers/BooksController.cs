@@ -1,18 +1,20 @@
 ﻿using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using UseCases.Books.Queries.GetBookById;
+using UseCases.Books.Commands.AddBookImage;
 using UseCases.Books.Commands.CreateBook;
 using UseCases.Books.Commands.DeleteBook;
 using UseCases.Books.Commands.UpdateBook;
-using Microsoft.AspNetCore.Authorization;
-using UseCases.Books.Commands.AddBookImage;
+using UseCases.Books.Queries;
+using UseCases.Books.Queries.GetBookById;
+using UseCases.Books.Queries.GetBooks;
 using UseCases.Books.Queries.GetImageByItsId;
 
 namespace Presentation.Controllers;
 public sealed class BooksController : ApiController
 {
-    [HttpGet("{bookId:guid}")]
+    [HttpGet("books/{bookId:guid}")]
     [ProducesResponseType(typeof(BookResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetBook(Guid bookId, CancellationToken cancellationToken)
@@ -22,6 +24,24 @@ public sealed class BooksController : ApiController
         var book = await Sender.Send(query, cancellationToken);
 
         return Ok(book);
+    }
+
+    [HttpGet("books")]
+    [ProducesResponseType(typeof(BookResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetBook(
+        string? searchTerm,
+        string? sortColumn,
+        string? sortOrder,
+        int page,
+        int pageSize,
+        CancellationToken cancellation)
+    {
+        var query = new GetBooksQuery(searchTerm, sortColumn, sortOrder, page, pageSize);
+
+        var books = await Sender.Send(query, cancellation);
+
+        return Ok(books);
     }
 
     [HttpGet("{imageId:guid}/image")]
@@ -37,7 +57,7 @@ public sealed class BooksController : ApiController
     }
 
     [HttpPost]
-    [Authorize(Policy = "OnlyForAdmin")]
+    //[Authorize(Policy = "OnlyForAdmin")]
     [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
 

@@ -1,21 +1,39 @@
 ﻿using Mapster;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using UseCases.Users.Commands.Register;
 using UseCases.Users.Commands.Login;
+using UseCases.Users.Commands.Register;
+using UseCases.Users.Queries;
 using UseCases.Users.Queries.GetUserById;
-using MediatR;
+using UseCases.Users.Queries.GetUsers;
 
 namespace Presentation.Controllers;
 
 public sealed class UserController : ApiController
 {
-    [HttpGet("{userId:guid}")]
+    [HttpGet("user")]
     [ProducesResponseType(typeof(UserResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetUser(Guid userId, CancellationToken cancellationToken)
     {
         var query = new GetUserByIdQuery(userId);
+
+        var book = await Sender.Send(query, cancellationToken);
+
+        return Ok(book);
+    }
+
+    [HttpGet("users")]
+    [ProducesResponseType(typeof(UserResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetUser(string? searchTerm,
+        string? sortColumn,
+        string? sortOrder,
+        int page,
+        int pageSize,
+        CancellationToken cancellationToken)
+    {
+        var query = new GetUsersQuery(searchTerm, sortColumn, sortOrder, page, pageSize);
 
         var book = await Sender.Send(query, cancellationToken);
 

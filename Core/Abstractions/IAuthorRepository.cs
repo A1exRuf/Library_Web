@@ -8,4 +8,3 @@ public interface IAuthorRepository
     void Delete(Author author);
     Task<Author?> GetByIdAsync(Guid authorId, CancellationToken cancellationToken);
 }
-

@@ -1,25 +1,30 @@
-﻿using UseCases.Abstractions.Messaging;
+﻿using Core.Abstractions;
 using Core.Exceptions;
-using System.Data;
-using Dapper;
+using Microsoft.EntityFrameworkCore;
+using UseCases.Abstractions.Messaging;
 
 namespace UseCases.Authors.Queries.GetAuthorById;
 
 internal sealed class GetAuthorQueryHandler : IQueryHandler<GetAuthorByIdQuery, AuthorResponse>
 {
-    private readonly IDbConnection _dbConnection;
+    private readonly IApplicationDbContext _context;
 
-    public GetAuthorQueryHandler(IDbConnection dbConnection) => _dbConnection = dbConnection;
+    public GetAuthorQueryHandler(IApplicationDbContext context) => _context = context;
 
     public async Task<AuthorResponse> Handle(
         GetAuthorByIdQuery request, 
         CancellationToken cancellationToken)
     {
-        const string sql = @"SELECT * FROM ""Authors"" WHERE ""Id"" = @AuthorId";
-
-        var author = await _dbConnection.QueryFirstOrDefaultAsync<AuthorResponse>(
-            sql,
-            new { request.AuthorId });
+        var author = await _context
+            .Authors
+            .Where(a => a.Id == request.AuthorId)
+            .Select(a => new AuthorResponse(
+                a.Id,
+                a.FirstName,
+                a.SecondName,
+                a.DateOfBirth,
+                a.Country))
+            .FirstOrDefaultAsync(cancellationToken);
 
         if (author is null)
         {

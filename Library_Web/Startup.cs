@@ -86,6 +86,8 @@ public class Startup
         services.AddScoped<IDbConnection>(
             factory => factory.GetRequiredService<ApplicationDbContext>().Database.GetDbConnection());
 
+        services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
+
         services.AddScoped<IPasswordHasher, PasswordHasher>();
 
         services.AddScoped<ITokenService, TokenService>();

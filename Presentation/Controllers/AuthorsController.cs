@@ -1,17 +1,19 @@
-﻿using UseCases.Authors.Commands.CreateAuthor;
-using UseCases.Authors.Commands.DeleteAuthor;
-using UseCases.Authors.Commands.UpdateAuthor;
-using UseCases.Authors.Queries.GetAuthorById;
-using Mapster;
+﻿using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
+using UseCases.Authors.Commands.CreateAuthor;
+using UseCases.Authors.Commands.DeleteAuthor;
+using UseCases.Authors.Commands.UpdateAuthor;
+using UseCases.Authors.Queries;
+using UseCases.Authors.Queries.GetAuthorById;
+using UseCases.Authors.Queries.GetAuthors;
 
 namespace Presentation.Controllers;
 
 public sealed class AuthorsController : ApiController
 {
-    [HttpGet("{authorId:guid}")]
+    [HttpGet("Author")]
     [ProducesResponseType(typeof(AuthorResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAuthor(Guid authorId, CancellationToken cancellationToken)
@@ -23,8 +25,20 @@ public sealed class AuthorsController : ApiController
         return Ok(author);
     }
 
+    [HttpGet("Authors")]
+    [ProducesResponseType(typeof(AuthorResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetAuthors(CancellationToken cancellationToken)
+    {
+        var query = new GetAuthorsQuery();
+
+        var authors = await Sender.Send(query, cancellationToken);
+
+        return Ok(authors);
+    }
+
     [HttpPost]
-    [Authorize(Policy = "OnlyForAdmin")]
+    //[Authorize(Policy = "OnlyForAdmin")]
     [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
 

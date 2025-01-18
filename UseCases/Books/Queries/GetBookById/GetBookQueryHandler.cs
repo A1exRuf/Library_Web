@@ -1,27 +1,36 @@
-﻿using Core.Exceptions;
+﻿using Core.Abstractions;
+using Core.Exceptions;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 using UseCases.Abstractions.Messaging;
-using Dapper;
 
 namespace UseCases.Books.Queries.GetBookById;
 
 internal sealed class GetBookQueryHandler : IQueryHandler<GetBookByIdQuery, BookResponse>
 {
-    private readonly IDbConnection _dbConnection;
+    private readonly IApplicationDbContext _context;
 
-    public GetBookQueryHandler(IDbConnection dbConnection) => _dbConnection = dbConnection;
+    public GetBookQueryHandler(IApplicationDbContext context) => _context = context;
 
     public async Task<BookResponse> Handle(
         GetBookByIdQuery request,
         CancellationToken cancellationToken)
     {
-        const string sql = @"SELECT * FROM ""Books"" WHERE ""Id"" = @BookId";
+        var book = await _context
+            .Books
+            .Where(b => b.Id == request.BookId)
+            .Select(b => new BookResponse(
+                b.Id,
+                b.Isbn,
+                b.Title,
+                b.Genree,
+                b.Description,
+                b.AuthorId,
+                b.TakenAt,
+                b.ImageId))
+            .FirstOrDefaultAsync(cancellationToken);
 
-        var book = await _dbConnection.QueryFirstOrDefaultAsync<BookResponse>(
-            sql,
-            new { request.BookId });
-
-        if (book is null)
+        if (book == null)
         {
             throw new BookNotFoundException(request.BookId);
         }
