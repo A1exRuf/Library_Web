@@ -12,6 +12,8 @@ public sealed class Author : Entity
 
     public string Country { get; set; }
 
+    public ICollection<Book> Books { get; set; } = new List<Book>();
+
     public Author(Guid id, string firstName, string secondName,
         DateTime dateOfBirth, string country) : base(id)
     {

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Configurations;
 
-internal sealed class BookrConfiguration : IEntityTypeConfiguration<Book>
+internal sealed class BookConfiguration : IEntityTypeConfiguration<Book>
 {
     public void Configure(EntityTypeBuilder<Book> builder)
     {
@@ -20,7 +20,10 @@ internal sealed class BookrConfiguration : IEntityTypeConfiguration<Book>
 
         builder.Property(book => book.Description);
 
-        builder.Property(book => book.AuthorId);
+        builder.HasOne(book => book.Author)
+            .WithMany(author => author.Books)
+            .HasForeignKey(book => book.AuthorId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.Property(book => book.TakenAt);
 
