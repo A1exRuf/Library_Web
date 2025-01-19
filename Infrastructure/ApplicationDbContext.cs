@@ -19,4 +19,6 @@ public sealed class ApplicationDbContext : DbContext, IApplicationDbContext, IUn
     public DbSet<Book> Books { get; set; }
 
     public DbSet<User> Users { get; set; }
+
+    public DbSet<BookLoan> BookLoans { get; set; }
 }

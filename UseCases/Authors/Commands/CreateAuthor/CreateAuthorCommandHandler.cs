@@ -17,7 +17,7 @@ internal sealed class CreateAuthorCommandHandler : ICommandHandler<CreateAuthorC
 
     public async Task<Guid> Handle(CreateAuthorCommand request, CancellationToken cancellationToken)
     {
-        var author = new Author(Guid.NewGuid(), request.FirstName, request.SecondName,
+        var author = new Author(Guid.NewGuid(), request.FirstName, request.LastName,
             request.DateOfBirth, request.Country);
 
         _authorRepository.Insert(author);

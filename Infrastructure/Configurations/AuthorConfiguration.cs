@@ -14,7 +14,7 @@ internal sealed class AuthorConfiguration : IEntityTypeConfiguration<Author>
 
         builder.Property(author => author.FirstName).HasMaxLength(50);
 
-        builder.Property(author => author.SecondName).HasMaxLength(50);
+        builder.Property(author => author.LastName).HasMaxLength(50);
 
         builder.Property(author => author.DateOfBirth).IsRequired();
 

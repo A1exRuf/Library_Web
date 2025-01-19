@@ -20,7 +20,7 @@ internal sealed class GetAuthorsQueryHandler : IQueryHandler<GetAuthorsQuery, Li
             .Select(a => new AuthorResponse(
                 a.Id,
                 a.FirstName,
-                a.SecondName,
+                a.LastName,
                 a.DateOfBirth,
                 a.Country))
             .ToListAsync(cancellationToken);

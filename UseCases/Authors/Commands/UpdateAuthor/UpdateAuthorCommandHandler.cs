@@ -24,7 +24,7 @@ internal sealed class UpdateAuthorCommandHandler : ICommandHandler<UpdateAuthorC
         }
 
         author.FirstName = request.FirstName;
-        author.SecondName = request.SecondName;
+        author.LastName = request.LastName;
         author.DateOfBirth = request.DateOfBirth;
         author.Country = request.Country;
 

@@ -1,8 +1,5 @@
 ﻿using Core.Abstractions;
-using Core.Entities;
 using Core.Exceptions;
-using System.Data;
-using Dapper;
 using UseCases.Abstractions.Messaging;
 
 namespace UseCases.Books.Commands.AddBookImage;

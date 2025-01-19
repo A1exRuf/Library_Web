@@ -21,7 +21,7 @@ internal sealed class GetAuthorQueryHandler : IQueryHandler<GetAuthorByIdQuery, 
             .Select(a => new AuthorResponse(
                 a.Id,
                 a.FirstName,
-                a.SecondName,
+                a.LastName,
                 a.DateOfBirth,
                 a.Country))
             .FirstOrDefaultAsync(cancellationToken);

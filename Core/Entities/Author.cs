@@ -6,7 +6,7 @@ public sealed class Author : Entity
 {
     public string FirstName { get; set; }
 
-    public string SecondName { get; set; }
+    public string LastName { get; set; }
 
     public DateTime DateOfBirth { get; set; }
 
@@ -14,11 +14,11 @@ public sealed class Author : Entity
 
     public ICollection<Book> Books { get; set; } = new List<Book>();
 
-    public Author(Guid id, string firstName, string secondName,
+    public Author(Guid id, string firstName, string lastName,
         DateTime dateOfBirth, string country) : base(id)
     {
         FirstName = firstName;
-        SecondName = secondName;
+        LastName = lastName;
         DateOfBirth = dateOfBirth;
         Country = country;
     }

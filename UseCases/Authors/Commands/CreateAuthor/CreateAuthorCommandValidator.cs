@@ -8,7 +8,7 @@ public sealed class CreateAuthorCommandValidator : AbstractValidator<CreateAutho
     {
         RuleFor(x => x.FirstName).NotEmpty();
 
-        RuleFor(x => x.SecondName).NotEmpty();
+        RuleFor(x => x.LastName).NotEmpty();
 
         RuleFor(x => x.DateOfBirth).NotEmpty();
 

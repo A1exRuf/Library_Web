@@ -39,7 +39,7 @@ public sealed class GetBooksQueryHandler : IQueryHandler<GetBooksQuery, PagedLis
                 b.Genree,
                 b.Description,
                 b.AuthorId,
-                b.TakenAt,
+                b.IsAvailable,
                 b.ImageId));
 
         var books = await PagedList<BookResponse>.CreateAsync(bookResponsesQuery,

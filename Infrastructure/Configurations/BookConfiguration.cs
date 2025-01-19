@@ -25,7 +25,7 @@ internal sealed class BookConfiguration : IEntityTypeConfiguration<Book>
             .HasForeignKey(book => book.AuthorId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.Property(book => book.TakenAt);
+        builder.Property(book => book.IsAvailable);
 
         builder.Property(book => book.ImageId);
     }

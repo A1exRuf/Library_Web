@@ -4,8 +4,8 @@ namespace Core.Exceptions;
 
 public sealed class AuthorNotFoundException : NotFoundException
 {
-    public AuthorNotFoundException(Guid authorId)
-        : base($"The author with the identifier {authorId} was not found")
+    public AuthorNotFoundException(Guid AuthorId)
+        : base($"The author with the identifier {AuthorId} was not found")
     {
     }
 }

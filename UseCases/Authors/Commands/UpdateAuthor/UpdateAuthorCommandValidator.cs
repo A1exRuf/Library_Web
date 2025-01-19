@@ -15,7 +15,7 @@ public sealed class UpdateAuthorCommandValidator : AbstractValidator<UpdateAutho
 
         RuleFor(x => x.FirstName).NotEmpty();
 
-        RuleFor(x => x.SecondName).NotEmpty();
+        RuleFor(x => x.LastName).NotEmpty();
 
         RuleFor(x => x.DateOfBirth).NotEmpty();
 

@@ -78,6 +78,8 @@ public class Startup
 
         services.AddScoped<IBookRepository, BookRepository>();
 
+        services.AddScoped<IBookLoanRepository, BookLoanRepository>();
+
         services.AddScoped<IUserRepository, UserRepository>();
 
         services.AddScoped<IUnitOfWork>(
