@@ -1,25 +1,18 @@
-using System.Data;
-using System.Text;
-using UseCases.Behaviors;
+using Azure.Storage.Blobs;
 using Core.Abstractions;
 using FluentValidation;
 using Infrastructure;
-using Infrastructure.Repositories;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Library_Web.Middleware;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Infrastructure.Services;
 using Infrastructure.Authentication;
+using Infrastructure.Repositories;
+using Infrastructure.Services;
+using Library_Web.Middleware;
+using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Azure.Storage.Blobs;
-using System;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Azure;
-using Azure.Data.Tables;
-using Azure.Storage.Queues;
-using Azure.Core.Extensions;
+using System.Text;
+using UseCases.Behaviors;
 
 namespace Library_Web;
 
@@ -84,9 +77,6 @@ public class Startup
 
         services.AddScoped<IUnitOfWork>(
             factory => factory.GetRequiredService<ApplicationDbContext>());
-
-        services.AddScoped<IDbConnection>(
-            factory => factory.GetRequiredService<ApplicationDbContext>().Database.GetDbConnection());
 
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 

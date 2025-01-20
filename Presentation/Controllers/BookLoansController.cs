@@ -54,9 +54,9 @@ public sealed class BookLoansController : ApiController
         return CreatedAtAction(nameof(LoanBook), new { bookLoanId }, bookLoanId);
     }
 
-    [HttpPost("ReturnBook")]
-    [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [HttpDelete("ReturnBook")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
 
     public async Task<IActionResult> ReturnBook(
         ReturnBookRequest request,
@@ -64,8 +64,13 @@ public sealed class BookLoansController : ApiController
     {
         var command = request.Adapt<ReturnBookCommand>();
 
-        var bookLoanId = await Sender.Send(command, cancellationToken);
+        bool succes = await Sender.Send(command, cancellationToken);
 
-        return CreatedAtAction(nameof(ReturnBook), new { bookLoanId }, bookLoanId);
+        if (!succes)
+        {
+            return NotFound();
+        }
+
+        return NoContent();
     }
 }

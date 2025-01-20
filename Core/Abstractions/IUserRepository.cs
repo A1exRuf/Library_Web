@@ -4,9 +4,10 @@ namespace Core.Abstractions;
 
 public interface IUserRepository
 {
-    void Insert(User User);
+    Task<User?> GetByIdAsync(Guid userId);
+    Task<User?> GetByEmailAsync(string email);
     Task<bool> EmailExistsAsync(string email);
-    Task SaveChangesAsync(CancellationToken cancellationToken);
-    Task<User> GetByEmailAsync(string email);
-    Task<User?> GetByIdAsync(Guid userId, CancellationToken cancellationToken);
+    void Add(User User);
+    void Update(User User);
+    void Remove(User User);
 }

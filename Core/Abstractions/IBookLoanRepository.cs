@@ -4,9 +4,8 @@ namespace Core.Abstractions;
 
 public interface IBookLoanRepository
 {
-    void Insert(BookLoan bookLoan);
-
-    void Delete(BookLoan bookLoan);
-
-    Task<BookLoan?> GetByIdAsync(Guid bookLoanId, CancellationToken cancellationToken);
+    Task<BookLoan?> GetByIdAsync(Guid id);
+    void Add(BookLoan bookLoan);
+    void Update(BookLoan bookLoan);
+    void Remove(BookLoan bookLoan);
 }

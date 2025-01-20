@@ -20,7 +20,7 @@ internal sealed class CreateBookCommandHandler : ICommandHandler<CreateBookComma
 
     public async Task<Guid> Handle(CreateBookCommand request, CancellationToken cancellationToken)
     {
-        var author = await _authorRepository.GetByIdAsync(request.AuthorId, cancellationToken);
+        var author = await _authorRepository.GetByIdAsync(request.AuthorId);
 
         if (author == null)
         {
@@ -29,7 +29,7 @@ internal sealed class CreateBookCommandHandler : ICommandHandler<CreateBookComma
 
         var book = new Book(Guid.NewGuid(), request.Isbn, request.Title, request.Genree, request.Description, request.AuthorId, author);
 
-        _bookRepository.Insert(book);
+        _bookRepository.Add(book);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

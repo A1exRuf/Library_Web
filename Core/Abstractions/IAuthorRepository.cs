@@ -4,7 +4,8 @@ namespace Core.Abstractions;
 
 public interface IAuthorRepository
 {
-    void Insert(Author author);
-    void Delete(Author author);
-    Task<Author?> GetByIdAsync(Guid authorId, CancellationToken cancellationToken);
+    Task<Author?> GetByIdAsync(Guid id);
+    void Add(Author author);
+    void Update(Author author);
+    void Remove(Author author);
 }

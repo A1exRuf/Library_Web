@@ -1,23 +1,20 @@
 ﻿using Core.Abstractions;
 using Core.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories;
 
 public sealed class AuthorRepository : IAuthorRepository
 {
-    private readonly ApplicationDbContext _dbContext;
+    private readonly ApplicationDbContext _context;
 
-    public AuthorRepository(ApplicationDbContext dbContext) => _dbContext = dbContext;
+    public AuthorRepository(ApplicationDbContext context) => _context = context;
 
-    public void Insert(Author author) => _dbContext.Set<Author>().Add(author);
-
-    public void Delete(Author author)
+    public Task<Author?> GetByIdAsync(Guid id)
     {
-        _dbContext.Set<Author>().Remove(author);
+        return _context.Authors.SingleOrDefaultAsync(a => a.Id == id);
     }
-
-    public async Task<Author?> GetByIdAsync(Guid authorId, CancellationToken cancellationToken)
-    {
-        return await _dbContext.Set<Author>().FindAsync(new object[] { authorId }, cancellationToken);
-    }
+    public void Add(Author author) => _context.Authors.Add(author);
+    public void Update(Author author) => _context.Authors.Update(author);
+    public void Remove(Author author) => _context.Authors.Remove(author);
 }

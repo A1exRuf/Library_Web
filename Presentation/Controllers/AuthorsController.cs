@@ -1,4 +1,5 @@
-﻿using Mapster;
+﻿using Core.Exceptions;
+using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -54,45 +55,41 @@ public sealed class AuthorsController : ApiController
     }
 
     [HttpDelete]
-    [Authorize(Policy = "OnlyForAdmin")]
+    //[Authorize(Policy = "OnlyForAdmin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
 
     public async Task<IActionResult> DeleteAuthor(Guid authorId, CancellationToken cancellationToken)
     {
-        var command = new DeleteAuthorCommand(authorId);
-
-        var succes = await Sender.Send(command, cancellationToken);
-
-        if(!succes)
+        try
         {
-            return NotFound();
-        }
+            var command = new DeleteAuthorCommand(authorId);
+            var succes = await Sender.Send(command, cancellationToken);
 
-        return NoContent();
+            return NoContent();
+        }
+        catch (AuthorNotFoundException e)
+        {
+            return Ok(e.Message);
+        }
     }
 
-    [HttpPut("{authorId:guid}")]
-    [Authorize(Policy = "OnlyForAdmin")]
+    [HttpPut]
+    //[Authorize(Policy = "OnlyForAdmin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateAuthor(
-        Guid authorId,
-        [FromBody] UpdateAuthorCommand request,
+        [FromBody] UpdateAuthorRequest request,
         CancellationToken cancellationToken)
     {
-        if (authorId != request.AuthorId)
-        {
-            return BadRequest("AuthorId in the route does not match AuthorId in the request body.");
-        }
-
-        var success = await Sender.Send(request, cancellationToken);
-
-        if (!success)
-        {
-            return NotFound();
-        }
+        var command = new UpdateAuthorCommand(
+            request.AuthorId,
+            request.FirstName,
+            request.LastName,
+            request.DateOfBirth,
+            request.Country);
+        await Sender.Send(command, cancellationToken);
 
         return NoContent();
     }

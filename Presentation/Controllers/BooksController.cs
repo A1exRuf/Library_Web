@@ -1,4 +1,5 @@
-﻿using Mapster;
+﻿using Core.Exceptions;
+using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +15,7 @@ using UseCases.Books.Queries.GetImageByItsId;
 namespace Presentation.Controllers;
 public sealed class BooksController : ApiController
 {
-    [HttpGet("books/{bookId:guid}")]
+    [HttpGet("book")]
     [ProducesResponseType(typeof(BookResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetBook(Guid bookId, CancellationToken cancellationToken)
@@ -46,7 +47,7 @@ public sealed class BooksController : ApiController
         return Ok(books);
     }
 
-    [HttpGet("{imageId:guid}/image")]
+    [HttpGet("image")]
     [ProducesResponseType(typeof(BookResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetBookImage(Guid imageId, CancellationToken cancellationToken)
@@ -75,50 +76,48 @@ public sealed class BooksController : ApiController
     }
 
     [HttpDelete]
-    [Authorize(Policy = "OnlyForAdmin")]
+    //[Authorize(Policy = "OnlyForAdmin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
 
     public async Task<IActionResult> DeleteBook(Guid bookId, CancellationToken cancellationToken)
     {
-        var command = new DeleteBookCommand(bookId);
-
-        var succes = await Sender.Send(command, cancellationToken);
-
-        if (!succes)
+        try
         {
-            return NotFound();
-        }
+            var command = new DeleteBookCommand(bookId);
+            var succes = await Sender.Send(command, cancellationToken);
 
-        return NoContent();
+            return NoContent();
+        }
+        catch (BookNotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
     }
 
-    [HttpPut("{bookId:guid}")]
-    [Authorize(Policy = "OnlyForAdmin")]
+    [HttpPut]
+    //[Authorize(Policy = "OnlyForAdmin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateBook(
-        Guid bookId,
-        [FromBody] UpdateBookCommand request,
+        [FromBody] UpdateBookRequest request,
         CancellationToken cancellationToken)
     {
-        if (bookId != request.BookId)
-        {
-            return BadRequest("BookId in the route does not match AuthorId in the request body.");
-        }
+        var command = new UpdateBookCommand(
+            request.BookId,
+            request.Isbn,
+            request.Genre,
+            request.Title,
+            request.Description,
+            request.AuthorId);
 
-        var success = await Sender.Send(request, cancellationToken);
-
-        if (!success)
-        {
-            return NotFound();
-        }
+        await Sender.Send(command, cancellationToken);
 
         return NoContent();
     }
 
-    [HttpPost("{bookId:guid}/image")]
+    [HttpPost("image")]
     [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

@@ -6,24 +6,16 @@ namespace Infrastructure.Repositories;
 
 public sealed class BookRepository : IBookRepository
 {
-    private readonly ApplicationDbContext _dbContext;
+    private readonly ApplicationDbContext _context;
 
-    public BookRepository(ApplicationDbContext dbContext) => _dbContext = dbContext;
+    public BookRepository(ApplicationDbContext context) => _context = context;
 
-    public void Insert(Book book) => _dbContext.Set<Book>().Add(book);
-
-    public void Delete(Book book)
+    public Task<Book?> GetByIdAsync(Guid id)
     {
-        _dbContext.Set<Book>().Remove(book);
+        return _context.Books.SingleOrDefaultAsync(b => b.Id == id);
     }
 
-    public void Update(Book book)
-    {
-        _dbContext.Set<Book>().Update(book);
-    }
-
-    public async Task<Book?> GetByIdAsync(Guid bookId, CancellationToken cancellationToken)
-    {
-        return await _dbContext.Set<Book>().FindAsync(new object[] { bookId }, cancellationToken);
-    }
+    public void Add(Book book) => _context.Books.Add(book);
+    public void Update(Book book) => _context.Books.Update(book);
+    public void Remove(Book book) => _context.Books.Remove(book);
 }

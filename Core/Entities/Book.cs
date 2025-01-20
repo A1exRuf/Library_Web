@@ -1,5 +1,4 @@
 ﻿using Core.Primitives;
-using System.Collections;
 
 namespace Core.Entities;
 

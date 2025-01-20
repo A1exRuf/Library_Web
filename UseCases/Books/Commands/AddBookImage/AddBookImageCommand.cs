@@ -2,4 +2,7 @@
 
 namespace UseCases.Books.Commands.AddBookImage;
 
-public sealed record AddBookImageCommand(Guid BookId, Stream ImageStream, string ContentType) : ICommand<Guid>;
+public sealed record AddBookImageCommand(
+    Guid BookId, 
+    Stream ImageStream, 
+    string ContentType) : ICommand<Guid>;

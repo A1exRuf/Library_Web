@@ -6,29 +6,26 @@ namespace Infrastructure.Repositories;
 
 public sealed class UserRepository : IUserRepository
 {
-    private readonly ApplicationDbContext _dbContext;
+    private readonly ApplicationDbContext _context;
 
-    public UserRepository(ApplicationDbContext dbContext) => _dbContext = dbContext;
+    public UserRepository(ApplicationDbContext context) => _context = context;
 
-    public void Insert(User User) => _dbContext.Set<User>().Add(User);
-
-    public async Task<bool> EmailExistsAsync(string email)
+    public Task<bool> EmailExistsAsync(string email)
     {
-        return await _dbContext.Set<User>().AnyAsync(u => u.Email == email);
+        return _context.Users.AnyAsync(u => u.Email == email);
     }
 
-    public async Task SaveChangesAsync(CancellationToken cancellationToken)
+    public Task<User?> GetByEmailAsync(string email)
     {
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        return _context.Users.SingleOrDefaultAsync(u => u.Email == email);
     }
 
-    public async Task<User> GetByEmailAsync(string email)
+    public Task<User?> GetByIdAsync(Guid id)
     {
-        return await _dbContext.Set<User>().FirstOrDefaultAsync(u => u.Email == email);
+        return _context.Users.SingleOrDefaultAsync(u => u.Id == id);
     }
 
-    public async Task<User?> GetByIdAsync(Guid userId, CancellationToken cancellationToken)
-    {
-        return await _dbContext.Set<User>().FindAsync(new object[] { userId }, cancellationToken);
-    }
+    public void Add(User User) => _context.Users.Add(User);
+    public void Update(User User) => _context.Users.Update(User);
+    public void Remove(User User) => _context.Users.Remove(User);
 }

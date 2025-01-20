@@ -22,7 +22,7 @@ internal sealed class AddBookImageCommandHandler : ICommandHandler<AddBookImageC
 
     public async Task<Guid> Handle(AddBookImageCommand request, CancellationToken cancellationToken)
     {
-        var book = await _bookRepository.GetByIdAsync(request.BookId, cancellationToken);
+        var book = await _bookRepository.GetByIdAsync(request.BookId);
         if (book is null)
         {
             throw new BookNotFoundException(request.BookId);

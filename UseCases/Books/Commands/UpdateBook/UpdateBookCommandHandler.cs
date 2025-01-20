@@ -1,4 +1,5 @@
 ﻿using Core.Abstractions;
+using Core.Exceptions;
 using UseCases.Abstractions.Messaging;
 
 namespace UseCases.Books.Commands.UpdateBook;
@@ -16,11 +17,11 @@ public sealed class UpdateBookCommandHandler : ICommandHandler<UpdateBookCommand
 
     public async Task<bool> Handle(UpdateBookCommand request, CancellationToken cancellationToken)
     {
-        var book = await _bookRepository.GetByIdAsync(request.BookId, cancellationToken);
+        var book = await _bookRepository.GetByIdAsync(request.BookId);
 
         if (book == null)
         {
-            return false;
+            throw new BookNotFoundException(request.BookId);
         }
 
         book.Isbn = request.Isbn;
@@ -28,6 +29,8 @@ public sealed class UpdateBookCommandHandler : ICommandHandler<UpdateBookCommand
         book.Genree = request.Genree;
         book.Description = request.Description;
         book.AuthorId = request.AuthorId;
+
+        _bookRepository.Update(book);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

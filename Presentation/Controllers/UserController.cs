@@ -1,8 +1,14 @@
-﻿using Mapster;
+﻿using Core.Exceptions;
+using Mapster;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using UseCases.Books.Commands.AddBookImage;
+using UseCases.Books.Commands.DeleteBook;
+using UseCases.Books.Commands.UpdateBook;
+using UseCases.Users.Commands.DeleteUser;
 using UseCases.Users.Commands.Login;
 using UseCases.Users.Commands.Register;
+using UseCases.Users.Commands.UpdateUser;
 using UseCases.Users.Queries;
 using UseCases.Users.Queries.GetUserById;
 using UseCases.Users.Queries.GetUsers;
@@ -68,5 +74,48 @@ public sealed class UserController : ApiController
         var response = await Sender.Send(command, cancellationToken);
 
         return Ok(response);
+    }
+
+
+    [HttpDelete]
+    //[Authorize(Policy = "OnlyForAdmin")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+
+    public async Task<IActionResult> DeleteUser(Guid userId, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var command = new DeleteUserCommand(userId);
+            var succes = await Sender.Send(command, cancellationToken);
+
+            return NoContent();
+        }
+        catch (UserNotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
+    }
+
+    [HttpPut]
+    //[Authorize(Policy = "OnlyForAdmin")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> UpdateUser(
+        [FromBody] UpdateUserRequest request,
+        CancellationToken cancellationToken)
+    {
+        var command = new UpdateUserCommand(
+            request.UserId,
+            request.Name,
+            request.Email,
+            request.Password,
+            request.ConfirmPassword,
+            request.Role);
+
+        await Sender.Send(command, cancellationToken);
+
+        return NoContent();
     }
 }

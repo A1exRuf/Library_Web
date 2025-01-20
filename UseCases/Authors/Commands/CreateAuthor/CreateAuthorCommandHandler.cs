@@ -20,7 +20,7 @@ internal sealed class CreateAuthorCommandHandler : ICommandHandler<CreateAuthorC
         var author = new Author(Guid.NewGuid(), request.FirstName, request.LastName,
             request.DateOfBirth, request.Country);
 
-        _authorRepository.Insert(author);
+        _authorRepository.Add(author);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

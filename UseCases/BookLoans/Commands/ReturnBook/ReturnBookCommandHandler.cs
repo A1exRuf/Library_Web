@@ -22,14 +22,14 @@ public sealed class ReturnBookCommandHandler : ICommandHandler<ReturnBookCommand
 
     public async Task<bool> Handle(ReturnBookCommand request, CancellationToken cancellationToken)
     {
-        var bookLoan = await _bookLoanRepository.GetByIdAsync(request.BookLoanId, cancellationToken);
+        var bookLoan = await _bookLoanRepository.GetByIdAsync(request.BookLoanId);
 
         if (bookLoan == null)
         {
             throw new BookLoanNotFoundException(request.BookLoanId);
         }
 
-        var book = await _bookRepository.GetByIdAsync(bookLoan.BookId, cancellationToken);
+        var book = await _bookRepository.GetByIdAsync(bookLoan.BookId);
         if (book == null)
         {
             throw new BookNotFoundException(bookLoan.BookId);
@@ -37,7 +37,7 @@ public sealed class ReturnBookCommandHandler : ICommandHandler<ReturnBookCommand
 
         book.IsAvailable = true;
 
-        _bookLoanRepository.Delete(bookLoan);
+        _bookLoanRepository.Remove(bookLoan);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         return true;

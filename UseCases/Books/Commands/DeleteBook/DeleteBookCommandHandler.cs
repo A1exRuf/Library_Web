@@ -1,4 +1,5 @@
 ﻿using Core.Abstractions;
+using Core.Exceptions;
 using UseCases.Abstractions.Messaging;
 
 namespace UseCases.Books.Commands.DeleteBook;
@@ -16,14 +17,14 @@ internal sealed class DeleteBookCommandHandler : ICommandHandler<DeleteBookComma
 
     public async Task<bool> Handle(DeleteBookCommand request, CancellationToken cancellationToken)
     {
-        var book = await _bookRepository.GetByIdAsync(request.BookId, cancellationToken);
+        var book = await _bookRepository.GetByIdAsync(request.BookId);
 
         if (book == null)
         {
-            return false;
+            throw new BookNotFoundException(request.BookId);
         }
 
-        _bookRepository.Delete(book);
+        _bookRepository.Remove(book);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

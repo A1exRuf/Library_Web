@@ -26,7 +26,7 @@ public sealed class LoanBookCommandHandler : ICommandHandler<LoanBookCommand, Gu
 
     public async Task<Guid> Handle(LoanBookCommand request, CancellationToken cancellationToken)
     {
-        var book = await _bookRepository.GetByIdAsync(request.BookId, cancellationToken);
+        var book = await _bookRepository.GetByIdAsync(request.BookId);
 
         if (book == null)
         {
@@ -37,7 +37,7 @@ public sealed class LoanBookCommandHandler : ICommandHandler<LoanBookCommand, Gu
             throw new BookNotAvailableException(request.BookId);
         }
 
-        var user = await _userRepository.GetByIdAsync(request.UserId, cancellationToken);
+        var user = await _userRepository.GetByIdAsync(request.UserId);
 
         if (user == null)
         {
@@ -48,7 +48,7 @@ public sealed class LoanBookCommandHandler : ICommandHandler<LoanBookCommand, Gu
 
         book.IsAvailable = false;
 
-        _bookLoanRepository.Insert(bookLoan);
+        _bookLoanRepository.Add(bookLoan);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

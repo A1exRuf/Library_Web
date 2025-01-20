@@ -1,4 +1,5 @@
 ﻿using Core.Abstractions;
+using Core.Exceptions;
 using UseCases.Abstractions.Messaging;
 
 namespace UseCases.Authors.Commands.DeleteAuthor;
@@ -16,14 +17,14 @@ internal sealed class DeleteAuthorCommandHandler : ICommandHandler<DeleteAuthorC
 
     public async Task<bool> Handle(DeleteAuthorCommand request, CancellationToken cancellationToken)
     {
-        var author = await _authorRepository.GetByIdAsync(request.AuthorId, cancellationToken);
+        var author = await _authorRepository.GetByIdAsync(request.AuthorId);
 
         if (author == null)
         {
-            return false;
+            throw new AuthorNotFoundException(request.AuthorId);
         }
 
-        _authorRepository.Delete(author);
+        _authorRepository.Remove(author);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
