@@ -1,5 +1,4 @@
 ﻿using Core.Abstractions;
-using Core.Entities;
 using UseCases.Abstractions.Messaging;
 
 namespace UseCases.BookLoans.Queries.GetBookLoanById;

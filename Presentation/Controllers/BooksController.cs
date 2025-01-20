@@ -31,13 +31,15 @@ public sealed class BooksController : ApiController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetBook(
         string? searchTerm,
+        string? genre,
+        Guid? authorId,
         string? sortColumn,
         string? sortOrder,
         int page,
         int pageSize,
         CancellationToken cancellation)
     {
-        var query = new GetBooksQuery(searchTerm, sortColumn, sortOrder, page, pageSize);
+        var query = new GetBooksQuery(searchTerm, genre, authorId, sortColumn, sortOrder, page, pageSize);
 
         var books = await Sender.Send(query, cancellation);
 

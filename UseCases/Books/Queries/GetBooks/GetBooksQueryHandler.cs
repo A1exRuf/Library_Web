@@ -15,11 +15,26 @@ public sealed class GetBooksQueryHandler : IQueryHandler<GetBooksQuery, PagedLis
     {
         IQueryable<Book> booksQuery = _context.Books;
 
-        if(!string.IsNullOrWhiteSpace(request.SearchTerm))
+        if(request.AuthorId.HasValue)
         {
             booksQuery = booksQuery.Where(b =>
-            b.Isbn.Contains(request.SearchTerm) ||
-            b.Title.ToLower().Contains(request.SearchTerm.ToLower()));
+            b.AuthorId == request.AuthorId);
+        }
+
+        if (request.Genre != null)
+        {
+            booksQuery = booksQuery.Where(b =>
+            b.Genree == request.Genre);
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.SearchTerm))
+        {
+            string searhTerm = request.SearchTerm.ToLower();
+            booksQuery = booksQuery.Where(b =>
+            b.Isbn.Contains(searhTerm) ||
+            b.Title.ToLower().Contains(searhTerm) ||
+            b.Author.FirstName.ToLower().Contains(searhTerm) ||
+            b.Author.LastName.ToLower().Contains(searhTerm));
         }
 
         if(request.SortOrder?.ToLower() == "desc")

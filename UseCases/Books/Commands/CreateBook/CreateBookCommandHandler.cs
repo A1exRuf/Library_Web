@@ -1,7 +1,7 @@
-﻿using UseCases.Abstractions.Messaging;
-using Core.Abstractions;
+﻿using Core.Abstractions;
 using Core.Entities;
 using Core.Exceptions;
+using UseCases.Abstractions.Messaging;
 
 namespace UseCases.Books.Commands.CreateBook;
 

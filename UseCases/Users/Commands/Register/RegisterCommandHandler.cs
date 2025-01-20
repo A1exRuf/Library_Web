@@ -1,7 +1,6 @@
 ﻿using Core.Abstractions;
 using Core.Entities;
 using UseCases.Abstractions.Messaging;
-using UseCases.Users.Commands.Login;
 
 namespace UseCases.Users.Commands.Register;
 
