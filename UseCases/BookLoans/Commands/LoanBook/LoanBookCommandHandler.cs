@@ -47,8 +47,9 @@ public sealed class LoanBookCommandHandler : ICommandHandler<LoanBookCommand, Gu
         var bookLoan = new BookLoan(Guid.NewGuid(), user, request.UserId, book, request.BookId, DateTime.UtcNow);
 
         book.IsAvailable = false;
-
+        
         _bookLoanRepository.Add(bookLoan);
+        _bookRepository.Update(book);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

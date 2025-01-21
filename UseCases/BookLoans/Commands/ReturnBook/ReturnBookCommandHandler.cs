@@ -23,7 +23,6 @@ public sealed class ReturnBookCommandHandler : ICommandHandler<ReturnBookCommand
     public async Task<bool> Handle(ReturnBookCommand request, CancellationToken cancellationToken)
     {
         var bookLoan = await _bookLoanRepository.GetByIdAsync(request.BookLoanId);
-
         if (bookLoan == null)
         {
             throw new BookLoanNotFoundException(request.BookLoanId);
@@ -38,6 +37,7 @@ public sealed class ReturnBookCommandHandler : ICommandHandler<ReturnBookCommand
         book.IsAvailable = true;
 
         _bookLoanRepository.Remove(bookLoan);
+        _bookRepository.Update(book);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         return true;

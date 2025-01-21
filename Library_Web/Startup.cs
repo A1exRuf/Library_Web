@@ -75,8 +75,7 @@ public class Startup
 
         services.AddScoped<IUserRepository, UserRepository>();
 
-        services.AddScoped<IUnitOfWork>(
-            factory => factory.GetRequiredService<ApplicationDbContext>());
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 
