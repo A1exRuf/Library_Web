@@ -1,0 +1,25 @@
+.header {
+    grid-area: h;
+    background-color: darkgrey;
+    padding: 10px;
+    display: flex
+}
+
+.item {
+    background-color: gray;
+    width: 20%;
+    height: auto;
+    padding: 10px;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+}
+
+.item a {
+    color: white;
+}
+
+.item a.active {
+    color: gold
+}

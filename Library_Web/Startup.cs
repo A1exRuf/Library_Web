@@ -22,6 +22,8 @@ public class Startup
 
     public IConfiguration Configuration { get; }
 
+    private string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
     public void ConfigureServices(IServiceCollection services)
     {
         var presentationAssembly = typeof(Presentation.AssemblyReference).Assembly;
@@ -117,6 +119,19 @@ public class Startup
             options.AddPolicy("OnlyForAdmin", policy => policy.RequireRole("Admin"));
             options.AddPolicy("OnlyForUser", policy => policy.RequireRole("User"));
         });
+
+        services.AddCors(options =>
+        {
+            options.AddPolicy(name: MyAllowSpecificOrigins,
+                builder =>
+                {
+                    builder.WithOrigins("http://localhost",
+                "http://localhost:5174")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .SetIsOriginAllowedToAllowWildcardSubdomains();
+                });
+        });
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -135,6 +150,8 @@ public class Startup
         app.UseHttpsRedirection();
 
         app.UseRouting();
+
+        app.UseCors(MyAllowSpecificOrigins);
 
         app.UseAuthentication();
 
