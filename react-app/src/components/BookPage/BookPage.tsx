@@ -1,9 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../state/store";
+import { AppDispath, RootState } from "../../state/store";
 
 const BookPage = () => {
   const bookTitle = useSelector((state: RootState) => state.book.title);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispath>();
 
   return (
     <div>

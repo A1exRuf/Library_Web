@@ -1,17 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
+import book from "./book"
 
-interface BookState {
-    id: string,
-    isbn: string,
-    title: string,
-    genree: string,
-    description: string,
-    authorId: string,
-    isAvailable: boolean,
-    imageId: string | null
-}
-
-const initialState:  BookState = {
+const initialState: book = {
     id: 'id',
     isbn: 'isbn',
     title: 'title',
@@ -19,7 +9,9 @@ const initialState:  BookState = {
     description: 'description',
     authorId: 'author id',
     isAvailable: false,
-    imageId:  'image id'
+    imageId: 'image id',
+    loading: false,
+    error: ''
 }
 
 const bookSlice = createSlice({
