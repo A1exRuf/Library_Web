@@ -1,9 +1,10 @@
 import "./App.css";
-import BookPage from "./components/Books/BookPage";
 import Footer from "./components/Footer/Footer";
 import Header from "./components/Header/Header";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MyBooksPage from "./components/MyBooksPage/MyBooksPage";
+import BooksPage from "./components/BooksPage/BooksPage";
+import BookPage from "./components/BookPage/BookPage";
 
 function App() {
   return (
@@ -12,8 +13,9 @@ function App() {
         <Header />
         <div className="app-wrapper-content">
           <Routes>
-            <Route path="/books" element={<BookPage />} />
+            <Route path="/books" element={<BooksPage />} />
             <Route path="/mybooks" element={<MyBooksPage />} />
+            <Route path="/book" element={<BookPage />} />
           </Routes>
         </div>
         <Footer />
