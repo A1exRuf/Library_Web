@@ -5,15 +5,17 @@ import { fetchBooks } from "../../state/book/bookListSlice";
 import { AppDispath, RootState } from "../../state/store";
 import BookItem from "./BookItem/BookItem";
 import Search from "./Search/Search";
+import useDebounce from "../../hooks/useDebounce";
 
 const BooksPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const bookList = useSelector((state: RootState) => state.bookList);
   const dispatch = useDispatch<AppDispath>();
+  const debouncedSearchTerm = useDebounce(searchTerm, 1000);
 
   useEffect(() => {
-    dispatch(fetchBooks(searchTerm));
-  }, [searchTerm, dispatch]);
+    dispatch(fetchBooks(debouncedSearchTerm));
+  }, [debouncedSearchTerm, dispatch]);
 
   const handleSearchChange = (newSearchTerm: string) => {
     setSearchTerm(newSearchTerm);
