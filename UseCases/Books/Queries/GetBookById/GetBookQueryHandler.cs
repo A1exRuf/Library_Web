@@ -26,6 +26,10 @@ internal sealed class GetBookQueryHandler : IQueryHandler<GetBookByIdQuery, Book
                 b.Genree,
                 b.Description,
                 b.AuthorId,
+                b.Author.FirstName,
+                b.Author.LastName,
+                b.Author.DateOfBirth,
+                b.Author.Country,
                 b.IsAvailable,
                 b.ImageId))
             .FirstOrDefaultAsync(cancellationToken);

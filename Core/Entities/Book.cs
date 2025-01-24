@@ -1,4 +1,5 @@
-﻿using Core.Primitives;
+﻿using Core.Abstractions;
+using Core.Primitives;
 
 namespace Core.Entities;
 

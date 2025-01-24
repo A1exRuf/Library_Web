@@ -1,4 +1,6 @@
-﻿namespace UseCases.Books.Queries;
+﻿using Core.Abstractions;
+
+namespace UseCases.Books.Queries;
 
 public record BookResponse(
     Guid Id, 
@@ -7,5 +9,10 @@ public record BookResponse(
     string Genree,
     string Description,
     Guid AuthorId,
+    string AuthorFirstName,
+    string AuthorLastName,
+    DateTime AuthorDateOfBirth,
+    string AuthorCountry,
     bool IsAvailable,
     Guid? ImageId);
+

@@ -1,5 +1,6 @@
 ﻿using Core.Abstractions;
 using Core.Entities;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 using UseCases.Abstractions.Messaging;
 
@@ -8,8 +9,13 @@ namespace UseCases.Books.Queries.GetBooks;
 public sealed class GetBooksQueryHandler : IQueryHandler<GetBooksQuery, PagedList<BookResponse>>
 {
     private readonly IApplicationDbContext _context;
+    private readonly IBlobService _blobService;
 
-    public GetBooksQueryHandler(IApplicationDbContext context) => _context = context;
+    public GetBooksQueryHandler(IApplicationDbContext context, IBlobService blobService)
+    { 
+        _context = context;
+        _blobService = blobService;
+    }
 
     public async Task<PagedList<BookResponse>> Handle(GetBooksQuery request, CancellationToken cancellationToken)
     {
@@ -54,6 +60,10 @@ public sealed class GetBooksQueryHandler : IQueryHandler<GetBooksQuery, PagedLis
                 b.Genree,
                 b.Description,
                 b.AuthorId,
+                b.Author.FirstName,
+                b.Author.LastName,
+                b.Author.DateOfBirth,
+                b.Author.Country,
                 b.IsAvailable,
                 b.ImageId));
 

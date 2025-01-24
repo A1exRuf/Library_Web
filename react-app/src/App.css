@@ -11,6 +11,12 @@
 
 }
 
+@media only screen and (max-width: 800px) {
+  .app-wrapper {
+    width: 100%;
+  }
+}
+
 .app-wrapper-content {
   grid-area: c;
   background-color: grey;

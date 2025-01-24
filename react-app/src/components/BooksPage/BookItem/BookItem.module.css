@@ -1,0 +1,42 @@
+.bookItem {
+    background-color: darkgrey;
+    border-radius: 8px;
+    padding: 8px;
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    grid-template-rows: auto 32px;
+    gap: 8px;
+}
+
+.img {
+    grid-column: 1;
+    grid-row: 1;
+    border-radius: 5%;
+    min-width: 100px;
+    width: 100%;
+}
+
+.bookInfo {
+    grid-column: 2;
+    grid-row: 1;
+    min-width: 100px;
+    width: 100%;
+}
+
+.button {
+    grid-column: 1 / span 2;
+    grid-row: 2;
+    height: 32px;
+    width: 100%;
+    border-radius: 8px;
+}
+
+h1 {
+    margin: 0;
+    margin-bottom: 8px;
+    line-height: normal
+}
+
+p {
+    margin: 0;
+}

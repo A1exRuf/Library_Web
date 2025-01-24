@@ -1,5 +1,4 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
-import axios from "axios"
 import book from "./book"
 import apiClient from "../../api/apiClient"
 
@@ -25,10 +24,11 @@ const initialState: bookListState = {
     hasPreviousPage: false,
 }
 
-export const fetchBooks = createAsyncThunk('books/fetchBooks', async () => {
+export const fetchBooks = createAsyncThunk('books/fetchBooks', async (searchTerm: string) => {
     const response = await apiClient
         .get('books/books', {
             params: {
+                searchTerm: searchTerm,
                 page: 1,
                 pageSize: 10
             }
@@ -56,7 +56,6 @@ const bookListSlice = createSlice({
         })
         builder.addCase(fetchBooks.rejected, (state, action) => {
             state.loading = false
-            state.items = []
             state.error = action.error.message
         })
     }
