@@ -2,9 +2,7 @@
 
 public interface IBlobService
 {
-    public Task<Guid> UploadAsync(Stream stream, string contentType, CancellationToken cancellationToken = default);
+    public Task<string> UploadAsync(Stream stream, string fileName, string containerName);
 
-    public Task<FileResponse> DownloadAsync(Guid imageId, CancellationToken cancellationToken = default);
-
-    public Task DeleteAsync(Guid imageId, CancellationToken cancellationToken = default);
+    public Task DeleteAsync(string url);
 }

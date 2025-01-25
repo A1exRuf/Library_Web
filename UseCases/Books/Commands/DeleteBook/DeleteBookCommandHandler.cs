@@ -8,10 +8,12 @@ internal sealed class DeleteBookCommandHandler : ICommandHandler<DeleteBookComma
 {
     private readonly IBookRepository _bookRepository;
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IBlobService _blobService;
 
-    public DeleteBookCommandHandler(IBookRepository bookRepository, IUnitOfWork unitOfWork)
+    public DeleteBookCommandHandler(IBookRepository bookRepository, IBlobService blobService, IUnitOfWork unitOfWork)
     {
         _bookRepository = bookRepository;
+        _blobService = blobService;
         _unitOfWork = unitOfWork;
     }
 
@@ -22,6 +24,11 @@ internal sealed class DeleteBookCommandHandler : ICommandHandler<DeleteBookComma
         if (book == null)
         {
             throw new BookNotFoundException(request.BookId);
+        }
+
+        if (book.ImageUrl != null)
+        {
+            await _blobService.DeleteAsync(book.ImageUrl);
         }
 
         _bookRepository.Remove(book);

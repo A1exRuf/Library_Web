@@ -1,5 +1,3 @@
-using Library_Web;
-
 namespace Library_Web;
 
 public class Program
@@ -7,8 +5,6 @@ public class Program
     public static async Task Main(string[] args)
     {
         var webHost = CreateHostBuilder(args).Build();
-
-
 
         await webHost.RunAsync();
     }

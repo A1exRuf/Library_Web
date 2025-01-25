@@ -9,12 +9,14 @@ internal sealed class CreateBookCommandHandler : ICommandHandler<CreateBookComma
 {
     private readonly IAuthorRepository _authorRepository;
     private readonly IBookRepository _bookRepository;
+    private readonly IBlobService _blobService;
     private readonly IUnitOfWork _unitOfWork;
 
-    public CreateBookCommandHandler(IAuthorRepository authorRepository, IBookRepository bookRepository, IUnitOfWork unitOfWork)
+    public CreateBookCommandHandler(IAuthorRepository authorRepository, IBookRepository bookRepository, IBlobService blobService, IUnitOfWork unitOfWork)
     {
         _authorRepository = authorRepository;
         _bookRepository = bookRepository;
+        _blobService = blobService;
         _unitOfWork = unitOfWork;
     }
 
@@ -27,7 +29,16 @@ internal sealed class CreateBookCommandHandler : ICommandHandler<CreateBookComma
             throw new AuthorNotFoundException(request.AuthorId);
         }
 
-        var book = new Book(Guid.NewGuid(), request.Isbn, request.Title, request.Genree, request.Description, request.AuthorId, author);
+        string? imageUrl = null;
+
+        if (request.ImageStream != null)
+        {
+            string imageName = request.Isbn + "_img";
+
+            imageUrl = await _blobService.UploadAsync(request.ImageStream, imageName, "bimages");
+        }
+
+        var book = new Book(Guid.NewGuid(), request.Isbn, request.Title, request.Genree, request.Description, request.AuthorId, author, imageUrl);
 
         _bookRepository.Add(book);
 

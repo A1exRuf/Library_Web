@@ -11,12 +11,12 @@ public sealed class Book : Entity
     public string Description { get; set; }
     public Guid AuthorId { get; set; }
     public Author Author { get; set; }
-    public Guid? ImageId { get; set; }
+    public string? ImageUrl { get; set; }
     public bool IsAvailable { get; set; }
     public ICollection<BookLoan> BookLoans { get; set; } = new List<BookLoan>();
 
     public Book( Guid id, string isbn, string title, 
-        string genree, string description, Guid authorId, Author author) : base(id)
+        string genree, string description, Guid authorId, Author author, string imageUrl) : base(id)
     {
         Isbn = isbn;
         Title = title;
@@ -25,6 +25,7 @@ public sealed class Book : Entity
         AuthorId = authorId;
         Author = author;
         IsAvailable = true;
+        ImageUrl = imageUrl;
     }
 
     public Book()

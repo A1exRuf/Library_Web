@@ -8,4 +8,5 @@ public sealed record UpdateBookCommand(
     string Title,
     string Genree,
     string Description,
-    Guid AuthorId) : ICommand<bool>;
+    Guid AuthorId,
+    Stream? ImageStream) : ICommand<bool>;

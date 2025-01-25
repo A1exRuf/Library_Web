@@ -3,14 +3,12 @@ using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using UseCases.Books.Commands.AddBookImage;
 using UseCases.Books.Commands.CreateBook;
 using UseCases.Books.Commands.DeleteBook;
 using UseCases.Books.Commands.UpdateBook;
 using UseCases.Books.Queries;
 using UseCases.Books.Queries.GetBookById;
 using UseCases.Books.Queries.GetBooks;
-using UseCases.Books.Queries.GetImageByItsId;
 
 namespace Presentation.Controllers;
 public sealed class BooksController : ApiController
@@ -47,28 +45,24 @@ public sealed class BooksController : ApiController
         return Ok(books);
     }
 
-    [HttpGet("image")]
-    [ProducesResponseType(typeof(BookResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetBookImage(Guid imageId, CancellationToken cancellationToken)
-    {
-        var query = new GetImageByItsIdQuery(imageId);
-
-        var image = await Sender.Send(query, cancellationToken);
-
-        return File(image.FileResponse.Stream, image.FileResponse.ContentType);
-    }
-
     [HttpPost]
     //[Authorize(Policy = "OnlyForAdmin")]
     [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
     public async Task<IActionResult> CreateBook(
-        [FromBody] CreateBookRequest request,
+        [FromForm] CreateBookRequest request,
         CancellationToken cancellationToken)
     {
-        var command = request.Adapt<CreateBookCommand>();
+        Stream imageStream = request.Image.OpenReadStream();
+
+        var command = new CreateBookCommand(
+            request.Isbn,
+            request.Title,
+            request.Genree,
+            request.Description,
+            request.AuthorId,
+            imageStream);
 
         var bookId = await Sender.Send(command, cancellationToken);
 
@@ -101,42 +95,22 @@ public sealed class BooksController : ApiController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UpdateBook(
-        [FromBody] UpdateBookRequest request,
+        [FromForm] UpdateBookRequest request,
         CancellationToken cancellationToken)
     {
+        Stream imageStream = request.Image.OpenReadStream();
+
         var command = new UpdateBookCommand(
             request.BookId,
             request.Isbn,
-            request.Genre,
             request.Title,
+            request.Genree,
             request.Description,
-            request.AuthorId);
+            request.AuthorId,
+            imageStream);
 
         await Sender.Send(command, cancellationToken);
 
         return NoContent();
-    }
-
-    [HttpPost("image")]
-    [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> AddBookImage(
-        Guid bookId,
-        IFormFile file,
-        CancellationToken cancellationToken)
-    {
-        if (file.Length == 0)
-        {
-            return BadRequest("The file is empty.");
-        }
-
-        using var stream = file.OpenReadStream();
-
-        var command = new AddBookImageCommand(bookId, stream, file.ContentType);
-
-        var imageId = await Sender.Send(command, cancellationToken);
-
-        return CreatedAtAction(nameof(GetBook), new { bookId }, imageId);
     }
 }

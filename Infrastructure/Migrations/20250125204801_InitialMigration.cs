@@ -51,7 +51,7 @@ namespace Infrastructure.Migrations
                     Genree = table.Column<string>(type: "text", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),
                     AuthorId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ImageId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ImageUrl = table.Column<string>(type: "text", nullable: true),
                     IsAvailable = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>

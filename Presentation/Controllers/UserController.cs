@@ -2,7 +2,6 @@
 using Mapster;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using UseCases.Books.Commands.AddBookImage;
 using UseCases.Books.Commands.DeleteBook;
 using UseCases.Books.Commands.UpdateBook;
 using UseCases.Users.Commands.DeleteUser;

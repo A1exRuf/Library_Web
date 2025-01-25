@@ -1,4 +1,5 @@
-﻿using UseCases.Abstractions.Messaging;
+﻿using Microsoft.AspNetCore.Http;
+using UseCases.Abstractions.Messaging;
 
 namespace UseCases.Books.Commands.CreateBook;
 
@@ -7,4 +8,5 @@ public sealed record CreateBookCommand(
     string Title,
     string Genree,
     string Description,
-    Guid AuthorId) : ICommand<Guid>;
+    Guid AuthorId,
+    Stream? ImageStream) : ICommand<Guid>;

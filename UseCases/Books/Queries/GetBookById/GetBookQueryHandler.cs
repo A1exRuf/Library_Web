@@ -3,6 +3,7 @@ using Core.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 using UseCases.Abstractions.Messaging;
+using UseCases.Authors.Queries;
 
 namespace UseCases.Books.Queries.GetBookById;
 
@@ -25,13 +26,14 @@ internal sealed class GetBookQueryHandler : IQueryHandler<GetBookByIdQuery, Book
                 b.Title,
                 b.Genree,
                 b.Description,
-                b.AuthorId,
-                b.Author.FirstName,
-                b.Author.LastName,
-                b.Author.DateOfBirth,
-                b.Author.Country,
+                new AuthorDTO(
+                    b.Author.Id,
+                    b.Author.FirstName,
+                    b.Author.LastName,
+                    b.Author.DateOfBirth,
+                    b.Author.Country),
                 b.IsAvailable,
-                b.ImageId))
+                b.ImageUrl))
             .FirstOrDefaultAsync(cancellationToken);
 
         if (book == null)

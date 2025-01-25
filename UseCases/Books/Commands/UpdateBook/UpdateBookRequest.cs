@@ -1,9 +1,12 @@
-﻿namespace UseCases.Books.Commands.UpdateBook;
+﻿using Microsoft.AspNetCore.Http;
+
+namespace UseCases.Books.Commands.UpdateBook;
 
 public sealed record UpdateBookRequest(
     Guid BookId,
     string Isbn,
     string Title,
-    string Genre,
+    string Genree,
     string Description,
-    Guid AuthorId);
+    Guid AuthorId,
+    IFormFile? Image);

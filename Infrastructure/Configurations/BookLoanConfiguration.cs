@@ -12,20 +12,20 @@ internal sealed class BookLoanConfiguration : IEntityTypeConfiguration<BookLoan>
 
         builder.HasKey(BookLoan => BookLoan.Id);
 
-        builder.Property(BookLoan => BookLoan.UserId);
+        builder.Property(BookLoan => BookLoan.UserId).IsRequired();
 
         builder.HasOne(BookLoan => BookLoan.User)
             .WithMany(User => User.BookLoans)
             .HasForeignKey(BookLoan => BookLoan.UserId);
 
-        builder.Property(BookLoan => BookLoan.BookId);
+        builder.Property(BookLoan => BookLoan.BookId).IsRequired(); ;
 
         builder.HasOne(BookLoan => BookLoan.Book)
             .WithMany(book => book.BookLoans)
             .HasForeignKey(book => book.BookId);
 
-        builder.Property(BookLoan => BookLoan.LoanDate);
+        builder.Property(BookLoan => BookLoan.LoanDate).IsRequired(); ;
 
-        builder.Property(BookLoan => BookLoan.DueDate);
+        builder.Property(BookLoan => BookLoan.DueDate).IsRequired(); ;
     }
 }

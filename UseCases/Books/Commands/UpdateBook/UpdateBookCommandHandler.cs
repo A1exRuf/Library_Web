@@ -7,11 +7,13 @@ namespace UseCases.Books.Commands.UpdateBook;
 public sealed class UpdateBookCommandHandler : ICommandHandler<UpdateBookCommand, bool>
 {
     private readonly IBookRepository _bookRepository;
+    private readonly IBlobService _blobService;
     private readonly IUnitOfWork _unitOfWork;
 
-    public UpdateBookCommandHandler(IBookRepository bookRepository, IUnitOfWork unitOfWork)
+    public UpdateBookCommandHandler(IBookRepository bookRepository, IBlobService blobService,IUnitOfWork unitOfWork)
     {
         _bookRepository = bookRepository;
+        _blobService = blobService;
         _unitOfWork = unitOfWork;
     }
 
@@ -22,6 +24,14 @@ public sealed class UpdateBookCommandHandler : ICommandHandler<UpdateBookCommand
         if (book == null)
         {
             throw new BookNotFoundException(request.BookId);
+        }
+
+        string? imageUrl = null;
+
+        if (request.ImageStream != null)
+        {
+            string imageName = request.Isbn + "_img";
+            imageUrl = await _blobService.UploadAsync(request.ImageStream, imageName, "bimages");
         }
 
         book.Isbn = request.Isbn;
