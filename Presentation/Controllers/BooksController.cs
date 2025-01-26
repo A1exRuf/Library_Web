@@ -30,8 +30,8 @@ public sealed class BooksController : ApiController
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetBooks(
         string? searchTerm,
-        string? genre,
-        Guid? authorId,
+        [FromQuery] string?[] genre,
+        [FromQuery] Guid?[] authorId,
         string? sortColumn,
         string? sortOrder,
         int page,

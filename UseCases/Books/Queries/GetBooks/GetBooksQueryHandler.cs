@@ -21,16 +21,16 @@ public sealed class GetBooksQueryHandler : IQueryHandler<GetBooksQuery, PagedLis
     {
         IQueryable<Book> booksQuery = _context.Books;
 
-        if(request.AuthorId.HasValue)
+        if (request.AuthorId.Any())
         {
             booksQuery = booksQuery.Where(b =>
-            b.AuthorId == request.AuthorId);
+            request.AuthorId.Contains(b.AuthorId));
         }
 
-        if (request.Genre != null)
+        if (request.Genre.Any())
         {
             booksQuery = booksQuery.Where(b =>
-            b.Genree == request.Genre);
+            request.Genre.Contains(b.Genree));
         }
 
         if (!string.IsNullOrWhiteSpace(request.SearchTerm))

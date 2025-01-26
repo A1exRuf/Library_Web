@@ -4,8 +4,8 @@ namespace UseCases.Books.Queries.GetBooks;
 
 public record GetBooksQuery(
     string? SearchTerm,
-    string? Genre,
-    Guid? AuthorId,
+    string?[] Genre,
+    Guid?[] AuthorId,
     string? SortColumn, 
     string? SortOrder, 
     int Page, 

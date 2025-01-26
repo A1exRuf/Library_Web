@@ -11,7 +11,7 @@ const initialState: book = {
         id: '',
         firstName: '',
         lastName: '',
-        dateofbirth: new Date,
+        dateOfBirth: new Date,
         country: ''
     },
     isAvailable: false,

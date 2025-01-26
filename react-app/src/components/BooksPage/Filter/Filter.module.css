@@ -1,0 +1,10 @@
+h3 {
+    text-align: center;
+}
+
+.container {
+    background-color: darkgrey;
+    margin: 10px;
+    margin-right: 0;
+    width: 140px;
+}

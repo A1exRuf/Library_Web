@@ -2,7 +2,7 @@ interface author {
     id: string,
     firstName: string,
     lastName: string,
-    dateofbirth: Date,
+    dateOfBirth: Date,
     country: string
 }
 

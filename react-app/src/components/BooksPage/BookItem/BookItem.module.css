@@ -1,6 +1,5 @@
 .bookItem {
     background-color: darkgrey;
-    border-radius: 8px;
     padding: 8px;
     display: grid;
     grid-template-columns: 2fr 3fr;
@@ -11,7 +10,6 @@
 .img {
     grid-column: 1;
     grid-row: 1;
-    border-radius: 5%;
     min-width: 100px;
     width: 100%;
 }
@@ -28,7 +26,6 @@
     grid-row: 2;
     height: 32px;
     width: 100%;
-    border-radius: 8px;
 }
 
 h1 {
