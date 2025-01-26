@@ -5,11 +5,11 @@ body {
 .header-content, .footer-content {
   background-color: #343a40;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  /* Легкая тень для объема */
 }
 
 header, footer, .app-wrapper-content {
-  width: 75%;
+  max-width: 1400px;
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -19,20 +19,16 @@ header, footer, .app-wrapper-content {
   min-height: 100vh;
   gap: 10px;
 
-  grid-template-rows: 60px 1fr 40px;
+  grid-template-rows: auto 1fr 40px;
   grid-template-areas:
     "h"
     "c"
     "f"
 }
 
-@media only screen and (max-width: 800px) {
-  .app-wrapper-content, header, footer {
-    width: 100%;
-  }
-
+@media only screen and (max-width: 1400px) {
   .app-wrapper-content {
-    margin-inline: 10px;
+    margin-inline: 16px;
   }
 }
 

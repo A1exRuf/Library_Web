@@ -10,7 +10,7 @@ interface book {
     isAvailable: boolean,
     imageUrl: string | null,
     loading: boolean,
-    error: string,
+    error: string | undefined,
 }
 
 export default book

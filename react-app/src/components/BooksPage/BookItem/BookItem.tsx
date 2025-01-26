@@ -1,6 +1,7 @@
 import s from "./BookItem.module.css";
 import book from "../../../state/book/book";
 import imgBookBlank from "../../../images/book_blank.png";
+import { NavLink } from "react-router-dom";
 
 function BookItem(props: book) {
   return (
@@ -18,7 +19,9 @@ function BookItem(props: book) {
         <p>Genre: {props.genree}</p>
         <p>ISBN: {props.isbn}</p>
       </div>
-      <button className={s.button}>Go to</button>
+      <NavLink to={`/books/${props.id}`} className={s.button}>
+        Go to
+      </NavLink>
     </div>
   );
 }

@@ -17,7 +17,7 @@ function App() {
           <Routes>
             <Route path="/books" element={<BooksPage />} />
             <Route path="/mybooks" element={<MyBooksPage />} />
-            <Route path="/book" element={<BookPage />} />
+            <Route path="/books/:id" element={<BookPage />} />
           </Routes>
         </div>
         <div className="footer-content">

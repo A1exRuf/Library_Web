@@ -36,8 +36,13 @@
 .button {
     grid-column: 1 / span 2;
     grid-row: 2;
+    background-color: #ffc107;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
     height: 48px;
-    width: 100%;
+    text-align: center;
+    line-height: 48px;
 }
 
 .button:hover {
