@@ -1,16 +1,14 @@
+import author from "../author/author"
+
 interface book {
     id: string,
     isbn: string,
     title: string,
     genree: string,
     description: string,
-    authorId: string,
-    authorFirstName: string,
-    authorLastName: string,
-    authorDateOfBirth: string,
-    authorCountry: string,
+    author: author,
     isAvailable: boolean,
-    imageId: string | null,
+    imageUrl: string | null,
     loading: boolean,
     error: string,
 }

@@ -7,13 +7,15 @@ const initialState: book = {
     title: 'title',
     genree: 'genre',
     description: 'description',
-    authorId: 'author id',
-    authorFirstName: 'first name',
-    authorLastName: 'last name',
-    authorDateOfBirth: 'date of birth',
-    authorCountry: 'country',
+    author: {
+        id: '',
+        firstName: '',
+        lastName: '',
+        dateofbirth: new Date,
+        country: ''
+    },
     isAvailable: false,
-    imageId: 'image id',
+    imageUrl: '',
     loading: false,
     error: ''
 }

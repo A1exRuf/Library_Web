@@ -16,7 +16,7 @@ public sealed class Book : Entity
     public ICollection<BookLoan> BookLoans { get; set; } = new List<BookLoan>();
 
     public Book( Guid id, string isbn, string title, 
-        string genree, string description, Guid authorId, Author author, string imageUrl) : base(id)
+        string genree, string description, Guid authorId, Author author, string? imageUrl) : base(id)
     {
         Isbn = isbn;
         Title = title;

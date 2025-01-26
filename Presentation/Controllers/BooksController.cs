@@ -54,7 +54,7 @@ public sealed class BooksController : ApiController
         [FromForm] CreateBookRequest request,
         CancellationToken cancellationToken)
     {
-        Stream imageStream = request.Image.OpenReadStream();
+        Stream? imageStream = request.Image?.OpenReadStream();
 
         var command = new CreateBookCommand(
             request.Isbn,
@@ -98,7 +98,7 @@ public sealed class BooksController : ApiController
         [FromForm] UpdateBookRequest request,
         CancellationToken cancellationToken)
     {
-        Stream imageStream = request.Image.OpenReadStream();
+        Stream? imageStream = request.Image?.OpenReadStream();
 
         var command = new UpdateBookCommand(
             request.BookId,
