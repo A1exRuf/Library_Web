@@ -1,12 +1,11 @@
 .header {
     grid-area: h;
-    background-color: darkgrey;
     padding: 10px;
-    display: flex
+    display: flex;
 }
 
 .item {
-    background-color: gray;
+    background-color: #fff;
     width: 20%;
     height: auto;
     padding: 10px;
@@ -14,12 +13,14 @@
     display: flex;
     align-items: center;
     justify-content: left;
+    border-radius: 12px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .item a {
-    color: white;
+    color: #333;
 }
 
 .item a.active {
-    color: gold
+    color: #e0a806;
 }

@@ -32,7 +32,7 @@ function Filter({ onFilterChange }: FilterProps) {
 
   return (
     <div className={s.container}>
-      <h3>Author</h3>
+      <h2>Author</h2>
       {authorList.items && authorList.items.length > 0 ? (
         <div>
           {authorList.items.map((author) => (

@@ -1,10 +1,27 @@
-h3 {
-    text-align: center;
+.container {
+    background-color: #f5f5f5;
+    width: 180px;
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.container {
-    background-color: darkgrey;
-    margin: 10px;
-    margin-right: 0;
-    width: 140px;
+label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #555;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+label:hover {
+    color: #007bff;
+}
+
+input[type="checkbox"] {
+    margin-right: 8px;
+    accent-color: #007bff;
+    transform: scale(1.2);
 }

@@ -11,7 +11,7 @@ function BookItem(props: book) {
         className={s.img}
       />
       <div className={s.bookInfo}>
-        <h1>{props.title}</h1>
+        <h2>{props.title}</h2>
         <p>
           {props.author.firstName} {props.author.lastName}
         </p>

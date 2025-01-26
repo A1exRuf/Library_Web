@@ -10,7 +10,9 @@ function App() {
   return (
     <BrowserRouter>
       <div className="app-wrapper">
-        <Header />
+        <div className="header-content">
+          <Header />
+        </div>
         <div className="app-wrapper-content">
           <Routes>
             <Route path="/books" element={<BooksPage />} />
@@ -18,7 +20,9 @@ function App() {
             <Route path="/book" element={<BookPage />} />
           </Routes>
         </div>
-        <Footer />
+        <div className="footer-content">
+          <Footer />
+        </div>
       </div>
     </BrowserRouter>
   );

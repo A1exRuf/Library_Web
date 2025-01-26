@@ -1,23 +1,41 @@
-.app-wrapper {
+body {
+  background-color: #e0e7ef
+}
+
+.header-content, .footer-content {
+  background-color: #343a40;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* Легкая тень для объема */
+}
+
+header, footer, .app-wrapper-content {
   width: 75%;
   margin: 0 auto;
+}
+
+.app-wrapper {
+  margin: auto;
   display: grid;
+  min-height: 100vh;
+  gap: 10px;
 
   grid-template-rows: 60px 1fr 40px;
   grid-template-areas:
     "h"
     "c"
     "f"
-
 }
 
 @media only screen and (max-width: 800px) {
-  .app-wrapper {
+  .app-wrapper-content, header, footer {
     width: 100%;
+  }
+
+  .app-wrapper-content {
+    margin-inline: 10px;
   }
 }
 
 .app-wrapper-content {
   grid-area: c;
-  background-color: grey;
 }

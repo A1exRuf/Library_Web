@@ -10,7 +10,12 @@ body {
 h1, h2, h3, h4, h5, h6 {
     font-weight: bold;
     margin-bottom: 16px;
-    color: #212529;
+    color: #333;
+}
+
+p {
+    font-size: 14px;
+    line-height: 1.6;
 }
 
 a {
@@ -20,10 +25,14 @@ a {
 button {
     font-family: inherit;
     font-size: 16px;
-    background-color: #007bff;
+    background-color: #ffc107;
     color: white;
+    font-weight: bold;
+    text-align: center;
     border: none;
+    border-radius: 8px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 input, textarea {
