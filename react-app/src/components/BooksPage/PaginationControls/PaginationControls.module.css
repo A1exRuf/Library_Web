@@ -1,0 +1,35 @@
+.container {
+    grid-column: 2;
+}
+
+.previous_btn, .page_btn, .next_btn {
+    background-color: #f5f5f5;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: #333;
+    padding: 8px;
+    font-weight: normal;
+}
+
+.previous_btn:hover, .page_btn:hover, .next_btn:hover {
+    background-color: #cfcfcf;
+}
+
+.previous_btn {
+    border-radius: 12px 0px 0px 12px;
+}
+
+.page_btn {
+    border-radius: 0px;
+}
+
+.page_btn.active {
+    font-weight: bold;
+}
+
+.next_btn {
+    border-radius: 0px 12px 12px 0px;
+}
+
+.previous_btn:disabled, .next_btn:disabled {
+    color: #cfcfcf;
+}

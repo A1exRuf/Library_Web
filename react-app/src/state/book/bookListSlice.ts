@@ -24,7 +24,7 @@ const initialState: bookListState = {
     hasPreviousPage: false,
 }
 
-export const fetchBooks = createAsyncThunk('books/fetchBooks', async ({ searchTerm, authorId }: { searchTerm: string; authorId: string[] }) => {
+export const fetchBooks = createAsyncThunk('books/fetchBooks', async ({ searchTerm, authorId, page }: { searchTerm: string; authorId: string[], page: number }) => {
     const params = new URLSearchParams();
 
     if (searchTerm) {
@@ -35,8 +35,8 @@ export const fetchBooks = createAsyncThunk('books/fetchBooks', async ({ searchTe
         params.append('authorId', id);
     });
 
-    params.append('page', '1');
-    params.append('pageSize', '10');
+    params.append('page', page.toString());
+    params.append('pageSize', '2');
 
     const response = await apiClient
         .get(`books/books?${params.toString()}`)
