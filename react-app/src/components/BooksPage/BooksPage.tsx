@@ -13,7 +13,9 @@ import { useSearchParams } from "react-router-dom";
 const BooksPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchParams, setSearchParams] = useSearchParams();
-  const authorIds = useSelector((state: RootState) => state.filter.authorIds);
+  const { authorIds, genres, showUnavailable } = useSelector(
+    (state: RootState) => state.filter
+  );
   const bookList = useSelector((state: RootState) => state.bookList);
   const dispatch = useDispatch<AppDispath>();
   const debouncedSearchTerm = useDebounce(searchTerm, 1000);
@@ -34,10 +36,19 @@ const BooksPage = () => {
       fetchBooks({
         searchTerm: debouncedSearchTerm,
         authorId: authorIds,
+        genre: genres,
+        showUnavailable: showUnavailable,
         page: currentPage,
       })
     );
-  }, [debouncedSearchTerm, authorIds, currentPage, dispatch]);
+  }, [
+    debouncedSearchTerm,
+    authorIds,
+    genres,
+    showUnavailable,
+    currentPage,
+    dispatch,
+  ]);
 
   return (
     <div className={s.container}>

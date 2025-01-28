@@ -34,11 +34,12 @@ public sealed class BooksController : ApiController
         [FromQuery] Guid?[] authorId,
         string? sortColumn,
         string? sortOrder,
+        bool? showUnavailable,
         int page,
         int pageSize,
         CancellationToken cancellation)
     {
-        var query = new GetBooksQuery(searchTerm, genre, authorId, sortColumn, sortOrder, page, pageSize);
+        var query = new GetBooksQuery(searchTerm, genre, authorId, showUnavailable, sortColumn, sortOrder, page, pageSize);
 
         var books = await Sender.Send(query, cancellation);
 

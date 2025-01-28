@@ -34,11 +34,11 @@ public sealed class UpdateBookCommandHandler : ICommandHandler<UpdateBookCommand
             imageUrl = await _blobService.UploadAsync(request.ImageStream, imageName, "bimages");
         }
 
-        book.Isbn = request.Isbn;
-        book.Title = request.Title;
-        book.Genree = request.Genree;
-        book.Description = request.Description;
-        book.AuthorId = request.AuthorId;
+        book.Isbn = request.Isbn ?? book.Isbn;
+        book.Title = request.Title ?? book.Title;
+        book.Genree = request.Genree ?? book.Genree;
+        book.Description = request.Description ?? book.Description;
+        book.AuthorId = request.AuthorId ?? book.AuthorId;
 
         _bookRepository.Update(book);
 

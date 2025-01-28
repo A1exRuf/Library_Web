@@ -24,10 +24,10 @@ internal sealed class UpdateAuthorCommandHandler : ICommandHandler<UpdateAuthorC
             throw new AuthorNotFoundException(request.AuthorId);
         }
 
-        author.FirstName = request.FirstName;
-        author.LastName = request.LastName;
-        author.DateOfBirth = request.DateOfBirth;
-        author.Country = request.Country;
+        author.FirstName = request.FirstName ?? author.FirstName;
+        author.LastName = request.LastName ?? author.LastName;
+        author.DateOfBirth = request.DateOfBirth ?? author.DateOfBirth;
+        author.Country = request.Country ?? author.Country;
 
         _authorRepository.Update(author);
 

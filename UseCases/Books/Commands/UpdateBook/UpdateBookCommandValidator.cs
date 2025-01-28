@@ -7,16 +7,23 @@ public sealed class UpdateBookCommandValidator : AbstractValidator<UpdateBookCom
 {
     public UpdateBookCommandValidator(IBookRepository bookRepository)
     {
-        RuleFor(x => x.BookId).NotEmpty();
+        RuleFor(x => x.BookId);
 
-        RuleFor(x => x.Isbn).NotEmpty();
+        RuleFor(x => x.Isbn);
 
-        RuleFor(x => x.Title).NotEmpty();
+        RuleFor(x => x.Title);
 
-        RuleFor(x => x.Genree).NotEmpty();
+        RuleFor(x => x.Genree).Must(g =>
+        g == "Fiction" ||
+        g == "Non-Fiction" ||
+        g == "Mystery/Thriller" ||
+        g == "Science Fiction" ||
+        g == "Fantasy" ||
+        g == "Biography" ||
+        g == "Romance");
 
-        RuleFor(x => x.Description).NotEmpty();
+        RuleFor(x => x.Description);
 
-        RuleFor(x => x.AuthorId).NotEmpty();
+        RuleFor(x => x.AuthorId);
     }
 }

@@ -21,6 +21,12 @@ public sealed class GetBooksQueryHandler : IQueryHandler<GetBooksQuery, PagedLis
     {
         IQueryable<Book> booksQuery = _context.Books;
 
+        if (request.ShowUnavailable != true)
+        {
+            booksQuery = booksQuery.Where(b =>
+            b.IsAvailable == true);
+        }
+
         if (request.AuthorId.Any())
         {
             booksQuery = booksQuery.Where(b =>

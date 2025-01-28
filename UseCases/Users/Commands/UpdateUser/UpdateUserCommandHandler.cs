@@ -26,11 +26,16 @@ internal class UpdateUserCommandHandler : ICommandHandler<UpdateUserCommand, boo
             throw new UserNotFoundException(request.UserId);
         }
 
-        var hashedPassword = _passwordHasher.HashPassword(request.Password);
+        string? hashedPassword = null;
 
-        user.Name = request.Name;
-        user.Email = request.Email;
-        user.PasswordHash = hashedPassword;
+        if(request.Password != null)
+        {
+            hashedPassword = _passwordHasher.HashPassword(request.Password);
+        }
+
+        user.Name = request.Name ?? user.Name;
+        user.Email = request.Email ?? user.Email;
+        user.PasswordHash = hashedPassword ?? user.PasswordHash;
         user.Role = request.Role;
 
         _userRepository.Update(user);

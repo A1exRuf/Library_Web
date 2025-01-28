@@ -6,6 +6,7 @@ public record GetBooksQuery(
     string? SearchTerm,
     string?[] Genre,
     Guid?[] AuthorId,
+    bool? ShowUnavailable,
     string? SortColumn, 
     string? SortOrder, 
     int Page, 

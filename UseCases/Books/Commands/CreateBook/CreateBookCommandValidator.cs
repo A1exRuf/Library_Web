@@ -10,7 +10,14 @@ public sealed class CreateBookCommandValidator : AbstractValidator<CreateBookCom
 
         RuleFor(x => x.Title).NotEmpty();
 
-        RuleFor(x => x.Genree).NotEmpty();
+        RuleFor(x => x.Genree).NotEmpty().Must(g => 
+        g == "Fiction" || 
+        g == "Non-Fiction" ||
+        g == "Mystery/Thriller" ||
+        g == "Science Fiction" ||
+        g == "Fantasy" ||
+        g == "Biography" ||
+        g == "Romance");
 
         RuleFor(x => x.Description).NotEmpty();
 

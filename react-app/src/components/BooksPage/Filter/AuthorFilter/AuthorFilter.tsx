@@ -1,3 +1,4 @@
+import s from "../Filter.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispath, RootState } from "../../../../state/store";
 import { useEffect } from "react";
@@ -18,8 +19,8 @@ function AuthorFilter() {
   }, [dispatch]);
 
   return (
-    <div>
-      <h2>Author </h2>
+    <div className={s.subContainer}>
+      <h2>Authors</h2>
       {authorList.items && authorList.items.length > 0 ? (
         <div>
           {authorList.items.map((author) => (

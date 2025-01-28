@@ -2,7 +2,7 @@
 
 public sealed record UpdateAuthorRequest(
     Guid AuthorId,
-    string FirstName,
-    string LastName,
-    DateTime DateOfBirth,
-    string Country);
+    string? FirstName,
+    string? LastName,
+    DateTime? DateOfBirth,
+    string? Country);

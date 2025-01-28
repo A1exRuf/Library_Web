@@ -13,12 +13,12 @@ public sealed class UpdateAuthorCommandValidator : AbstractValidator<UpdateAutho
 
         RuleFor(x => x.AuthorId).NotEmpty();
 
-        RuleFor(x => x.FirstName).NotEmpty();
+        RuleFor(x => x.FirstName);
 
-        RuleFor(x => x.LastName).NotEmpty();
+        RuleFor(x => x.LastName);
 
-        RuleFor(x => x.DateOfBirth).NotEmpty();
+        RuleFor(x => x.DateOfBirth);
 
-        RuleFor(x => x.Country).NotEmpty();
+        RuleFor(x => x.Country);
     }
 }
