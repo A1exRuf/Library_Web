@@ -12,8 +12,8 @@ import { useSearchParams } from "react-router-dom";
 
 const BooksPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedAuthors, setSelectedAuthors] = useState<string[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
+  const authorIds = useSelector((state: RootState) => state.filter.authorIds);
   const bookList = useSelector((state: RootState) => state.bookList);
   const dispatch = useDispatch<AppDispath>();
   const debouncedSearchTerm = useDebounce(searchTerm, 1000);
@@ -29,24 +29,20 @@ const BooksPage = () => {
     handlePageChange(1);
   };
 
-  const handleFilterChange = (authors: string[]) => {
-    setSelectedAuthors(authors);
-  };
-
   useEffect(() => {
     dispatch(
       fetchBooks({
         searchTerm: debouncedSearchTerm,
-        authorId: selectedAuthors,
+        authorId: authorIds,
         page: currentPage,
       })
     );
-  }, [debouncedSearchTerm, selectedAuthors, currentPage, dispatch]);
+  }, [debouncedSearchTerm, authorIds, currentPage, dispatch]);
 
   return (
     <div className={s.container}>
       <Search onSearchChange={handleSearchChange} />
-      <Filter onFilterChange={handleFilterChange} />
+      <Filter />
       <div className={s.content}>
         {bookList.loading && <div>Loading...</div>}
         {!bookList.loading && bookList.error ? (
