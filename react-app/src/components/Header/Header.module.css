@@ -5,10 +5,9 @@
     gap: 10px;
 }
 
-.item {
+.item, .signIn {
     background-color: #fff;
-    width: 20%;
-    padding: 10px;
+    padding: 10px 16px 10px 16px;
     display: flex;
     align-items: center;
     justify-content: left;
@@ -16,10 +15,14 @@
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.item a {
+.signIn {
+    margin-left: auto;
+}
+
+.item a, .signIn a {
     color: #333;
 }
 
-.item a.active {
+.item a.active, .signIn a.active {
     color: #e0a806;
 }

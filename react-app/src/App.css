@@ -9,8 +9,9 @@ body {
 
 header, footer, .app-wrapper-content {
   max-width: 1400px;
-  width: 100%;
   margin: 0 auto;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .app-wrapper {
@@ -26,12 +27,7 @@ header, footer, .app-wrapper-content {
     "f"
 }
 
-@media only screen and (max-width: 1400px) {
-  .app-wrapper-content {
-    margin-inline: 16px;
-  }
-}
-
 .app-wrapper-content {
   grid-area: c;
+  padding-inline: 16px;
 }

@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import MyBooksPage from "./components/MyBooksPage/MyBooksPage";
 import BooksPage from "./components/BooksPage/BooksPage";
 import BookPage from "./components/BookPage/BookPage";
+import SignInPage from "./components/SignInPage/SignInPage";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <Route path="/books" element={<BooksPage />} />
             <Route path="/mybooks" element={<MyBooksPage />} />
             <Route path="/books/:id" element={<BookPage />} />
+            <Route path="/signin" element={<SignInPage />} />
           </Routes>
         </div>
         <div className="footer-content">

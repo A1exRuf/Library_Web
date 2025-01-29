@@ -20,6 +20,14 @@ function Header() {
           My books
         </NavLink>
       </div>
+      <div className={s.signIn}>
+        <NavLink
+          to="/signin"
+          className={(navData) => (navData.isActive ? s.active : "")}
+        >
+          Sign in
+        </NavLink>
+      </div>
     </header>
   );
 }

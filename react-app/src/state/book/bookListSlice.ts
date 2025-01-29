@@ -47,7 +47,7 @@ export const fetchBooks = createAsyncThunk('books/fetchBooks', async (
         params.append('showUnavailable', 'true');
     }
 
-    params.append('pageSize', '2');
+    params.append('pageSize', '10');
 
     const response = await apiClient
         .get(`books/books?${params.toString()}`)
