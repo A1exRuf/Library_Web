@@ -8,7 +8,7 @@ public sealed class RegisterCommandValidator : AbstractValidator<RegisterCommand
     {
         RuleFor(x => x.Name).NotEmpty();
         RuleFor(x => x.Email).NotEmpty().EmailAddress();
-        RuleFor(x => x.Password).NotEmpty().MinimumLength(6);
+        RuleFor(x => x.Password).NotEmpty().MinimumLength(6).MaximumLength(24);
         RuleFor(x => x.ConfirmPassword).Equal(x => x.Password);
         RuleFor(x => x.Role).Must(Role => Role == "Admin" || Role == "User");
     }

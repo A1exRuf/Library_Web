@@ -3,13 +3,15 @@ import authorListReducer from "./author/authorListSlice"
 import bookReducer from "./book/bookSlice"
 import bookListReducer from "./book/bookListSlice"
 import filterReducer from "./book/filterSlice"
+import signInReducer from "./user/signInSlice"
 
 export const store = configureStore({
     reducer: {
         book: bookReducer,
         bookList: bookListReducer,
         authorList: authorListReducer,
-        filter: filterReducer
+        filter: filterReducer,
+        signIn: signInReducer
     }
 })
 

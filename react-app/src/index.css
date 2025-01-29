@@ -35,6 +35,10 @@ button {
     transition: background-color 0.3s ease;
 }
 
+button:hover {
+    background-color: #e0a806;
+}
+
 input, textarea {
     font-family: inherit;
     font-size: 16px;

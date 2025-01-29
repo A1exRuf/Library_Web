@@ -1,7 +1,20 @@
+import { useDispatch, useSelector } from "react-redux";
 import s from "./Header.module.css";
 import { NavLink } from "react-router-dom";
+import { AppDispath, RootState } from "../../state/store";
+import { logout } from "../../state/user/signInSlice";
 
 function Header() {
+  const dispatch = useDispatch<AppDispath>();
+
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.signIn.isAuthenticated
+  );
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
+
   return (
     <header className={s.header}>
       <div className={s.item}>
@@ -20,14 +33,20 @@ function Header() {
           My books
         </NavLink>
       </div>
-      <div className={s.signIn}>
-        <NavLink
-          to="/signin"
-          className={(navData) => (navData.isActive ? s.active : "")}
-        >
-          Sign in
-        </NavLink>
-      </div>
+      {isAuthenticated ? (
+        <div className={s.logout} onClick={handleLogout}>
+          Logout
+        </div>
+      ) : (
+        <div className={s.signIn}>
+          <NavLink
+            to="/signin"
+            className={(navData) => (navData.isActive ? s.active : "")}
+          >
+            Sign in
+          </NavLink>
+        </div>
+      )}
     </header>
   );
 }

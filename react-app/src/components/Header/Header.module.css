@@ -5,7 +5,7 @@
     gap: 10px;
 }
 
-.item, .signIn {
+.item, .signIn, .logout {
     background-color: #fff;
     padding: 10px 16px 10px 16px;
     display: flex;
@@ -15,8 +15,9 @@
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-.signIn {
+.signIn, .logout {
     margin-left: auto;
+    cursor: pointer;
 }
 
 .item a, .signIn a {
