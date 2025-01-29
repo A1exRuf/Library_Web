@@ -33,17 +33,17 @@
     border-color: #e0a806;
 }
 
+.roleSelector {
+    gap: 8px;
+}
+
+.roleSelector input[type="radio"] {
+    width: 16px;
+    height: 16px;
+}
+
 .submit {
+    margin-top: 16px;
     width: 100%;
     padding: 12px;
-}
-
-.haveAccount {
-    text-align: center;
-    font-size: 14px;
-}
-
-.haveAccount a {
-    color: #e0a806;
-    text-decoration: none;
 }

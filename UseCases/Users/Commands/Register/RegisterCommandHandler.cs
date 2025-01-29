@@ -1,6 +1,7 @@
 ﻿using Core.Abstractions;
 using Core.Entities;
 using UseCases.Abstractions.Messaging;
+using UseCases.Exceptions;
 
 namespace UseCases.Users.Commands.Register;
 
@@ -19,7 +20,12 @@ internal class RegisterCommandHandler : ICommandHandler<RegisterCommand, Guid>
     }
 
     public async Task<Guid> Handle(RegisterCommand request, CancellationToken cancellationToken)
-    {
+    { 
+        if ( await _userRepository.EmailExistsAsync(request.Email) == true )
+        {
+            throw new EmailExistsException();
+        }
+
         var hashedPassword = _passwordHasher.HashPassword(request.Password);
 
         var user = new User(Guid.NewGuid(), request.Name, request.Email, hashedPassword, request.Role);
