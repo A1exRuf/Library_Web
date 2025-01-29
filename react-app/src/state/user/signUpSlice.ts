@@ -13,17 +13,22 @@ const initialState: signUpState = {
     error: undefined
 }
 
-export const register = createAsyncThunk(
-    "user/register",
-    async (userData, { rejectWithValue }) => {
-        try {
-            const response = await apiClient.post("/api/register", userData);
-            return response.data;
-        } catch (error) {
-            return rejectWithValue(error.response?.data); // Передаем response.data
-        }
+export const register = createAsyncThunk("user/signup", async ({ name, email, password, confirmPassword, role }:
+    { name: string, email: string, password: string, confirmPassword: string, role: string }, { rejectWithValue }
+) => {
+    try {
+        const response = await apiClient.post('user/register', {
+            name,
+            email,
+            password,
+            confirmPassword,
+            role
+        });
+        return response.data;
+    } catch (error: any) {
+        return rejectWithValue(error.response?.data?.message || "Registration failed")
     }
-);
+});
 
 const signUpSlice = createSlice({
     name: "signUp",
@@ -36,14 +41,14 @@ const signUpSlice = createSlice({
         })
 
         builder.addCase(register.fulfilled, (state, action) => {
-            state.userId = action.payload.userIdl;
+            state.userId = action.payload;
             state.loading = false;
             state.error = undefined;
         })
 
         builder.addCase(register.rejected, (state, action) => {
             state.loading = false;
-            state.error = action.error.message;
+            state.error = action.payload as string;
         })
     }
 })

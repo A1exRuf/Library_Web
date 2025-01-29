@@ -21,18 +21,16 @@ function SignUpPage() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(name, email, password, confirmPassword, role);
 
     dispatch(register({ name, email, password, confirmPassword, role }));
   };
 
   if (userId) {
-    navigate("/books");
+    navigate("/signin");
   }
 
   return (
     <div className={s.container}>
-      {error && <p className={s.error}>{error}</p>}
       <h1>Sign up</h1>
       <form onSubmit={handleSubmit}>
         <h2 className={s.inputName}>Name:</h2>
@@ -106,6 +104,7 @@ function SignUpPage() {
         <button className={s.submit} type="submit" disabled={loading}>
           {loading ? "Loading..." : "Sign up"}
         </button>
+        {error && <p className={s.error}>{error}</p>}
       </form>
     </div>
   );

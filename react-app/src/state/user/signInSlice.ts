@@ -17,10 +17,15 @@ const initialState: signInState = {
     error: undefined
 }
 
-export const login = createAsyncThunk("user/signin", async ({ email, password }: { email: string, password: string }) => {
-    const response = await apiClient
-        .post('user/login', { email, password });
-    return response.data;
+export const login = createAsyncThunk("user/signin", async ({ email, password }: { email: string, password: string }, { rejectWithValue }) => {
+    try {
+        const response = await apiClient
+            .post('user/login', { email, password });
+        return response.data;
+    } catch (error: any) {
+        return rejectWithValue(error.response?.data?.message || "Authentication failed")
+    }
+
 });
 
 const signInSlice = createSlice({
@@ -59,7 +64,7 @@ const signInSlice = createSlice({
 
         builder.addCase(login.rejected, (state, action) => {
             state.loading = false;
-            state.error = action.error.message;
+            state.error = action.payload as string;
         })
     }
 })

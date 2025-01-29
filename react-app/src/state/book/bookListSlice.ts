@@ -26,7 +26,8 @@ const initialState: bookListState = {
 
 export const fetchBooks = createAsyncThunk('books/fetchBooks', async (
     { searchTerm, authorId, genre, showUnavailable, page }:
-        { searchTerm: string; authorId: string[], genre: string[], showUnavailable: boolean, page: number }) => {
+        { searchTerm: string; authorId: string[], genre: string[], showUnavailable: boolean, page: number },
+    { rejectWithValue }) => {
     const params = new URLSearchParams();
 
     if (searchTerm) {
@@ -49,10 +50,14 @@ export const fetchBooks = createAsyncThunk('books/fetchBooks', async (
 
     params.append('pageSize', '10');
 
-    const response = await apiClient
-        .get(`books/books?${params.toString()}`)
+    try {
+        const response = await apiClient
+            .get(`books/books?${params.toString()}`)
 
-    return response.data
+        return response.data
+    } catch (error: any) {
+        return rejectWithValue(error.response?.data?.message || "Get books failed")
+    }
 })
 
 const bookListSlice = createSlice({
@@ -75,7 +80,7 @@ const bookListSlice = createSlice({
         })
         builder.addCase(fetchBooks.rejected, (state, action) => {
             state.loading = false
-            state.error = action.error.message
+            state.error = action.payload as string
         })
     }
 })
