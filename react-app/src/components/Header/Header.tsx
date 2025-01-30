@@ -25,14 +25,17 @@ function Header() {
           Books
         </NavLink>
       </div>
-      <div className={s.item}>
-        <NavLink
-          to="/mybooks"
-          className={(navData) => (navData.isActive ? s.active : "")}
-        >
-          My books
-        </NavLink>
-      </div>
+      {isAuthenticated ? (
+        <div className={s.item}>
+          <NavLink
+            to="/mybooks"
+            className={(navData) => (navData.isActive ? s.active : "")}
+          >
+            My books
+          </NavLink>
+        </div>
+      ) : null}
+
       {isAuthenticated ? (
         <div className={s.logout} onClick={handleLogout}>
           Logout
