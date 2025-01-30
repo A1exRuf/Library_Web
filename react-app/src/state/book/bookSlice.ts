@@ -12,7 +12,7 @@ const initialState: book = {
         id: '',
         firstName: '',
         lastName: '',
-        dateOfBirth: new Date,
+        dateOfBirth: '',
         country: ''
     },
     isAvailable: false,
@@ -35,8 +35,6 @@ export const fetchBook = createAsyncThunk('books/fetchBook', async (bookId: stri
     } catch (error: any) {
         return rejectWithValue(error.response?.data?.message || "Get book failed")
     }
-
-
 })
 
 const bookSlice = createSlice({
@@ -60,7 +58,7 @@ const bookSlice = createSlice({
         })
         builder.addCase(fetchBook.rejected, (state, action) => {
             state.loading = false
-            state.error = action.error.message
+            state.error = action.payload as string;
         })
     }
 })

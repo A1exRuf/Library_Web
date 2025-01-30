@@ -70,7 +70,13 @@ const bookListSlice = createSlice({
         })
         builder.addCase(fetchBooks.fulfilled, (state, action) => {
             state.loading = false
-            state.items = action.payload.items
+            state.items = action.payload.items.map((b: book) => ({
+                ...b,
+                author: {
+                    ...b.author,
+                    dateOfBirth: b.author.dateOfBirth = new Date(b.author.dateOfBirth).toISOString()
+                }
+            }))
             state.page = action.payload.page
             state.pageSize = action.payload.pageSize
             state.totalCount = action.payload.totalCount

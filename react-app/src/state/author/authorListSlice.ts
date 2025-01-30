@@ -32,7 +32,10 @@ const authorListSlice = createSlice({
         builder.addCase(fetchAuthors.fulfilled, (state, action) => {
             state.loading = false
             state.error = ''
-            state.items = action.payload
+            state.items = action.payload.map((a: author) => ({
+                ...a,
+                dateOfBirth: new Date(a.dateOfBirth).toISOString()
+            }))
         })
         builder.addCase(fetchAuthors.rejected, (state, action) => {
             state.loading = false

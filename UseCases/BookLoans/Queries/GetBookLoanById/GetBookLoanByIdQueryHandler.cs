@@ -2,6 +2,8 @@
 using Core.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using UseCases.Abstractions.Messaging;
+using UseCases.Authors.Queries;
+using UseCases.Books.Queries;
 
 namespace UseCases.BookLoans.Queries.GetBookLoanById;
 
@@ -20,8 +22,14 @@ internal sealed class GetBookLoanByIdQueryHandler : IQueryHandler<GetBookLoanByI
             .Where(bl => bl.Id == request.BookLoanId)
             .Select(bl => new BookLoanResponse(
                 bl.Id,
-                bl.UserId,
-                bl.BookId,
+                new BookLoansBookDTO(
+                    bl.Book.Id,
+                    bl.Book.Isbn,
+                    bl.Book.Title,
+                    bl.Book.ImageUrl,
+                    new BookLoansAuthorDTO(
+                        bl.Book.Author.FirstName,
+                        bl.Book.Author.LastName)),
                 bl.LoanDate,
                 bl.DueDate))
             .FirstOrDefaultAsync(cancellationToken);
