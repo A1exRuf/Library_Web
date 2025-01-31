@@ -1,20 +1,23 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import apiClient from "../../api/apiClient"
+import Cookies from "js-cookie"
+
+var inOneMinute = new Date(new Date().getTime() + 60 * 1000);
 
 interface signInState {
     accessToken: string | null,
     refreshToken: string | null,
     isAuthenticated: boolean,
     loading: boolean,
-    error: string | undefined
+    error: string | undefined,
 }
 
 const initialState: signInState = {
-    accessToken: localStorage.getItem("accessToken"),
-    refreshToken: localStorage.getItem("refreshToken"),
-    isAuthenticated: !!localStorage.getItem("accessToken"),
+    accessToken: Cookies.get("accessToken") || null,
+    refreshToken: Cookies.get("refreshToken") || null,
+    isAuthenticated: !!Cookies.get("refreshToken"),
     loading: false,
-    error: undefined
+    error: undefined,
 }
 
 export const login = createAsyncThunk("user/signin", async ({ email, password }: { email: string, password: string }, { rejectWithValue }) => {
@@ -37,11 +40,11 @@ const signInSlice = createSlice({
             state.refreshToken = null;
             state.isAuthenticated = false;
 
-            localStorage.removeItem("accessToken");
-            localStorage.removeItem("refreshToken");
+            Cookies.remove("accessToken");
+            Cookies.remove("refreshToken");
 
             delete apiClient.defaults.headers.common["Authorization"];
-        }
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(login.pending, (state) => {
@@ -56,8 +59,8 @@ const signInSlice = createSlice({
             state.loading = false;
             state.error = undefined;
 
-            localStorage.setItem("accessToken", action.payload.accessToken)
-            localStorage.setItem("refreshToken", action.payload.refreshToken)
+            Cookies.set("accessToken", action.payload.accessToken, { expires: inOneMinute })
+            Cookies.set("refreshToken", action.payload.refreshToken, { expires: 7 })
 
             apiClient.defaults.headers.common["Authorization"] = `Bearer ${action.payload.accessToken}`
         })

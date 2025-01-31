@@ -131,6 +131,7 @@ public class Startup
                 "http://localhost:5174")
             .AllowAnyMethod()
             .AllowAnyHeader()
+            .AllowCredentials()
             .SetIsOriginAllowedToAllowWildcardSubdomains();
                 });
         });
