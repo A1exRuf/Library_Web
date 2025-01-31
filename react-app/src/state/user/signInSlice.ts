@@ -2,8 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import apiClient from "../../api/apiClient"
 import Cookies from "js-cookie"
 
-var inOneMinute = new Date(new Date().getTime() + 60 * 1000);
-
 interface signInState {
     accessToken: string | null,
     refreshToken: string | null,
@@ -59,7 +57,7 @@ const signInSlice = createSlice({
             state.loading = false;
             state.error = undefined;
 
-            Cookies.set("accessToken", action.payload.accessToken, { expires: inOneMinute })
+            Cookies.set("accessToken", action.payload.accessToken, { expires: 7 })
             Cookies.set("refreshToken", action.payload.refreshToken, { expires: 7 })
 
             apiClient.defaults.headers.common["Authorization"] = `Bearer ${action.payload.accessToken}`

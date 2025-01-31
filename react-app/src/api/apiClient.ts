@@ -21,8 +21,7 @@ apiClient.interceptors.response.use(
           refreshToken,
         });
         const { accessToken, refreshToken: newRefreshToken } = response.data;
-        var inOneMinute = new Date(new Date().getTime() + 60 * 1000);
-        Cookies.set('accessToken', accessToken, { expires: inOneMinute });
+        Cookies.set('accessToken', accessToken, { expires: 7 });
         Cookies.set('refreshToken', newRefreshToken, { expires: 7 });
         apiClient.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
         return apiClient(originalRequest);
