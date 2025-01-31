@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Core.Abstractions;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Cryptography;
 
 namespace Infrastructure.Authentication;
 
@@ -42,6 +43,6 @@ public class TokenService : ITokenService
 
     public string GenerateRefreshToken()
     {
-        return Guid.NewGuid().ToString();
+        return Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
     }
 }

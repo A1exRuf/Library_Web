@@ -12,6 +12,8 @@ public sealed class ApplicationDbContext : DbContext, IApplicationDbContext
 
     public DbSet<User> Users { get; set; }
 
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
+
     public DbSet<BookLoan> BookLoans { get; set; }
 
     public ApplicationDbContext(DbContextOptions options)

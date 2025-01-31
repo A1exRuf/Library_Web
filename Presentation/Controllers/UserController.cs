@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UseCases.Users.Commands.DeleteUser;
 using UseCases.Users.Commands.Login;
+using UseCases.Users.Commands.LoginWithRefreshToken;
 using UseCases.Users.Commands.Register;
 using UseCases.Users.Commands.UpdateUser;
 using UseCases.Users.Queries;
@@ -67,6 +68,17 @@ public sealed class UserController : ApiController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<IActionResult> Login([FromBody] LoginCommand command, CancellationToken cancellationToken)
+    {
+        var response = await Sender.Send(command, cancellationToken);
+
+        return Ok(response);
+    }
+
+    [HttpPost("loginwithrefreshtoken")]
+    [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public async Task<IActionResult> LoginWithRefreshToken([FromBody] LoginWithRefreshTokenCommand command, CancellationToken cancellationToken)
     {
         var response = await Sender.Send(command, cancellationToken);
 

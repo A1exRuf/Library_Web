@@ -7,10 +7,12 @@ using UseCases.BookLoans.Queries.GetBookLoanById;
 using UseCases.Books.Commands.LoanBook;
 using UseCases.BookLoans.Commands.ReturnBook;
 using UseCases.Books.Commands.ReturnBook;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Presentation.Controllers;
 public sealed class BookLoansController : ApiController
 {
+    [Authorize]
     [HttpGet("BookLoanById")]
     [ProducesResponseType(typeof(BookLoanResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -23,6 +25,7 @@ public sealed class BookLoansController : ApiController
         return Ok(bookLoan);
     }
 
+    [Authorize]
     [HttpGet("BookLoansByUserId")]
     [ProducesResponseType(typeof(BookLoanResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

@@ -77,6 +77,8 @@ public class Startup
 
         services.AddScoped<IUserRepository, UserRepository>();
 
+        services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
