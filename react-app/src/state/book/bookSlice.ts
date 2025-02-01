@@ -21,21 +21,20 @@ const initialState: book = {
     error: undefined
 }
 
-export const fetchBook = createAsyncThunk('books/fetchBook', async (bookId: string, { rejectWithValue }
-) => {
-    try {
-        const response = await apiClient
-            .get('books/book', {
-                params: {
-                    bookId: bookId
-                }
-            })
-
-        return response.data
-    } catch (error: any) {
-        return rejectWithValue(error.response?.data?.message || "Get book failed")
-    }
-})
+export const fetchBook = createAsyncThunk('books/fetchBook',
+    async (bookId: string, { rejectWithValue }) => {
+        try {
+            const response = await apiClient
+                .get('books/book', {
+                    params: {
+                        bookId: bookId
+                    }
+                })
+            return response.data
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data?.message || "Get book failed")
+        }
+    })
 
 const bookSlice = createSlice({
     name: 'book',

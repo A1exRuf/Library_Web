@@ -1,5 +1,5 @@
 .container {
-    max-width: 400px;
+    max-width: 600px;
     margin: auto;
     padding: 20px;
     background-color: #f5f5f5;
@@ -11,15 +11,10 @@
     gap: 20px;
 }
 
-.inputName {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 6px;
-}
-
 .input {
     box-sizing: border-box;
     width: 100%;
+    padding: 12px;
     margin-bottom: 15px;
     border: 1px solid #ddd;
     border-radius: 8px;
@@ -32,28 +27,13 @@
     border-color: #e0a806;
 }
 
-.roleSelector {
-    gap: 8px;
-}
-
-.roleSelector input[type="radio"] {
-    width: 16px;
-    height: 16px;
+textarea {
+    resize: none;
+    min-height: 200px;
 }
 
 .submit {
     margin-top: 16px;
     width: 100%;
-    padding: 12px;
-}
-
-.error {
-    color: #d9534f;
-    background-color: #f2dede;
-    border: 1px solid #ebccd1;
-    padding: 10px;
-    border-radius: 4px;
-    margin-top: 10px;
-    font-size: 14px;
-    text-align: center;
+    border-radius: 8px;
 }

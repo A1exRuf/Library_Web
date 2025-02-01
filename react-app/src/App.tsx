@@ -7,6 +7,7 @@ import BooksPage from "./components/BooksPage/BooksPage";
 import BookPage from "./components/BookPage/BookPage";
 import SignInPage from "./components/SignInPage/SignInPage";
 import SignUpPage from "./components/SignUpPage/SignUpPage";
+import AddBookPage from "./components/AddBookPage/AddBookPage";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Routes>
             <Route path="/books" element={<BooksPage />} />
             <Route path="/mybooks" element={<MyBooksPage />} />
+            <Route path="/addbook" element={<AddBookPage />} />
             <Route path="/books/:id" element={<BookPage />} />
             <Route path="/signin" element={<SignInPage />} />
             <Route path="/signup" element={<SignUpPage />} />

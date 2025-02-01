@@ -7,7 +7,7 @@ import { useEffect } from "react";
 import { fetchBook } from "../../state/book/bookSlice";
 import { takeBook } from "../../state/bookLoan/myBooksSlice";
 import { jwtDecode } from "jwt-decode";
-import AdminControls from "./AdminControls/adminControls";
+import AdminControls from "./AdminControls/AdminControls";
 
 interface BookParams {
   id: string;

@@ -27,6 +27,7 @@ button {
     font-size: 16px;
     background-color: #ffc107;
     color: white;
+    padding: 12px;
     font-weight: bold;
     text-align: center;
     border: none;

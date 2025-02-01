@@ -47,7 +47,7 @@ public sealed class BooksController : ApiController
     }
 
     [HttpPost]
-    //[Authorize(Policy = "OnlyForAdmin")]
+    [Authorize(Policy = "OnlyForAdmin")]
     [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
@@ -71,7 +71,7 @@ public sealed class BooksController : ApiController
     }
 
     [HttpDelete]
-    //[Authorize(Policy = "OnlyForAdmin")]
+    [Authorize(Policy = "OnlyForAdmin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
 
@@ -91,7 +91,7 @@ public sealed class BooksController : ApiController
     }
 
     [HttpPut]
-    //[Authorize(Policy = "OnlyForAdmin")]
+    [Authorize(Policy = "OnlyForAdmin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
