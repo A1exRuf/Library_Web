@@ -24,23 +24,43 @@ const initialState: myBooksState = {
     error: undefined
 }
 
-export const fetchMyBooks = createAsyncThunk('myBooks/fetchMyBooks', async ({ userId, page }: { userId: string, page: number }, { rejectWithValue }
-) => {
-    try {
-        const response = await apiClient
-            .get('BookLoans/BookLoansByUserId', {
-                params: {
-                    userId: userId,
-                    page: page,
-                    pageSize: 10
-                }
-            })
+export const fetchMyBooks = createAsyncThunk('myBooks/fetchMyBooks',
+    async ({ userId, page }: { userId: string, page: number }, { rejectWithValue }) => {
+        try {
+            const response = await apiClient
+                .get('BookLoans/BookLoansByUserId', {
+                    params: {
+                        userId: userId,
+                        page: page,
+                        pageSize: 10
+                    }
+                })
 
-        return response.data
-    } catch (error: any) {
-        return rejectWithValue(error.response?.data?.message || "Get book loans failed")
-    }
-})
+            return response.data
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data?.message || "Get book loans failed")
+        }
+    })
+
+export const takeBook = createAsyncThunk('myBooks/takebook',
+    async ({ bookId, userId }: { bookId: string, userId: string }, { rejectWithValue }) => {
+        try {
+            const response = await apiClient.post(`BookLoans/LoanBook`, { bookId: bookId, userId: userId })
+            return response.data
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data?.message || "Take book failed")
+        }
+    })
+
+export const returnBook = createAsyncThunk('myBooks/ReturnBook',
+    async ({ bookLoanId }: { bookLoanId: string }, { rejectWithValue }) => {
+        try {
+            await apiClient.delete(`BookLoans/ReturnBook`, { data: { bookLoanId } })
+            return bookLoanId
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data?.message || "Return book failed")
+        }
+    })
 
 const myBooksSlice = createSlice({
     name: "myBooks",
@@ -62,6 +82,24 @@ const myBooksSlice = createSlice({
             state.error = undefined;
         })
         builder.addCase(fetchMyBooks.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload as string;
+        })
+
+        builder.addCase(takeBook.pending, (state) => {
+            state.loading = true;
+            state.error = undefined;
+        })
+        builder.addCase(takeBook.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload as string;
+        })
+
+        builder.addCase(returnBook.pending, (state) => {
+            state.loading = true;
+            state.error = undefined;
+        })
+        builder.addCase(returnBook.rejected, (state, action) => {
             state.loading = false;
             state.error = action.payload as string;
         })

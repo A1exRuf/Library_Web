@@ -1,6 +1,7 @@
 ﻿using Core.Abstractions;
 using Core.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 
 namespace Infrastructure.Repositories;
 
@@ -20,6 +21,7 @@ public sealed class RefreshTokenRepository : IRefreshTokenRepository
     {
         await _context.RefreshTokens
             .Where(r => r.UserId == userId)
+            .Where(r => r.ExpiresOnUtc < DateTime.UtcNow)
             .ExecuteDeleteAsync();
     }
 

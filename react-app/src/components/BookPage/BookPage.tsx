@@ -2,9 +2,11 @@ import imgBookBlank from "../../images/book_blank.png";
 import s from "./bookPage.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispath, RootState } from "../../state/store";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { fetchBook } from "../../state/book/bookSlice";
+import { takeBook } from "../../state/bookLoan/myBooksSlice";
+import { jwtDecode } from "jwt-decode";
 
 interface BookParams {
   id: string;
@@ -13,7 +15,12 @@ interface BookParams {
 
 function BookPage() {
   const book = useSelector((state: RootState) => state.book);
+  const accessToken = useSelector(
+    (state: RootState) => state.signIn.accessToken
+  );
+
   const dispatch = useDispatch<AppDispath>();
+  const navigate = useNavigate();
 
   const { id } = useParams<BookParams>();
 
@@ -22,6 +29,18 @@ function BookPage() {
       dispatch(fetchBook(id));
     }, [dispatch]);
   }
+
+  const handleTakeBook = () => {
+    if (accessToken) {
+      const userId = jwtDecode(accessToken).sub;
+      if (userId) {
+        dispatch(takeBook({ bookId: book.id, userId: userId }));
+        navigate("/books");
+      }
+    } else {
+      navigate("/signin");
+    }
+  };
 
   return (
     <div className={s.container}>
@@ -44,7 +63,11 @@ function BookPage() {
         <p className={s.isbn}>ISBN: {book.isbn}</p>
         <p className={s.description}>{book.description}</p>
         <p className={s.country}>Country: {book.author.country}</p>
-        {book.isAvailable && <button className={s.button}>Take</button>}
+        {book.isAvailable && (
+          <button className={s.button} onClick={handleTakeBook}>
+            Take
+          </button>
+        )}
       </div>
     </div>
   );

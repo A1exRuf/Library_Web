@@ -46,6 +46,7 @@ const bookSlice = createSlice({
             state.loading = true
         })
         builder.addCase(fetchBook.fulfilled, (state, action) => {
+            state.id = action.payload.id
             state.isbn = action.payload.isbn
             state.title = action.payload.title
             state.genree = action.payload.genree
