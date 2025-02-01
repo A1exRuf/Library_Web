@@ -3,6 +3,7 @@ import s from "./Header.module.css";
 import { NavLink } from "react-router-dom";
 import { AppDispath, RootState } from "../../state/store";
 import { logout } from "../../state/user/signInSlice";
+import useUserRole from "../../hooks/useUserRole";
 
 function Header() {
   const dispatch = useDispatch<AppDispath>();
@@ -10,6 +11,8 @@ function Header() {
   const isAuthenticated = useSelector(
     (state: RootState) => state.signIn.isAuthenticated
   );
+
+  const userRole = useUserRole();
 
   const handleLogout = () => {
     dispatch(logout());
@@ -33,6 +36,16 @@ function Header() {
           My books
         </NavLink>
       </div>
+      {userRole === "Admin" && (
+        <div className={s.item}>
+          <NavLink
+            to="/addbook"
+            className={(navData) => (navData.isActive ? s.active : "")}
+          >
+            Add book
+          </NavLink>
+        </div>
+      )}
 
       {isAuthenticated ? (
         <div className={s.logout} onClick={handleLogout}>

@@ -1,0 +1,27 @@
+.adminControls {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.edit, .remove {
+    align-self: flex-end;
+    width: 100%;
+    height: 48px;
+}
+
+.edit {
+    background-color: #17a2b8;
+}
+
+.edit:hover {
+    background-color: #138496;
+}
+
+.remove {
+    background-color: #dc3545;
+}
+
+.remove:hover {
+    background-color: #bd2130;
+}

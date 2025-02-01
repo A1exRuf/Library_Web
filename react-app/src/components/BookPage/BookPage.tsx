@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { fetchBook } from "../../state/book/bookSlice";
 import { takeBook } from "../../state/bookLoan/myBooksSlice";
 import { jwtDecode } from "jwt-decode";
+import AdminControls from "./AdminControls/adminControls";
 
 interface BookParams {
   id: string;
@@ -63,11 +64,14 @@ function BookPage() {
         <p className={s.isbn}>ISBN: {book.isbn}</p>
         <p className={s.description}>{book.description}</p>
         <p className={s.country}>Country: {book.author.country}</p>
-        {book.isAvailable && (
-          <button className={s.button} onClick={handleTakeBook}>
-            Take
-          </button>
-        )}
+        <div className={s.buttonContainer}>
+          {book.isAvailable && (
+            <button className={s.button} onClick={handleTakeBook}>
+              Take
+            </button>
+          )}
+          <AdminControls />
+        </div>
       </div>
     </div>
   );
