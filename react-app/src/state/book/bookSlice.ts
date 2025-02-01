@@ -36,6 +36,16 @@ export const fetchBook = createAsyncThunk('books/fetchBook',
         }
     })
 
+export const deleteBook = createAsyncThunk('books/delete',
+    async (bookId: string, { rejectWithValue }) => {
+        try {
+            await apiClient.delete(`books/${bookId}`);
+            return bookId;
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data?.message || "Delete book failed");
+        }
+    })
+
 const bookSlice = createSlice({
     name: 'book',
     initialState,
@@ -58,6 +68,17 @@ const bookSlice = createSlice({
         })
         builder.addCase(fetchBook.rejected, (state, action) => {
             state.loading = false
+            state.error = action.payload as string;
+        })
+
+        builder.addCase(deleteBook.pending, (state) => {
+            state.loading = true;
+        })
+        builder.addCase(deleteBook.fulfilled, (state) => {
+            state = initialState;
+        })
+        builder.addCase(deleteBook.rejected, (state, action) => {
+            state.loading = false;
             state.error = action.payload as string;
         })
     }

@@ -70,7 +70,7 @@ function BookPage() {
               Take
             </button>
           )}
-          <AdminControls />
+          <AdminControls bookId={book.id} />
         </div>
       </div>
     </div>

@@ -70,7 +70,7 @@ public sealed class BooksController : ApiController
         return CreatedAtAction(nameof(GetBook), new { bookId }, bookId);
     }
 
-    [HttpDelete]
+    [HttpDelete("{bookId}")]
     [Authorize(Policy = "OnlyForAdmin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
