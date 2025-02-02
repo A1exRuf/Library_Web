@@ -4,7 +4,7 @@ import { AppDispath, RootState } from "../../state/store";
 import { useEffect } from "react";
 import { fetchMyBooks } from "../../state/bookLoan/myBooksSlice";
 import { jwtDecode } from "jwt-decode";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import BookLoanItem from "./BookLoanItem/BookLoanItem";
 
 function MyBooksPage() {
@@ -29,22 +29,23 @@ function MyBooksPage() {
   }, [accessToken, dispatch, navigate]);
 
   return (
-    <div>
-      <div className={s.content}>
-        {bookLoans.loading && <div>Loading...</div>}
-        {!bookLoans.loading && bookLoans.error ? (
-          <div>Error: {bookLoans.error}</div>
-        ) : null}
-        {!bookLoans.loading && bookLoans.items.length ? (
-          <div className={s.bookList}>
-            {bookLoans.items.map((item) => (
-              <BookLoanItem key={item.id} {...item} />
-            ))}
-          </div>
-        ) : (
-          <h1>No books available</h1>
-        )}
-      </div>
+    <div className={s.container}>
+      {!bookLoans.loading && bookLoans.items.length ? (
+        <div className={s.bookLoanList}>
+          {bookLoans.items.map((item) => (
+            <BookLoanItem key={item.id} {...item} />
+          ))}
+        </div>
+      ) : (
+        <div className={s.noBookLoans}>
+          <h1>
+            You haven't borrowed any books yet.{" "}
+            <NavLink to="/books">
+              Explore our collection and start reading!
+            </NavLink>
+          </h1>
+        </div>
+      )}
     </div>
   );
 }

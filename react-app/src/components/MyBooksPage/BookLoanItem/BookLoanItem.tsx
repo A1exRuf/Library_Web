@@ -21,20 +21,23 @@ function BookLoanItem(props: bookLoan) {
 
   return (
     <div className={s.container}>
-      <div className={s.bookInfo}>
-        <h1>{props.book.title}</h1>
-        <p>
-          {"by " +
-            props.book.author.firstName +
-            " " +
-            props.book.author.lastName}
-        </p>
-        <p>Borrowed On: {loanDate}</p>
-        <p>Due Date: {dueDate}</p>
-        <p>{remainingDays} days remaining</p>
-        <p> </p>
-      </div>
       <img src={props.book.imageURL || imgBookBlank} />
+      <div className={s.bookLoanInfo}>
+        <div className={s.nameGroup}>
+          <h1>{props.book.title}</h1>
+          <p>
+            {"by " +
+              props.book.author.firstName +
+              " " +
+              props.book.author.lastName}
+          </p>
+        </div>
+        <div className={s.dataInfo}>
+          <p>Borrowed On: {loanDate}</p>
+          <p>Due Date: {dueDate}</p>
+          <p>{remainingDays} days remaining</p>
+        </div>
+      </div>
       <button onClick={handleReturnBook}>Return book</button>
     </div>
   );

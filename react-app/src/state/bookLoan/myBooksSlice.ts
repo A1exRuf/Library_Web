@@ -90,6 +90,10 @@ const myBooksSlice = createSlice({
             state.loading = true;
             state.error = undefined;
         })
+        builder.addCase(takeBook.fulfilled, (state) => {
+            state.loading = false;
+            state.error = undefined;
+        });
         builder.addCase(takeBook.rejected, (state, action) => {
             state.loading = false;
             state.error = action.payload as string;
@@ -99,6 +103,11 @@ const myBooksSlice = createSlice({
             state.loading = true;
             state.error = undefined;
         })
+        builder.addCase(returnBook.fulfilled, (state, action) => {
+            state.loading = false;
+            state.error = undefined;
+            state.items = state.items.filter(item => item.id !== action.payload);
+        });
         builder.addCase(returnBook.rejected, (state, action) => {
             state.loading = false;
             state.error = action.payload as string;

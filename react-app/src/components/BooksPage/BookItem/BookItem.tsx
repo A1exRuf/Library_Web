@@ -12,10 +12,12 @@ function BookItem(props: book) {
         className={s.img}
       />
       <div className={s.bookInfo}>
-        <h2>{props.title}</h2>
-        <p>
-          {props.author.firstName} {props.author.lastName}
-        </p>
+        <div className={s.nameGroup}>
+          <h2>{props.title}</h2>
+          <p>
+            by {props.author.firstName} {props.author.lastName}
+          </p>
+        </div>
         <p>Genre: {props.genree}</p>
         <p>ISBN: {props.isbn}</p>
       </div>
