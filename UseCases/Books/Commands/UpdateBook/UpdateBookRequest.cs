@@ -6,7 +6,7 @@ public sealed record UpdateBookRequest(
     Guid BookId,
     string? Isbn,
     string? Title,
-    string Genree,
+    string? Genree,
     string? Description,
     Guid? AuthorId,
     IFormFile? Image);

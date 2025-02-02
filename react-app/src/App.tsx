@@ -8,6 +8,7 @@ import BookPage from "./components/BookPage/BookPage";
 import SignInPage from "./components/SignInPage/SignInPage";
 import SignUpPage from "./components/SignUpPage/SignUpPage";
 import AddBookPage from "./components/AddBookPage/AddBookPage";
+import EditBookPage from "./components/EditBookPage/EditBookPage";
 
 function App() {
   return (
@@ -18,10 +19,12 @@ function App() {
         </div>
         <div className="app-wrapper-content">
           <Routes>
-            <Route path="/books" element={<BooksPage />} />
-            <Route path="/mybooks" element={<MyBooksPage />} />
+            <Route path="/" element={<BooksPage />} />
             <Route path="/addbook" element={<AddBookPage />} />
+            <Route path="/books" element={<BooksPage />} />
             <Route path="/books/:id" element={<BookPage />} />
+            <Route path="/books/edit/:id" element={<EditBookPage />} />
+            <Route path="/mybooks" element={<MyBooksPage />} />
             <Route path="/signin" element={<SignInPage />} />
             <Route path="/signup" element={<SignUpPage />} />
           </Routes>

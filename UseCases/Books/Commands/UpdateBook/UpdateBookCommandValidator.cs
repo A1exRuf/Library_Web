@@ -14,6 +14,7 @@ public sealed class UpdateBookCommandValidator : AbstractValidator<UpdateBookCom
         RuleFor(x => x.Title);
 
         RuleFor(x => x.Genree).Must(g =>
+        g == null ||
         g == "Fiction" ||
         g == "Non-Fiction" ||
         g == "Mystery/Thriller" ||

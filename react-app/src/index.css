@@ -46,3 +46,16 @@ input, textarea {
     padding: 8px;
     border: none;
 }
+
+input {
+    outline: none;
+}
+
+input:focus {
+    border-color: #e0a806;
+}
+
+textarea {
+    resize: none;
+    min-height: 200px;
+}

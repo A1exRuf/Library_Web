@@ -70,26 +70,6 @@ public sealed class BooksController : ApiController
         return CreatedAtAction(nameof(GetBook), new { bookId }, bookId);
     }
 
-    [HttpDelete("{bookId}")]
-    [Authorize(Policy = "OnlyForAdmin")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-
-    public async Task<IActionResult> DeleteBook(Guid bookId, CancellationToken cancellationToken)
-    {
-        try
-        {
-            var command = new DeleteBookCommand(bookId);
-            var succes = await Sender.Send(command, cancellationToken);
-
-            return NoContent();
-        }
-        catch (BookNotFoundException e)
-        {
-            return NotFound(e.Message);
-        }
-    }
-
     [HttpPut]
     [Authorize(Policy = "OnlyForAdmin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -113,5 +93,24 @@ public sealed class BooksController : ApiController
         await Sender.Send(command, cancellationToken);
 
         return NoContent();
+    }
+
+    [HttpDelete("{bookId}")]
+    [Authorize(Policy = "OnlyForAdmin")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteBook(Guid bookId, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var command = new DeleteBookCommand(bookId);
+            var succes = await Sender.Send(command, cancellationToken);
+
+            return NoContent();
+        }
+        catch (BookNotFoundException e)
+        {
+            return NotFound(e.Message);
+        }
     }
 }

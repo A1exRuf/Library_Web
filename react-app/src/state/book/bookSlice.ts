@@ -36,6 +36,20 @@ export const fetchBook = createAsyncThunk('books/fetchBook',
         }
     })
 
+export const updateBook = createAsyncThunk(
+    'books/updateBook',
+    async ({ bookData }: { bookData: FormData }, { rejectWithValue }) => {
+        try {
+            const response = await apiClient.put(`books`, bookData, {
+                headers: { 'Content-Type': 'multipart/form-data' },
+            });
+            return response.data;
+        } catch (error: any) {
+            return rejectWithValue(error.response?.data?.message || "Update book failed");
+        }
+    }
+);
+
 export const deleteBook = createAsyncThunk('books/delete',
     async (bookId: string, { rejectWithValue }) => {
         try {
@@ -51,6 +65,7 @@ const bookSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: (builder) => {
+        //fetchBook
         builder.addCase(fetchBook.pending, (state) => {
             state.loading = true
         })
@@ -70,7 +85,19 @@ const bookSlice = createSlice({
             state.loading = false
             state.error = action.payload as string;
         })
-
+        //updateBook
+        builder.addCase(updateBook.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(updateBook.fulfilled, (state) => {
+            state.loading = false;
+            state.error = undefined;
+        });
+        builder.addCase(updateBook.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.payload as string;
+        });
+        //deleteBook
         builder.addCase(deleteBook.pending, (state) => {
             state.loading = true;
         })

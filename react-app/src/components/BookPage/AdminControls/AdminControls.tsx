@@ -22,6 +22,10 @@ function AdminControls(props: { bookId: string }) {
     setIsModalOpen(false);
   };
 
+  const handleEdit = () => {
+    navigate(`/books/edit/${props.bookId}`);
+  };
+
   const handleCancel = () => {
     setIsModalOpen(false);
   };
@@ -32,7 +36,9 @@ function AdminControls(props: { bookId: string }) {
 
   return (
     <div className={s.adminControls}>
-      <button className={s.edit}>Edit</button>
+      <button className={s.edit} onClick={handleEdit}>
+        Edit
+      </button>
       <button className={s.remove} onClick={openModal}>
         Remove
       </button>

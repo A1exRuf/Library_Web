@@ -1,6 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import s from "./SignInPage.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispath, RootState } from "../../state/store";
 import { login } from "../../state/user/signInSlice";
@@ -22,9 +22,11 @@ function SignInPage() {
     dispatch(login({ email, password }));
   };
 
-  if (isAuthenticated) {
-    navigate("/books");
-  }
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/books");
+    }
+  }, [isAuthenticated, navigate]);
 
   return (
     <div className={s.container}>

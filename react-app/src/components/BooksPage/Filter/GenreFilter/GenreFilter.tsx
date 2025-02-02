@@ -2,16 +2,7 @@ import s from "../Filter.module.css";
 import { useDispatch } from "react-redux";
 import { AppDispath } from "../../../../state/store";
 import { setGenre } from "../../../../state/book/filterSlice";
-
-const genres: string[] = [
-  "Fiction",
-  "Non-Fiction",
-  "Mystery/Thriller",
-  "Science Fiction",
-  "Fantasy",
-  "Biography",
-  "Romance",
-];
+import genres from "../../../../constants/genres";
 
 function GenreFilter() {
   const dispatch = useDispatch<AppDispath>();

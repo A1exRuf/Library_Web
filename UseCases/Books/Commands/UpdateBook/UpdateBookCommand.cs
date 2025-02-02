@@ -6,7 +6,7 @@ public sealed record UpdateBookCommand(
     Guid BookId,
     string? Isbn,
     string? Title,
-    string Genree,
+    string? Genree,
     string? Description,
     Guid? AuthorId,
     Stream? ImageStream) : ICommand<bool>;
