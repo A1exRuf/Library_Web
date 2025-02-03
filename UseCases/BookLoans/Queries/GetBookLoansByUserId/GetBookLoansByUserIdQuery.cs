@@ -1,4 +1,5 @@
-﻿using UseCases.Abstractions.Messaging;
+﻿using Core.Common;
+using UseCases.Abstractions.Messaging;
 
 namespace UseCases.BookLoans.Queries.GetBookLoanById;
 

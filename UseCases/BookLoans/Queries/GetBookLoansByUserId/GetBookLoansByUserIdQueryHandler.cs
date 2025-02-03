@@ -1,23 +1,21 @@
 ﻿using Core.Abstractions;
-using MediatR;
+using Core.Common;
+using Core.Exceptions;
 using UseCases.Abstractions.Messaging;
-using UseCases.Authors.Queries;
-using UseCases.Books.Queries;
 
 namespace UseCases.BookLoans.Queries.GetBookLoanById;
 
 internal sealed class GetBookLoansByUserIdQueryHandler : IQueryHandler<GetBookLoansByUserIdQuery, PagedList<BookLoanResponse>>
 {
-    private readonly IApplicationDbContext _context;
+    private readonly IBookLoanRepository _bookLoanRepository;
 
-    public GetBookLoansByUserIdQueryHandler(IApplicationDbContext context) => _context = context;
+    public GetBookLoansByUserIdQueryHandler(IBookLoanRepository bookLoanRepository) => _bookLoanRepository = bookLoanRepository;
 
     public async Task<PagedList<BookLoanResponse>> Handle(GetBookLoansByUserIdQuery request, CancellationToken cancellationToken)
     {
-        var bookLoanResponsesQuery = _context.BookLoans
-            .Where(bl => bl.UserId == request.UserId)
-            .OrderBy(bl => bl.Book.Title)
-            .Select(bl => new BookLoanResponse(
+        var bookLoans = await _bookLoanRepository.GetByUserIdAsync(
+            request.UserId, 
+            bl => new BookLoanResponse(
                 bl.Id,
                 new BookLoansBookDTO(
                     bl.Book.Id,
@@ -26,13 +24,17 @@ internal sealed class GetBookLoansByUserIdQueryHandler : IQueryHandler<GetBookLo
                     bl.Book.ImageUrl,
                     new BookLoansAuthorDTO(
                         bl.Book.Author.FirstName,
-                        bl.Book.Author.LastName)),
+                        bl.Book.Author.LastName
+                    )),
                 bl.LoanDate,
-                bl.DueDate));
+                bl.DueDate),
 
-        var bookLoans = await PagedList<BookLoanResponse>.CreateAsync(bookLoanResponsesQuery,
-            request.Page,
-            request.PageSize);
+            request.Page, request.PageSize);
+
+        if(bookLoans == null)
+        {
+            throw new UserNotFoundException(request.UserId);
+        }
 
         return bookLoans;
     }

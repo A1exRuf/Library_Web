@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace UseCases;
+namespace Core.Common;
 
 public class PagedList<T>
 {
-    private PagedList(List<T> items, int page, int pageSize, int totalCount)
+    public PagedList(List<T> items, int page, int pageSize, int totalCount)
     {
         Items = items;
         Page = page;

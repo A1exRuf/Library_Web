@@ -1,36 +1,33 @@
 ﻿using Core.Abstractions;
 using Core.Exceptions;
-using Microsoft.EntityFrameworkCore;
 using UseCases.Abstractions.Messaging;
 
 namespace UseCases.Authors.Queries.GetAuthorById;
 
 internal sealed class GetAuthorQueryHandler : IQueryHandler<GetAuthorByIdQuery, AuthorResponse>
 {
-    private readonly IApplicationDbContext _context;
+    private readonly IAuthorRepository _authorRepository;
 
-    public GetAuthorQueryHandler(IApplicationDbContext context) => _context = context;
+    public GetAuthorQueryHandler(IAuthorRepository authorRepository) => _authorRepository = authorRepository;
 
     public async Task<AuthorResponse> Handle(
         GetAuthorByIdQuery request, 
         CancellationToken cancellationToken)
     {
-        var author = await _context
-            .Authors
-            .Where(a => a.Id == request.AuthorId)
-            .Select(a => new AuthorResponse(
-                a.Id,
-                a.FirstName,
-                a.LastName,
-                a.DateOfBirth,
-                a.Country))
-            .FirstOrDefaultAsync(cancellationToken);
+        var author = await _authorRepository.GetByIdAsync(request.AuthorId);
 
-        if (author is null)
+        if (author == null)
         {
             throw new AuthorNotFoundException(request.AuthorId);
-        }    
+        }
 
-        return author;
+        AuthorResponse authorResponse = new(
+            author.Id,
+            author.FirstName,
+            author.LastName,
+            author.DateOfBirth,
+            author.Country);
+
+        return authorResponse;
     }
 }

@@ -81,8 +81,6 @@ public class Startup
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-        services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
-
         services.AddScoped<IPasswordHasher, PasswordHasher>();
 
         services.AddScoped<ITokenService, TokenService>();

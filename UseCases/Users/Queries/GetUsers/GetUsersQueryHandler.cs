@@ -1,4 +1,5 @@
 ﻿using Core.Abstractions;
+using Core.Common;
 using Core.Entities;
 using System.Linq.Expressions;
 using UseCases.Abstractions.Messaging;
@@ -7,13 +8,13 @@ namespace UseCases.Users.Queries.GetUsers;
 
 public sealed class GetUsersQueryHandler : IQueryHandler<GetUsersQuery, PagedList<UserResponse>>
 {
-    private readonly IApplicationDbContext _context;
+    private readonly IUserRepository _userRepository;
 
-    public GetUsersQueryHandler(IApplicationDbContext context) => _context = context;
+    public GetUsersQueryHandler(IUserRepository userRepository) => _userRepository = userRepository;
 
     public async Task<PagedList<UserResponse>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
     {
-        IQueryable<User> usersQuery = _context.Users;
+        IQueryable<User> usersQuery = _userRepository.Query();
 
         if (!string.IsNullOrWhiteSpace(request.SearchTerm))
         {
@@ -39,9 +40,7 @@ public sealed class GetUsersQueryHandler : IQueryHandler<GetUsersQuery, PagedLis
                 u.PasswordHash,
                 u.Role));
 
-        var users = await PagedList<UserResponse>.CreateAsync(userResponsesQuery,
-            request.Page,
-            request.PageSize);
+        var users = await _userRepository.GetPagedAsync(userResponsesQuery, request.Page, request.PageSize);
 
         return users;
     }

@@ -4,7 +4,7 @@ using Core.Entities;
 
 namespace Infrastructure;
 
-public sealed class ApplicationDbContext : DbContext, IApplicationDbContext
+public sealed class ApplicationDbContext : DbContext
 {
     public DbSet<Author> Authors { get; set; }
 

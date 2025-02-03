@@ -1,4 +1,5 @@
 ﻿using Core.Abstractions;
+using Core.Common;
 using Core.Entities;
 using System.Linq.Expressions;
 using UseCases.Abstractions.Messaging;
@@ -7,16 +8,16 @@ namespace UseCases.Books.Queries.GetBooks;
 
 public sealed class GetBooksQueryHandler : IQueryHandler<GetBooksQuery, PagedList<BookResponse>>
 {
-    private readonly IApplicationDbContext _context;
+    private readonly IBookRepository _bookRepository;
 
-    public GetBooksQueryHandler(IApplicationDbContext context, IBlobService blobService)
-    { 
-        _context = context;
+    public GetBooksQueryHandler(IBookRepository bookRepository)
+    {
+        _bookRepository = bookRepository;
     }
 
     public async Task<PagedList<BookResponse>> Handle(GetBooksQuery request, CancellationToken cancellationToken)
     {
-        IQueryable<Book> booksQuery = _context.Books;
+        var booksQuery = _bookRepository.Query();
 
         if (request.ShowUnavailable != true)
         {
@@ -71,9 +72,7 @@ public sealed class GetBooksQueryHandler : IQueryHandler<GetBooksQuery, PagedLis
                 b.IsAvailable,
                 b.ImageUrl));
 
-        var books = await PagedList<BookResponse>.CreateAsync(bookResponsesQuery,
-            request.Page,
-            request.PageSize);
+        var books = await _bookRepository.GetPagedAsync(bookResponsesQuery, request.Page, request.PageSize);
 
         return books;
     }
