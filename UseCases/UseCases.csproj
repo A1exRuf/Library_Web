@@ -18,4 +18,10 @@
     <ProjectReference Include="..\Core\Core.csproj" />
   </ItemGroup>
 
+<ItemGroup>
+	<AssemblyAttribute Include ="System.Runtime.CompilerServices.InternalsVisibleTo">
+		<_Parameter1>UseCases.UnitTests</_Parameter1>
+	</AssemblyAttribute>
+</ItemGroup>
+
 </Project>

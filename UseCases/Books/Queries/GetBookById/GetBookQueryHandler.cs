@@ -1,46 +1,45 @@
 ﻿using Core.Abstractions;
+using Core.Entities;
 using Core.Exceptions;
-using Microsoft.EntityFrameworkCore;
-using System.Data;
 using UseCases.Abstractions.Messaging;
-using UseCases.Authors.Queries;
 
 namespace UseCases.Books.Queries.GetBookById;
 
 internal sealed class GetBookQueryHandler : IQueryHandler<GetBookByIdQuery, BookResponse>
 {
-    private readonly IApplicationDbContext _context;
+    private readonly IBookRepository _bookRepository;
 
-    public GetBookQueryHandler(IApplicationDbContext context) => _context = context;
+    public GetBookQueryHandler(IBookRepository bookRepository)
+    {
+        _bookRepository = bookRepository;
+    }
 
     public async Task<BookResponse> Handle(
         GetBookByIdQuery request,
         CancellationToken cancellationToken)
     {
-        var book = await _context
-            .Books
-            .Where(b => b.Id == request.BookId)
-            .Select(b => new BookResponse(
-                b.Id,
-                b.Isbn,
-                b.Title,
-                b.Genree,
-                b.Description,
-                new AuthorDTO(
-                    b.Author.Id,
-                    b.Author.FirstName,
-                    b.Author.LastName,
-                    b.Author.DateOfBirth,
-                    b.Author.Country),
-                b.IsAvailable,
-                b.ImageUrl))
-            .FirstOrDefaultAsync(cancellationToken);
+        Book? book = await _bookRepository.GetByIdAsync(request.BookId);
 
         if (book == null)
         {
             throw new BookNotFoundException(request.BookId);
         }
 
-        return book;
+        BookResponse bookResponse = new(
+            book.Id, 
+            book.Isbn, 
+            book.Title, 
+            book.Genree, 
+            book.Description,
+            new BookAuthorDTO(
+                book.Author.Id,
+                book.Author.FirstName,
+                book.Author.LastName,
+                book.Author.DateOfBirth,
+                book.Author.Country),
+            book.IsAvailable,
+            book.ImageUrl);
+
+        return bookResponse;
     }
 }

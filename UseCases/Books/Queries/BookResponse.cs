@@ -9,7 +9,9 @@ public record BookResponse(
     string Title,
     string Genree,
     string Description,
-    AuthorDTO Author,
+    BookAuthorDTO Author,
     bool IsAvailable,
-    string ImageUrl);
+    string? ImageUrl);
 
+public record BookAuthorDTO(Guid Id, string FirstName,
+    string LastName, DateTime DateOfBirth, string Country);

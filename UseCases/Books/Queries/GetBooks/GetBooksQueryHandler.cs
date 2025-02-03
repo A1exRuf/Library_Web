@@ -2,19 +2,16 @@
 using Core.Entities;
 using System.Linq.Expressions;
 using UseCases.Abstractions.Messaging;
-using UseCases.Authors.Queries;
 
 namespace UseCases.Books.Queries.GetBooks;
 
 public sealed class GetBooksQueryHandler : IQueryHandler<GetBooksQuery, PagedList<BookResponse>>
 {
     private readonly IApplicationDbContext _context;
-    private readonly IBlobService _blobService;
 
     public GetBooksQueryHandler(IApplicationDbContext context, IBlobService blobService)
     { 
         _context = context;
-        _blobService = blobService;
     }
 
     public async Task<PagedList<BookResponse>> Handle(GetBooksQuery request, CancellationToken cancellationToken)
@@ -65,7 +62,7 @@ public sealed class GetBooksQueryHandler : IQueryHandler<GetBooksQuery, PagedLis
                 b.Title,
                 b.Genree,
                 b.Description,
-                new AuthorDTO(
+                new BookAuthorDTO(
                     b.Author.Id,
                     b.Author.FirstName,
                     b.Author.LastName,
@@ -86,8 +83,7 @@ public sealed class GetBooksQueryHandler : IQueryHandler<GetBooksQuery, PagedLis
         return request.SortColumn?.ToLower() switch
         {
             "genree" => b => b.Genree,
-            "title" => b => b.Title,
-            _ => b => b.Id
+            _ => b => b.Title,
         };
     }
 }

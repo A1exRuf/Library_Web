@@ -12,7 +12,7 @@ public sealed class BookRepository : IBookRepository
 
     public Task<Book?> GetByIdAsync(Guid id)
     {
-        return _context.Books.SingleOrDefaultAsync(b => b.Id == id);
+        return _context.Books.Include(b => b.Author).SingleOrDefaultAsync(b => b.Id == id);
     }
 
     public void Add(Book book) => _context.Books.Add(book);

@@ -11,10 +11,12 @@ public sealed class BookLoanRepository : IBookLoanRepository
     public BookLoanRepository(ApplicationDbContext context) => _context = context;
 
 
-    public Task<BookLoan?> GetByIdAsync(Guid id)
-    {
-        return _context.BookLoans.SingleOrDefaultAsync(bl => bl.Id == id);
-    }
+    public Task<BookLoan?> GetByIdAsync(Guid id) => 
+        _context.BookLoans.Include(bl => bl.Book).SingleOrDefaultAsync(bl => bl.Id == id);
+
+    public Task<BookLoan?> GetByUserIdAsync(Guid userId) =>
+        _context.BookLoans.Include(bl => bl.Book).SingleOrDefaultAsync(bl => bl.UserId == userId);
+
     public void Add(BookLoan bookLoan) => _context.BookLoans.Add(bookLoan);
     public void Update(BookLoan bookLoan) => _context.BookLoans.Update(bookLoan);
     public void Remove(BookLoan bookLoan) => _context.BookLoans.Remove(bookLoan);

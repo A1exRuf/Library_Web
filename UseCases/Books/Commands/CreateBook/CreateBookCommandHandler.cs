@@ -31,14 +31,16 @@ internal sealed class CreateBookCommandHandler : ICommandHandler<CreateBookComma
 
         string? imageUrl = null;
 
+        Guid bookId = Guid.NewGuid();
+
         if (request.ImageStream != null)
         {
-            string imageName = request.Isbn + "_img";
+            string imageName = bookId + "_img";
 
             imageUrl = await _blobService.UploadAsync(request.ImageStream, imageName, "bimages");
         }
 
-        var book = new Book(Guid.NewGuid(), request.Isbn, request.Title, request.Genree, request.Description, request.AuthorId, author, imageUrl);
+        var book = new Book(bookId, request.Isbn, request.Title, request.Genree, request.Description, request.AuthorId, author, imageUrl);
 
         _bookRepository.Add(book);
 
