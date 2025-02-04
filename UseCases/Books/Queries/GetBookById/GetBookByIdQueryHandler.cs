@@ -5,11 +5,11 @@ using UseCases.Abstractions.Messaging;
 
 namespace UseCases.Books.Queries.GetBookById;
 
-internal sealed class GetBookQueryHandler : IQueryHandler<GetBookByIdQuery, BookResponse>
+internal sealed class GetBookByIdQueryHandler : IQueryHandler<GetBookByIdQuery, BookResponse>
 {
     private readonly IBookRepository _bookRepository;
 
-    public GetBookQueryHandler(IBookRepository bookRepository)
+    public GetBookByIdQueryHandler(IBookRepository bookRepository)
     {
         _bookRepository = bookRepository;
     }

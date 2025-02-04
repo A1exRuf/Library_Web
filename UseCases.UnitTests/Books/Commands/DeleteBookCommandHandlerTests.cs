@@ -27,7 +27,7 @@ public class DeleteBookCommandHandlerTests
     }
 
     [Fact]
-    public async Task Handle_ShouldDeleteBook_WhenBookExists()
+    public async Task Handle_Should_DeleteBook_WhenBookExists()
     {
         // Arrange
         var bookId = Guid.NewGuid();
@@ -55,7 +55,7 @@ public class DeleteBookCommandHandlerTests
     }
 
     [Fact]
-    public async Task Handle_ShouldThrowBookNotFoundException_WhenBookDoesNotExist()
+    public async Task Handle_Should_ThrowException_WhenNotExist()
     {
         // Arrange
         var bookId = Guid.NewGuid();
@@ -72,7 +72,7 @@ public class DeleteBookCommandHandlerTests
     }
 
     [Fact]
-    public async Task Handle_ShouldDeleteBookImage_WhenImageExists()
+    public async Task Handle_Should_DeleteBookImage_WhenImageExists()
     {
         // Arrange
         var bookId = Guid.NewGuid();

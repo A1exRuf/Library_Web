@@ -3,7 +3,6 @@ using Core.Entities;
 using Core.Exceptions;
 using FluentAssertions;
 using Moq;
-using System.Net;
 using UseCases.Books.Commands.UpdateBook;
 
 namespace UseCases.UnitTests.Books.Commands;
@@ -27,14 +26,14 @@ public class UpdateBookCommandHandlerTests
             _unitOfWorkMock.Object);
     }
 
-    private Author _author = new Author(
+    private readonly Author _author = new(
             Guid.NewGuid(),
             "FirstName",
             "SecondName",
             DateTime.UtcNow,
             "Country");
 
-    private Book _book = new Book
+    private readonly Book _book = new()
     {
         Isbn = "00000000000",
         Title = "Old Title",
@@ -44,7 +43,7 @@ public class UpdateBookCommandHandlerTests
     };
 
     [Fact]
-    public async Task Handle_ShouldUpdateBook_WhenBookExists()
+    public async Task Handle_Should_UpdateBook_WhenBookExists()
     {
         // Arrange
         var command = new UpdateBookCommand(_book.Id, "0000000000", "Updated Title", "Updated Genre", "Updated Description", _author.Id, null);
@@ -73,7 +72,7 @@ public class UpdateBookCommandHandlerTests
     }
 
     [Fact]
-    public async Task Handle_ShouldThrowBookNotFoundException_WhenBookDoesNotExist()
+    public async Task Handle_Should_ThrowException_WhenNotExist()
     {
         // Arrange
         var nonExistentBookId = Guid.NewGuid();
@@ -89,7 +88,7 @@ public class UpdateBookCommandHandlerTests
     }
 
     [Fact]
-    public async Task Handle_ShouldUploadImage_WhenImageProvided()
+    public async Task Handle_Should_UploadImage_WhenImageProvided()
     {
         // Arrange
         var imageStream = new MemoryStream();

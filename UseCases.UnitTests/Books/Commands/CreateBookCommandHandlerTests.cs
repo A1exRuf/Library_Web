@@ -30,7 +30,7 @@ public class CreateBookCommandHandlerTests
             _unitOfWorkMock.Object);
     }
 
-    private Author author = new Author(
+    private Author author = new(
             Guid.NewGuid(),
             "FirstName",
             "SecondName",
@@ -38,7 +38,7 @@ public class CreateBookCommandHandlerTests
             "Country");
 
     [Fact]
-    public async Task Handle_ShouldCreateBook_WhenAuthorExists()
+    public async Task Handle_Should_CreateBook_WhenAuthorExists()
     {
         // Arrange
         var command = new CreateBookCommand("00000000000", "Title", "Fiction", "Description", author.Id, null);
@@ -61,7 +61,7 @@ public class CreateBookCommandHandlerTests
     }
 
     [Fact]
-    public async Task Handle_ShouldThrowException_WhenAuthorNotFound()
+    public async Task Handle_Should_ThrowException_WhenAuthorNotFound()
     {
         // Arrange
         var authorId = Guid.NewGuid();
@@ -76,7 +76,7 @@ public class CreateBookCommandHandlerTests
     }
 
     [Fact]
-    public async Task Handle_ShouldUploadImage_WhenImageProvided()
+    public async Task Handle_Should_UploadImage_WhenImageProvided()
     {
         // Arrange
         var imageStream = new MemoryStream();
