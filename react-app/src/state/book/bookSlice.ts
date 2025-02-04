@@ -102,7 +102,8 @@ const bookSlice = createSlice({
             state.loading = true;
         })
         builder.addCase(deleteBook.fulfilled, (state) => {
-            state = initialState;
+            state.loading = false;
+            state.error = undefined;
         })
         builder.addCase(deleteBook.rejected, (state, action) => {
             state.loading = false;

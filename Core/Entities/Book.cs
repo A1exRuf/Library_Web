@@ -28,6 +28,18 @@ public sealed class Book : Entity
         ImageUrl = imageUrl;
     }
 
+    public Book(Guid id, string isbn, string title,
+        string genree, string description, Guid authorId, string? imageUrl) : base(id)
+    {
+        Isbn = isbn;
+        Title = title;
+        Genree = genree;
+        Description = description;
+        AuthorId = authorId;
+        IsAvailable = true;
+        ImageUrl = imageUrl;
+    }
+
     public Book()
     {
     }
