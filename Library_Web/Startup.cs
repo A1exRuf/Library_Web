@@ -1,5 +1,8 @@
+using Infrastructure;
 using Library_Web.Configuration;
+using Library_Web.Extensions;
 using Library_Web.Middleware;
+using Microsoft.EntityFrameworkCore;
 
 namespace Library_Web;
 
@@ -27,6 +30,7 @@ public class Startup
             app.UseDeveloperExceptionPage();
             app.UseSwagger();
             app.UseSwaggerUI();
+            app.ApplyMigrations();
         }
 
         app.UseMiddleware<ExceptionHandlingMiddleware>();
