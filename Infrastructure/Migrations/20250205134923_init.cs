@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class initialMigration : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -147,8 +147,8 @@ namespace Infrastructure.Migrations
                     { new Guid("97d6a6d4-9096-4380-8e10-a35a8568fcc9"), new Guid("63ccc0b6-a595-4d38-92a8-2db150073698"), "A novel about an aging fisherman's battle with a giant marlin.", "Fiction", "https://m.media-amazon.com/images/I/71+rqbp57dL._AC_UF894,1000_QL80_.jpg", true, "9780684801469", "The Old Man and the Sea" },
                     { new Guid("a2e79b1c-a9fa-46ec-955e-74c893dc49e1"), new Guid("3f965ba7-3962-4c5e-8b0b-67325256d865"), "A novel about racial injustice in the Deep South.", "Fiction", "https://m.media-amazon.com/images/I/81JYG8sqRsL._AC_UF1000,1000_QL80_.jpg", true, "9780061120084", "To Kill a Mockingbird" },
                     { new Guid("b4d899ce-ae21-459c-8ca9-cf25f91e07b7"), new Guid("5a95136f-a3f0-4bdf-8ab0-3996999a789a"), "A historical novel set during the Napoleonic Wars.", "Fiction", "https://blackwells.co.uk/jacket/l/9780199232765.webp", true, "9780199232765", "War and Peace" },
-                    { new Guid("bd9c80b5-138b-4ef5-a091-f9ca697cc260"), new Guid("8c98ef9a-b29b-46b1-bcca-e31b39c46568"), "A classic novel about manners and marriage.", "Romance", "https://images-eu.ssl-images-amazon.com/images/I/81NLDvyAHrL._AC_UL600_SR600,600_.jpg", true, "9781503290563", "Pride and Prejudice" },
-                    { new Guid("e7275cc0-c33a-4023-a8ee-be028691bc76"), new Guid("37c2b95e-bf1b-41b9-bcca-10aef794e913"), "A novel about the adventures of a young boy along the Mississippi River.", "Fiction", "https://images-eu.ssl-images-amazon.com/images/I/91yLxd90MiL._AC_UL600_SR600,600_.jpg", true, "9780486280615", "Adventures of Huckleberry Finn" },
+                    { new Guid("bd9c80b5-138b-4ef5-a091-f9ca697cc260"), new Guid("8c98ef9a-b29b-46b1-bcca-e31b39c46568"), "A classic novel about manners and marriage.", "Romance", "https://cdn11.bigcommerce.com/s-gjd9kmzlkz/products/25092/images/24834/pride_9781503290563__49747.1607045952.386.513.jpg?c=1", true, "9781503290563", "Pride and Prejudice" },
+                    { new Guid("e7275cc0-c33a-4023-a8ee-be028691bc76"), new Guid("37c2b95e-bf1b-41b9-bcca-10aef794e913"), "A novel about the adventures of a young boy along the Mississippi River.", "Fiction", "https://dover-books-us.imgix.net/covers/9780486280615.jpg?auto=format&w=300", true, "9780486280615", "Adventures of Huckleberry Finn" },
                     { new Guid("ea188a26-0fb4-4a81-a969-bf0e431eee29"), new Guid("a3e96cc7-f74a-4c9b-857a-7a8a4ff15d59"), "A novel about a dystopian future.", "Fiction", "https://m.media-amazon.com/images/I/71rpa1-kyvL._AC_UF894,1000_QL80_.jpg", true, "9780451524935", "1984" }
                 });
 

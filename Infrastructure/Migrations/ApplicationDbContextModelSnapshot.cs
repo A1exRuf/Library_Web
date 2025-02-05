@@ -237,7 +237,7 @@ namespace Infrastructure.Migrations
                             AuthorId = new Guid("8c98ef9a-b29b-46b1-bcca-e31b39c46568"),
                             Description = "A classic novel about manners and marriage.",
                             Genree = "Romance",
-                            ImageUrl = "https://images-eu.ssl-images-amazon.com/images/I/81NLDvyAHrL._AC_UL600_SR600,600_.jpg",
+                            ImageUrl = "https://cdn11.bigcommerce.com/s-gjd9kmzlkz/products/25092/images/24834/pride_9781503290563__49747.1607045952.386.513.jpg?c=1",
                             IsAvailable = true,
                             Isbn = "9781503290563",
                             Title = "Pride and Prejudice"
@@ -248,7 +248,7 @@ namespace Infrastructure.Migrations
                             AuthorId = new Guid("37c2b95e-bf1b-41b9-bcca-10aef794e913"),
                             Description = "A novel about the adventures of a young boy along the Mississippi River.",
                             Genree = "Fiction",
-                            ImageUrl = "https://images-eu.ssl-images-amazon.com/images/I/91yLxd90MiL._AC_UL600_SR600,600_.jpg",
+                            ImageUrl = "https://dover-books-us.imgix.net/covers/9780486280615.jpg?auto=format&w=300",
                             IsAvailable = true,
                             Isbn = "9780486280615",
                             Title = "Adventures of Huckleberry Finn"

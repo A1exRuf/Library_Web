@@ -42,6 +42,7 @@ public sealed class BookLoansController : ApiController
         return Ok(bookLoans);
     }
 
+    [Authorize]
     [HttpPost("LoanBook")]
     [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -57,6 +58,7 @@ public sealed class BookLoansController : ApiController
         return CreatedAtAction(nameof(LoanBook), new { bookLoanId }, bookLoanId);
     }
 
+    [Authorize]
     [HttpDelete("ReturnBook")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

@@ -39,7 +39,7 @@ public sealed class AuthorsController : ApiController
     }
 
     [HttpPost]
-    //[Authorize(Policy = "OnlyForAdmin")]
+    [Authorize(Policy = "OnlyForAdmin")]
     [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
 
@@ -55,7 +55,7 @@ public sealed class AuthorsController : ApiController
     }
 
     [HttpDelete]
-    //[Authorize(Policy = "OnlyForAdmin")]
+    [Authorize(Policy = "OnlyForAdmin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
 
@@ -75,7 +75,7 @@ public sealed class AuthorsController : ApiController
     }
 
     [HttpPut]
-    //[Authorize(Policy = "OnlyForAdmin")]
+    [Authorize(Policy = "OnlyForAdmin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -83,12 +83,7 @@ public sealed class AuthorsController : ApiController
         [FromBody] UpdateAuthorRequest request,
         CancellationToken cancellationToken)
     {
-        var command = new UpdateAuthorCommand(
-            request.AuthorId,
-            request.FirstName,
-            request.LastName,
-            request.DateOfBirth,
-            request.Country);
+        var command = request.Adapt<UpdateAuthorCommand>();
         await Sender.Send(command, cancellationToken);
 
         return NoContent();

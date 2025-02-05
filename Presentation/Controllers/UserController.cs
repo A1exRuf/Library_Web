@@ -1,5 +1,6 @@
 ﻿using Core.Exceptions;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UseCases.Users.Commands.DeleteUser;
@@ -87,7 +88,7 @@ public sealed class UserController : ApiController
 
 
     [HttpDelete]
-    //[Authorize(Policy = "OnlyForAdmin")]
+    [Authorize(Policy = "OnlyForAdmin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
 
@@ -107,7 +108,6 @@ public sealed class UserController : ApiController
     }
 
     [HttpPut]
-    //[Authorize(Policy = "OnlyForAdmin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -115,13 +115,7 @@ public sealed class UserController : ApiController
         [FromBody] UpdateUserRequest request,
         CancellationToken cancellationToken)
     {
-        var command = new UpdateUserCommand(
-            request.UserId,
-            request.Name,
-            request.Email,
-            request.Password,
-            request.ConfirmPassword,
-            request.Role);
+        var command = request.Adapt<UpdateUserCommand>();
 
         await Sender.Send(command, cancellationToken);
 
