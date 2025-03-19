@@ -1,6 +1,6 @@
-﻿using UseCases.Abstractions.Messaging;
-using FluentValidation;
+﻿using FluentValidation;
 using MediatR;
+using UseCases.Abstractions.Messaging;
 using ValidationException = UseCases.Exceptions.ValidationException;
 
 namespace UseCases.Behaviors;

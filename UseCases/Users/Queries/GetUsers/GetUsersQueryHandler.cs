@@ -1,6 +1,7 @@
 ﻿using Core.Abstractions;
 using Core.Common;
 using Core.Entities;
+using Mapster;
 using System.Linq.Expressions;
 using UseCases.Abstractions.Messaging;
 
@@ -33,12 +34,7 @@ public sealed class GetUsersQueryHandler : IQueryHandler<GetUsersQuery, PagedLis
         }
 
         var userResponsesQuery = usersQuery
-            .Select(u => new UserResponse(
-                u.Id,
-                u.Name,
-                u.Email,
-                u.PasswordHash,
-                u.Role));
+            .Select(u => u.Adapt<UserResponse>());
 
         var users = await _userRepository.GetPagedAsync(userResponsesQuery, request.Page, request.PageSize);
 

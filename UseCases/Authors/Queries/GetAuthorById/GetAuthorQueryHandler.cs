@@ -1,5 +1,6 @@
 ﻿using Core.Abstractions;
 using Core.Exceptions;
+using Mapster;
 using UseCases.Abstractions.Messaging;
 
 namespace UseCases.Authors.Queries.GetAuthorById;
@@ -21,12 +22,7 @@ internal sealed class GetAuthorQueryHandler : IQueryHandler<GetAuthorByIdQuery, 
             throw new AuthorNotFoundException(request.AuthorId);
         }
 
-        AuthorResponse authorResponse = new(
-            author.Id,
-            author.FirstName,
-            author.LastName,
-            author.DateOfBirth,
-            author.Country);
+        var authorResponse = author.Adapt<AuthorResponse>();
 
         return authorResponse;
     }

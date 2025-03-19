@@ -1,8 +1,6 @@
-using Infrastructure;
 using Library_Web.Configuration;
 using Library_Web.Extensions;
 using Library_Web.Middleware;
-using Microsoft.EntityFrameworkCore;
 
 namespace Library_Web;
 

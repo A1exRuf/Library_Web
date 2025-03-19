@@ -1,6 +1,7 @@
 ﻿using Core.Abstractions;
 using Core.Common;
 using Core.Entities;
+using Mapster;
 using System.Linq.Expressions;
 using UseCases.Abstractions.Messaging;
 
@@ -19,24 +20,35 @@ public sealed class GetBooksQueryHandler : IQueryHandler<GetBooksQuery, PagedLis
     {
         var booksQuery = _bookRepository.Query();
 
-        if (request.ShowUnavailable != true)
+        booksQuery = FilterByAvailability(request, booksQuery);
+        booksQuery = FilterByAuthor(request, booksQuery);
+        booksQuery = FilterByGenre(request, booksQuery);
+        booksQuery = Search(request, booksQuery);
+        booksQuery = Sort(request, booksQuery);
+
+        var bookResponsesQuery = booksQuery.ProjectToType<BookResponse>();
+
+        var books = await _bookRepository.GetPagedAsync(bookResponsesQuery, request.Page, request.PageSize);
+
+        return books;
+    }
+
+    private static IQueryable<Book> Sort(GetBooksQuery request, IQueryable<Book> booksQuery)
+    {
+        if (request.SortOrder?.ToLower() == "desc")
         {
-            booksQuery = booksQuery.Where(b =>
-            b.IsAvailable == true);
+            booksQuery = booksQuery.OrderByDescending(GetSortProperty(request));
+        }
+        else
+        {
+            booksQuery = booksQuery.OrderBy(GetSortProperty(request));
         }
 
-        if (request.AuthorId.Any())
-        {
-            booksQuery = booksQuery.Where(b =>
-            request.AuthorId.Contains(b.AuthorId));
-        }
+        return booksQuery;
+    }
 
-        if (request.Genre.Any())
-        {
-            booksQuery = booksQuery.Where(b =>
-            request.Genre.Contains(b.Genree));
-        }
-
+    private static IQueryable<Book> Search(GetBooksQuery request, IQueryable<Book> booksQuery)
+    {
         if (!string.IsNullOrWhiteSpace(request.SearchTerm))
         {
             string searhTerm = request.SearchTerm.ToLower();
@@ -47,34 +59,40 @@ public sealed class GetBooksQueryHandler : IQueryHandler<GetBooksQuery, PagedLis
             b.Author.LastName.ToLower().Contains(searhTerm));
         }
 
-        if(request.SortOrder?.ToLower() == "desc")
+        return booksQuery;
+    }
+
+    private static IQueryable<Book> FilterByGenre(GetBooksQuery request, IQueryable<Book> booksQuery)
+    {
+        if (request.Genre.Any())
         {
-            booksQuery = booksQuery.OrderByDescending(GetSortProperty(request));
-        } 
-        else
-        {
-            booksQuery = booksQuery.OrderBy(GetSortProperty(request));
+            booksQuery = booksQuery.Where(b =>
+            request.Genre.Contains(b.Genree));
         }
 
-        var bookResponsesQuery = booksQuery
-            .Select(b => new BookResponse(
-                b.Id,
-                b.Isbn,
-                b.Title,
-                b.Genree,
-                b.Description,
-                new BookAuthorDTO(
-                    b.Author.Id,
-                    b.Author.FirstName,
-                    b.Author.LastName,
-                    b.Author.DateOfBirth,
-                    b.Author.Country),
-                b.IsAvailable,
-                b.ImageUrl));
+        return booksQuery;
+    }
 
-        var books = await _bookRepository.GetPagedAsync(bookResponsesQuery, request.Page, request.PageSize);
+    private static IQueryable<Book> FilterByAuthor(GetBooksQuery request, IQueryable<Book> booksQuery)
+    {
+        if (request.AuthorId.Any())
+        {
+            booksQuery = booksQuery.Where(b =>
+            request.AuthorId.Contains(b.AuthorId));
+        }
 
-        return books;
+        return booksQuery;
+    }
+
+    private static IQueryable<Book> FilterByAvailability(GetBooksQuery request, IQueryable<Book> booksQuery)
+    {
+        if (request.ShowUnavailable != true)
+        {
+            booksQuery = booksQuery.Where(b =>
+            b.IsAvailable == true);
+        }
+
+        return booksQuery;
     }
 
     private static Expression<Func<Book, object>> GetSortProperty(GetBooksQuery request)

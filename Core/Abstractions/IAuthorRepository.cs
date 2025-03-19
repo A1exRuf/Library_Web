@@ -1,5 +1,4 @@
-﻿using Core.Common;
-using Core.Entities;
+﻿using Core.Entities;
 using System.Linq.Expressions;
 
 namespace Core.Abstractions;

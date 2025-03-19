@@ -1,5 +1,5 @@
-﻿using FluentValidation;
-using Core.Abstractions;
+﻿using Core.Abstractions;
+using FluentValidation;
 
 namespace UseCases.Authors.Commands.UpdateAuthor;
 

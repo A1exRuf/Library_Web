@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using UseCases.Abstractions.Messaging;
+﻿using UseCases.Abstractions.Messaging;
 
 namespace UseCases.Books.Commands.CreateBook;
 

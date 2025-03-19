@@ -1,6 +1,6 @@
-﻿using UseCases.Abstractions.Messaging;
-using Core.Abstractions;
+﻿using Core.Abstractions;
 using Core.Exceptions;
+using UseCases.Abstractions.Messaging;
 
 namespace UseCases.Authors.Commands.UpdateAuthor;
 

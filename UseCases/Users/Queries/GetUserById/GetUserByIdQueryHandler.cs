@@ -1,5 +1,6 @@
 ﻿using Core.Abstractions;
 using Core.Exceptions;
+using Mapster;
 using UseCases.Abstractions.Messaging;
 
 namespace UseCases.Users.Queries.GetUserById;
@@ -21,12 +22,7 @@ internal sealed class GetUserByIdQueryHandler : IQueryHandler<GetUserByIdQuery, 
             throw new UserNotFoundException(request.UserId);
         }
 
-        UserResponse userResponse = new(
-            user.Id,
-            user.Name,
-            user.Email,
-            user.PasswordHash,
-            user.Role);
+        var userResponse = user.Adapt<UserResponse>();
 
         return userResponse;
     }

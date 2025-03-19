@@ -1,4 +1,5 @@
 ﻿using Core.Abstractions;
+using Mapster;
 using UseCases.Abstractions.Messaging;
 using UseCases.Authors.Queries.GetAuthors;
 
@@ -14,12 +15,8 @@ internal sealed class GetAuthorsQueryHandler : IQueryHandler<GetAuthorsQuery, Li
         GetAuthorsQuery request,
         CancellationToken cancellationToken)
     {
-        var authors = await _authorRepository.GetAllAsync(a => new AuthorResponse(
-            a.Id,
-            a.FirstName,
-            a.LastName,
-            a.DateOfBirth,
-            a.Country));
+        var authors = await _authorRepository.GetAllAsync(
+            a => a.Adapt<AuthorResponse>());
 
         return authors;
     }
