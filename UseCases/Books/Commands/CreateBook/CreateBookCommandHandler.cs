@@ -35,9 +35,11 @@ internal sealed class CreateBookCommandHandler : ICommandHandler<CreateBookComma
 
         if (request.ImageStream != null)
         {
-            string imageName = bookId + "_img";
-
-            imageUrl = await _blobService.UploadAsync(request.ImageStream, imageName, "bimages");
+            using (request.ImageStream)
+            {
+                string imageName = bookId + "_img";
+                imageUrl = await _blobService.UploadAsync(request.ImageStream, imageName, "bimages");
+            }
         }
 
         var book = new Book(bookId, request.Isbn, request.Title, request.Genree, request.Description, request.AuthorId, author, imageUrl);

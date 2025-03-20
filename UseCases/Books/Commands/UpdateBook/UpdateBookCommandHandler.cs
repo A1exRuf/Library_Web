@@ -30,8 +30,11 @@ public sealed class UpdateBookCommandHandler : ICommandHandler<UpdateBookCommand
 
         if (request.ImageStream != null)
         {
-            string imageName = request.BookId + "_img";
-            imageUrl = await _blobService.UploadAsync(request.ImageStream, imageName, "bimages");
+            using (request.ImageStream)
+            {
+                string imageName = request.BookId + "_img";
+                imageUrl = await _blobService.UploadAsync(request.ImageStream, imageName, "bimages");
+            } 
         }
 
         book.Isbn = request.Isbn ?? book.Isbn;
