@@ -21,7 +21,7 @@ public sealed class UserRepository : IUserRepository
         await _context.Users.SingleOrDefaultAsync(u => u.Id == id);
 
     public IQueryable<User> Query() => 
-        _context.Users;
+        _context.Users.AsNoTracking();
 
     public async Task<PagedList<T>> GetPagedAsync<T>(
         IQueryable<T> query, int page, int pageSize) =>

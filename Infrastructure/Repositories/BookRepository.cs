@@ -15,7 +15,7 @@ public sealed class BookRepository : IBookRepository
         _context.Books.Include(b => b.Author).SingleOrDefaultAsync(b => b.Id == id);
 
     public IQueryable<Book> Query() => 
-        _context.Books;
+        _context.Books.AsNoTracking();
 
     public async Task<PagedList<T>> GetPagedAsync<T>(
         IQueryable<T> query, int page, int pageSize) =>
