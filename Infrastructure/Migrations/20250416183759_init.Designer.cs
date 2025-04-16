@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250205134923_init")]
+    [Migration("20250416183759_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -186,6 +186,20 @@ namespace Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
+
+                    b.HasIndex("Genree");
+
+                    b.HasIndex("IsAvailable");
+
+                    b.HasIndex("Isbn");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("Isbn"), "GIN");
+                    NpgsqlIndexBuilderExtensions.HasOperators(b.HasIndex("Isbn"), new[] { "gin_trgm_ops" });
+
+                    b.HasIndex("Title");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("Title"), "GIN");
+                    NpgsqlIndexBuilderExtensions.HasOperators(b.HasIndex("Title"), new[] { "gin_trgm_ops" });
 
                     b.ToTable("Books", (string)null);
 

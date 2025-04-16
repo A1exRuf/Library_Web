@@ -13,6 +13,8 @@ namespace Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.Sql("CREATE EXTENSION IF NOT EXISTS pg_trgm;");
+
             migrationBuilder.CreateTable(
                 name: "Authors",
                 columns: table => new
@@ -166,6 +168,30 @@ namespace Infrastructure.Migrations
                 name: "IX_Books_AuthorId",
                 table: "Books",
                 column: "AuthorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Books_Genree",
+                table: "Books",
+                column: "Genree");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Books_IsAvailable",
+                table: "Books",
+                column: "IsAvailable");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Books_Isbn",
+                table: "Books",
+                column: "Isbn")
+                .Annotation("Npgsql:IndexMethod", "GIN")
+                .Annotation("Npgsql:IndexOperators", new[] { "gin_trgm_ops" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Books_Title",
+                table: "Books",
+                column: "Title")
+                .Annotation("Npgsql:IndexMethod", "GIN")
+                .Annotation("Npgsql:IndexOperators", new[] { "gin_trgm_ops" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_RefreshTokens_Token",

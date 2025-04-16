@@ -13,10 +13,17 @@ internal sealed class BookConfiguration : IEntityTypeConfiguration<Book>
         builder.HasKey(book => book.Id);
 
         builder.Property(book => book.Isbn).IsRequired();
+        builder.HasIndex(b => b.Isbn)
+            .HasMethod("GIN")
+            .HasOperators("gin_trgm_ops");
 
         builder.Property(book => book.Title).IsRequired();
+        builder.HasIndex(b => b.Title)
+            .HasMethod("GIN")
+            .HasOperators("gin_trgm_ops");
 
         builder.Property(book => book.Genree).IsRequired();
+        builder.HasIndex(book => book.Genree);
 
         builder.Property(book => book.Description);
 
@@ -25,7 +32,10 @@ internal sealed class BookConfiguration : IEntityTypeConfiguration<Book>
             .HasForeignKey(book => book.AuthorId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        builder.HasIndex(book => book.AuthorId);
+
         builder.Property(book => book.IsAvailable).IsRequired();
+        builder.HasIndex(b => b.IsAvailable);
 
         builder.Property(book => book.ImageUrl);
     }

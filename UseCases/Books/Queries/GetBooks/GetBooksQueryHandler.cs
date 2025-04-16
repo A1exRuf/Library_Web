@@ -54,9 +54,7 @@ public sealed class GetBooksQueryHandler : IQueryHandler<GetBooksQuery, PagedLis
             string searhTerm = request.SearchTerm.ToLower();
             booksQuery = booksQuery.Where(b =>
             b.Isbn.Contains(searhTerm) ||
-            b.Title.ToLower().Contains(searhTerm) ||
-            b.Author.FirstName.ToLower().Contains(searhTerm) ||
-            b.Author.LastName.ToLower().Contains(searhTerm));
+            b.Title.ToLower().Contains(searhTerm));
         }
 
         return booksQuery;

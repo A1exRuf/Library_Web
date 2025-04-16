@@ -184,6 +184,20 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("AuthorId");
 
+                    b.HasIndex("Genree");
+
+                    b.HasIndex("IsAvailable");
+
+                    b.HasIndex("Isbn");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("Isbn"), "GIN");
+                    NpgsqlIndexBuilderExtensions.HasOperators(b.HasIndex("Isbn"), new[] { "gin_trgm_ops" });
+
+                    b.HasIndex("Title");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("Title"), "GIN");
+                    NpgsqlIndexBuilderExtensions.HasOperators(b.HasIndex("Title"), new[] { "gin_trgm_ops" });
+
                     b.ToTable("Books", (string)null);
 
                     b.HasData(
