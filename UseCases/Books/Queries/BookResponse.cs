@@ -1,7 +1,4 @@
-﻿using Core.Abstractions;
-using UseCases.Authors.Queries;
-
-namespace UseCases.Books.Queries;
+﻿namespace UseCases.Books.Queries;
 
 public record BookResponse(
     Guid Id, 
@@ -11,7 +8,11 @@ public record BookResponse(
     string Description,
     BookAuthorDTO Author,
     bool IsAvailable,
-    string? ImageUrl);
+    string? ImageUrl,
+    List<LinkDTO> Links);
 
-public record BookAuthorDTO(Guid Id, string FirstName,
-    string LastName, DateTime DateOfBirth, string Country);
+public record BookAuthorDTO(Guid Id, 
+    string FirstName,
+    string LastName, 
+    DateTime DateOfBirth, 
+    string Country);

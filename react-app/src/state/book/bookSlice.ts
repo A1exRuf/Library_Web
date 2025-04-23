@@ -25,11 +25,7 @@ export const fetchBook = createAsyncThunk('books/fetchBook',
     async (bookId: string, { rejectWithValue }) => {
         try {
             const response = await apiClient
-                .get('books/book', {
-                    params: {
-                        bookId: bookId
-                    }
-                })
+                .get(`books/${bookId}`)
             return response.data
         } catch (error: any) {
             return rejectWithValue(error.response?.data?.message || "Get book failed")
@@ -40,9 +36,10 @@ export const updateBook = createAsyncThunk(
     'books/updateBook',
     async ({ bookData }: { bookData: FormData }, { rejectWithValue }) => {
         try {
-            const response = await apiClient.put(`books`, bookData, {
-                headers: { 'Content-Type': 'multipart/form-data' },
-            });
+            const response = await apiClient
+                .put(`books/${bookData.get("id")}`, bookData, {
+                    headers: { 'Content-Type': 'multipart/form-data' },
+                });
             return response.data;
         } catch (error: any) {
             return rejectWithValue(error.response?.data?.message || "Update book failed");

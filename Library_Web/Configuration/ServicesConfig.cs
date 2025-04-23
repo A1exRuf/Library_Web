@@ -16,6 +16,10 @@ public static class ServicesConfig
 
         services.AddScoped<IBlobService, BlobService>();
 
+        services.AddHttpContextAccessor();
+
+        services.AddScoped<ICurrentUserService, CurrentUserService>();
+
         services.AddSingleton(provider =>
         {
             var configuration = provider.GetRequiredService<IConfiguration>();
@@ -24,5 +28,6 @@ public static class ServicesConfig
         });
 
         services.AddTransient<ExceptionHandlingMiddleware>();
+
     }
 }

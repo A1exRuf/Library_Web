@@ -52,7 +52,7 @@ export const fetchBooks = createAsyncThunk('books/fetchBooks', async (
 
     try {
         const response = await apiClient
-            .get(`books/books?${params.toString()}`)
+            .get(`books?${params.toString()}`)
 
         return response.data
     } catch (error: any) {

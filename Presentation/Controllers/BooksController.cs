@@ -12,7 +12,7 @@ using UseCases.Books.Queries.GetBooks;
 namespace Presentation.Controllers;
 public sealed class BooksController : ApiController
 {
-    [HttpGet("book")]
+    [HttpGet("{bookId}")]
     [ProducesResponseType(typeof(BookResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetBook(Guid bookId, CancellationToken cancellationToken)
@@ -24,7 +24,7 @@ public sealed class BooksController : ApiController
         return Ok(book);
     }
 
-    [HttpGet("books")]
+    [HttpGet]
     [ProducesResponseType(typeof(BookResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetBooks(
@@ -69,7 +69,7 @@ public sealed class BooksController : ApiController
         return CreatedAtAction(nameof(GetBook), new { bookId }, bookId);
     }
 
-    [HttpPut]
+    [HttpPut("{bookId}")]
     [Authorize(Policy = "OnlyForAdmin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
