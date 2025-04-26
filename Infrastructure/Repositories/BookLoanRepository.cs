@@ -1,6 +1,7 @@
 ﻿using Core.Abstractions;
 using Core.Common;
 using Core.Entities;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -17,13 +18,13 @@ public sealed class BookLoanRepository : IBookLoanRepository
 
     public async Task<PagedList<T>> GetByUserIdAsync<T>(
         Guid userId, 
-        Expression<Func<BookLoan, T>> selector, 
         int page, 
         int pageSize)
     {
         var query = _context.BookLoans
             .Where(bl => bl.UserId == userId)
-            .Select(selector);
+            .AsNoTracking()
+            .ProjectToType<T>();
 
         var totalCount = await query.CountAsync();
 

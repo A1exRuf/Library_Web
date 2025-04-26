@@ -16,7 +16,7 @@ function BookLoanItem(props: bookLoan) {
   );
 
   const handleReturnBook = () => {
-    dispatch(returnBook({ bookLoanId: props.id }));
+    dispatch(returnBook(props.id));
   };
 
   return (

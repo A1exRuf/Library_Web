@@ -13,8 +13,23 @@ public class CurrentUserService : ICurrentUserService
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public string? UserId => 
-        _httpContextAccessor.HttpContext?.User?.FindFirst("sub")?.Value;
+    public Guid? UserId { 
+        get
+        {
+            var sub = _httpContextAccessor
+                .HttpContext?
+                .User?
+                .FindFirst(ClaimTypes.NameIdentifier)
+                .Value;
+
+            if (Guid.TryParse(sub, out var userId))
+            {  
+                return userId;
+            }
+
+            return null;
+        } 
+    }
 
     public string? Role =>
         _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.Role)?.Value;

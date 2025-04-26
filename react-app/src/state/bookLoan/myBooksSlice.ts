@@ -24,13 +24,13 @@ const initialState: myBooksState = {
     error: undefined
 }
 
+// Fetch MyBooks
 export const fetchMyBooks = createAsyncThunk('myBooks/fetchMyBooks',
-    async ({ userId, page }: { userId: string, page: number }, { rejectWithValue }) => {
+    async (page: number, { rejectWithValue }) => {
         try {
             const response = await apiClient
-                .get('BookLoans/BookLoansByUserId', {
+                .get('BookLoans', {
                     params: {
-                        userId: userId,
                         page: page,
                         pageSize: 10
                     }
@@ -42,20 +42,22 @@ export const fetchMyBooks = createAsyncThunk('myBooks/fetchMyBooks',
         }
     })
 
+// Take Book
 export const takeBook = createAsyncThunk('myBooks/takebook',
     async ({ bookId, userId }: { bookId: string, userId: string }, { rejectWithValue }) => {
         try {
-            const response = await apiClient.post(`BookLoans/LoanBook`, { bookId: bookId, userId: userId })
+            const response = await apiClient.post(`BookLoans`, { bookId: bookId, userId: userId })
             return response.data
         } catch (error: any) {
             return rejectWithValue(error.response?.data?.message || "Take book failed")
         }
     })
 
-export const returnBook = createAsyncThunk('myBooks/ReturnBook',
-    async ({ bookLoanId }: { bookLoanId: string }, { rejectWithValue }) => {
+// Return Book
+export const returnBook = createAsyncThunk('myBooks/returnBook',
+    async (bookLoanId: string, { rejectWithValue }) => {
         try {
-            await apiClient.delete(`BookLoans/ReturnBook`, { data: { bookLoanId } })
+            await apiClient.delete(`BookLoans/${bookLoanId}`)
             return bookLoanId
         } catch (error: any) {
             return rejectWithValue(error.response?.data?.message || "Return book failed")
@@ -67,6 +69,7 @@ const myBooksSlice = createSlice({
     initialState,
     reducers: {},
     extraReducers: (builder) => {
+        // Fetch MyBooks
         builder.addCase(fetchMyBooks.pending, (state) => {
             state.loading = true;
             state.error = undefined;
@@ -86,6 +89,7 @@ const myBooksSlice = createSlice({
             state.error = action.payload as string;
         })
 
+        // Take Book
         builder.addCase(takeBook.pending, (state) => {
             state.loading = true;
             state.error = undefined;
@@ -99,6 +103,7 @@ const myBooksSlice = createSlice({
             state.error = action.payload as string;
         })
 
+        // Return Book
         builder.addCase(returnBook.pending, (state) => {
             state.loading = true;
             state.error = undefined;

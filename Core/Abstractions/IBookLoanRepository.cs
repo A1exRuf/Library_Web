@@ -9,7 +9,6 @@ public interface IBookLoanRepository
     Task<BookLoan?> GetByIdAsync(Guid id);
     Task<PagedList<T>> GetByUserIdAsync<T>(
         Guid userId,
-        Expression<Func<BookLoan, T>> selector,
         int page,
         int pageSize);
 

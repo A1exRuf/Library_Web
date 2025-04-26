@@ -3,30 +3,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispath, RootState } from "../../state/store";
 import { useEffect } from "react";
 import { fetchMyBooks } from "../../state/bookLoan/myBooksSlice";
-import { jwtDecode } from "jwt-decode";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import BookLoanItem from "./BookLoanItem/BookLoanItem";
 
 function MyBooksPage() {
   const bookLoans = useSelector((state: RootState) => state.myBooks);
-  const accessToken = useSelector(
-    (state: RootState) => state.signIn.accessToken
-  );
 
   const dispatch = useDispatch<AppDispath>();
-  const navigate = useNavigate();
 
   useEffect(() => {
-    if (!accessToken) {
-      navigate("/signin");
-      return;
-    }
-    const userId = jwtDecode(accessToken).sub;
-
-    if (userId) {
-      dispatch(fetchMyBooks({ userId: userId, page: 1 }));
-    }
-  }, [accessToken, dispatch, navigate]);
+    dispatch(fetchMyBooks(1));
+  }, []);
 
   return (
     <div className={s.container}>
