@@ -10,6 +10,13 @@ public static class ServicesConfig
 {
     public static void AddServices(IServiceCollection services)
     {
+        services.AddSingleton(provider =>
+        {
+            var configuration = provider.GetRequiredService<IConfiguration>();
+            string connectionString = configuration.GetConnectionString("BlobStorage");
+            return new BlobServiceClient(connectionString);
+        });
+
         services.AddScoped<IPasswordHasher, PasswordHasher>();
 
         services.AddScoped<ITokenService, TokenService>();
@@ -20,12 +27,7 @@ public static class ServicesConfig
 
         services.AddScoped<ICurrentUserService, CurrentUserService>();
 
-        services.AddSingleton(provider =>
-        {
-            var configuration = provider.GetRequiredService<IConfiguration>();
-            string connectionString = configuration.GetConnectionString("BlobStorage");
-            return new BlobServiceClient(connectionString);
-        });
+        services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
         services.AddTransient<ExceptionHandlingMiddleware>();
 

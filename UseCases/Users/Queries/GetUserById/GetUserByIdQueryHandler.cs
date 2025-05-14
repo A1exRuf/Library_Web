@@ -1,29 +1,30 @@
 ﻿using Core.Abstractions;
+using Core.Entities;
 using Core.Exceptions;
-using Mapster;
 using UseCases.Abstractions.Messaging;
 
 namespace UseCases.Users.Queries.GetUserById;
 
 internal sealed class GetUserByIdQueryHandler : IQueryHandler<GetUserByIdQuery, UserResponse>
 {
-    private readonly IUserRepository _userRepository;
+    private readonly IRepository<User> _repository;
 
-    public GetUserByIdQueryHandler(IUserRepository userRepository) => _userRepository = userRepository;
+    public GetUserByIdQueryHandler(IRepository<User> repository) => _repository = repository;
 
     public async Task<UserResponse> Handle(
         GetUserByIdQuery request,
         CancellationToken cancellationToken)
     {
-        var user = await _userRepository.GetByIdAsync(request.UserId);
+        var response = await _repository.GetAsync<UserResponse>(
+            x => x.Id == request.UserId,
+            asNoTracking: true,
+            cancellationToken);
 
-        if (user == null)
+        if (response == null)
         {
             throw new UserNotFoundException(request.UserId);
         }
 
-        var userResponse = user.Adapt<UserResponse>();
-
-        return userResponse;
+        return response;
     }
 }

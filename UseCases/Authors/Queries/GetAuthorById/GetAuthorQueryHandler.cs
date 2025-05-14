@@ -1,29 +1,30 @@
 ﻿using Core.Abstractions;
+using Core.Entities;
 using Core.Exceptions;
-using Mapster;
 using UseCases.Abstractions.Messaging;
 
 namespace UseCases.Authors.Queries.GetAuthorById;
 
 internal sealed class GetAuthorQueryHandler : IQueryHandler<GetAuthorByIdQuery, AuthorResponse>
 {
-    private readonly IAuthorRepository _authorRepository;
+    private readonly IRepository<Author> _repository;
 
-    public GetAuthorQueryHandler(IAuthorRepository authorRepository) => _authorRepository = authorRepository;
+    public GetAuthorQueryHandler(IRepository<Author> repository) => _repository = repository;
 
     public async Task<AuthorResponse> Handle(
         GetAuthorByIdQuery request, 
         CancellationToken cancellationToken)
     {
-        var author = await _authorRepository.GetByIdAsync(request.AuthorId);
+        var response = await _repository.GetAsync<AuthorResponse>(
+            x => x.Id == request.AuthorId,
+            asNoTracking: true, 
+            cancellationToken);
 
-        if (author == null)
+        if (response == null)
         {
             throw new AuthorNotFoundException(request.AuthorId);
         }
 
-        var authorResponse = author.Adapt<AuthorResponse>();
-
-        return authorResponse;
+        return response;
     }
 }
