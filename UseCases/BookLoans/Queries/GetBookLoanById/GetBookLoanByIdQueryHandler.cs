@@ -8,9 +8,15 @@ namespace UseCases.BookLoans.Queries.GetBookLoanById;
 internal sealed class GetBookLoanByIdQueryHandler : IQueryHandler<GetBookLoanByIdQuery, BookLoanResponse>
 {
     private readonly IRepository<BookLoan> _repository;
+    private readonly ILinkService _linkService;
 
-    public GetBookLoanByIdQueryHandler(IRepository<BookLoan> repository) =>
+    public GetBookLoanByIdQueryHandler(
+        IRepository<BookLoan> repository,
+        ILinkService linkService)
+    {
         _repository = repository;
+        _linkService = linkService;
+    }
 
     public async Task<BookLoanResponse> Handle(
         GetBookLoanByIdQuery request,
@@ -26,6 +32,25 @@ internal sealed class GetBookLoanByIdQueryHandler : IQueryHandler<GetBookLoanByI
             throw new BookLoanNotFoundException(request.BookLoanId);
         }
 
+        AddLinksForBookLoan(response);
+
         return response;
+    }
+
+    private void AddLinksForBookLoan(BookLoanResponse bookloanResponse)
+    {
+        bookloanResponse.Links.Add(
+            _linkService.Generate(
+                "GetBookLoan",
+                new { bookLoanId = bookloanResponse.Id },
+                "self",
+                "GET"));
+
+        bookloanResponse.Links.Add(
+            _linkService.Generate(
+                "ReturnBook",
+                new { bookLoanId = bookloanResponse.Id },
+                "return-book",
+                "DELETE"));
     }
 }

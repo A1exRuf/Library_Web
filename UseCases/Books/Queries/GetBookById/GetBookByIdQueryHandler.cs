@@ -1,56 +1,77 @@
 ﻿using Core.Abstractions;
 using Core.Entities;
 using Core.Exceptions;
-using Mapster;
 using UseCases.Abstractions.Messaging;
 
 namespace UseCases.Books.Queries.GetBookById;
 
 internal sealed class GetBookByIdQueryHandler : IQueryHandler<GetBookByIdQuery, BookResponse>
 {
-    private readonly IBookRepository _bookRepository;
-    private readonly ICurrentUserService _currentUserService;
+    private readonly IRepository<Book> _repository;
+    private readonly ILinkService _linkService;
 
     public GetBookByIdQueryHandler(
-        IBookRepository bookRepository, 
-        ICurrentUserService currentUserService)
+        IRepository<Book> repository, 
+        ILinkService linkService)
     {
-        _bookRepository = bookRepository;
-        _currentUserService = currentUserService;
+        _repository = repository;
+        _linkService = linkService;
     }
 
     public async Task<BookResponse> Handle(
         GetBookByIdQuery request,
         CancellationToken cancellationToken)
     {
-        Book? book = await _bookRepository.GetByIdAsync(request.BookId);
+        var response = await _repository.GetAsync<BookResponse>(
+            x => x.Id == request.BookId,
+            asNoTracking: true,
+            cancellationToken);
 
-        if (book == null)
+        if (response == null)
         {
             throw new BookNotFoundException(request.BookId);
         }
 
-        List<LinkDTO> links = GetLinks(book);
+        AddLinksForBook(response);
 
-        var bookResponse = book.Adapt<BookResponse>() with { Links = links };
-
-        return bookResponse;
+        return response;
     }
 
-    private List<LinkDTO> GetLinks(Book? book)
+    private void AddLinksForBook(BookResponse bookResponse)
     {
-        var links = new List<LinkDTO>
-        {
-            new("self", $"/api/books/{book.Id}", "GET"),
-            new("author", $"/api/authors/{book.Author.Id}", "GET"),
-        };
+        bookResponse.Links.Add(
+            _linkService.Generate(
+                "GetBook", 
+                new { bookId = bookResponse.Id },
+                "self",
+                "GET"));
 
-        if (_currentUserService.Role == "Admin")
-        {
-            links.Add(new("update", $"/api/books/{book.Id}", "PUT"));
-            links.Add(new("delete", $"/api/books/{book.Id}", "DELETE"));
-        }
+        bookResponse.Links.Add(
+            _linkService.Generate(
+                "TakeBook",
+                new { bookId = bookResponse.Id },
+                "take-book",
+                "POST"));
 
-        return links;
+        bookResponse.Links.Add(
+            _linkService.Generate(
+                "GetAuthor", 
+                new { authorId = bookResponse.Author.Id },
+                "author",
+                "GET"));
+
+        bookResponse.Links.Add(
+            _linkService.Generate(
+                "PutBook", 
+                new { bookId = bookResponse.Id },
+                "update-book",
+                "PUT"));
+
+        bookResponse.Links.Add(
+            _linkService.Generate(
+                "DeleteBook", 
+                new { bookId = bookResponse.Id },
+                "delete-book",
+                "DELETE"));
     }
 }

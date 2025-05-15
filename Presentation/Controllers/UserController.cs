@@ -16,7 +16,7 @@ namespace Presentation.Controllers;
 
 public sealed class UserController : ApiController
 {
-    [HttpGet("user")]
+    [HttpGet("{userId}", Name = "GetUser")]
     [ProducesResponseType(typeof(UserResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetUser(Guid userId, CancellationToken cancellationToken)
@@ -28,7 +28,7 @@ public sealed class UserController : ApiController
         return Ok(book);
     }
 
-    [HttpGet("users")]
+    [HttpGet(Name = "GetUsers")]
     [ProducesResponseType(typeof(UserResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetUser(string? searchTerm,
@@ -45,7 +45,7 @@ public sealed class UserController : ApiController
         return Ok(book);
     }
 
-    [HttpPost("register")]
+    [HttpPost("register", Name = "Register")]
     [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Register(
@@ -64,7 +64,7 @@ public sealed class UserController : ApiController
         return CreatedAtAction(nameof(GetUser), new { userId }, userId);
     }
 
-    [HttpPost("login")]
+    [HttpPost("login", Name = "Login")]
     [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -75,7 +75,7 @@ public sealed class UserController : ApiController
         return Ok(response);
     }
 
-    [HttpPost("loginwithrefreshtoken")]
+    [HttpPost("loginwithrefreshtoken", Name = "LoginWithRefreshToken")]
     [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -87,7 +87,7 @@ public sealed class UserController : ApiController
     }
 
 
-    [HttpDelete]
+    [HttpDelete(Name = "DeleteUser")]
     [Authorize(Policy = "OnlyForAdmin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -107,7 +107,7 @@ public sealed class UserController : ApiController
         }
     }
 
-    [HttpPut]
+    [HttpPut(Name = "UpdateUser")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]

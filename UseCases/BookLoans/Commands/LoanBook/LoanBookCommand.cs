@@ -2,4 +2,4 @@
 
 namespace UseCases.Books.Commands.LoanBook;
 
-public record LoanBookCommand(Guid BookId, Guid UserId) : ICommand<Guid>;
+public record LoanBookCommand(Guid BookId) : ICommand<Guid>;

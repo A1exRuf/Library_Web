@@ -1,5 +1,12 @@
-﻿namespace UseCases.Authors.Queries;
+﻿using Core.Common;
 
-public sealed record AuthorResponse(Guid Id, string FirstName,
-    string LastName, DateTime DateOfBirth, string Country);
+namespace UseCases.Authors.Queries;
+
+public sealed record AuthorResponse(
+    Guid Id, 
+    string FirstName,
+    string LastName, 
+    DateTime DateOfBirth, 
+    string Country,
+    List<Link> Links);
 

@@ -14,7 +14,7 @@ namespace Presentation.Controllers;
 
 public sealed class AuthorsController : ApiController
 {
-    [HttpGet("Author")]
+    [HttpGet("{authorId}", Name = "GetAuthor")]
     [ProducesResponseType(typeof(AuthorResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAuthor(Guid authorId, CancellationToken cancellationToken)
@@ -26,7 +26,7 @@ public sealed class AuthorsController : ApiController
         return Ok(author);
     }
 
-    [HttpGet("Authors")]
+    [HttpGet(Name = "GetAuthors")]
     [ProducesResponseType(typeof(AuthorResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAuthors(CancellationToken cancellationToken)
@@ -38,7 +38,7 @@ public sealed class AuthorsController : ApiController
         return Ok(authors);
     }
 
-    [HttpPost]
+    [HttpPost(Name = "PostAuthor")]
     [Authorize(Policy = "OnlyForAdmin")]
     [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -54,7 +54,7 @@ public sealed class AuthorsController : ApiController
         return CreatedAtAction(nameof(GetAuthor), new { authorId }, authorId);
     }
 
-    [HttpDelete]
+    [HttpDelete(Name = "DeleteAuthor")]
     [Authorize(Policy = "OnlyForAdmin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -74,7 +74,7 @@ public sealed class AuthorsController : ApiController
         }
     }
 
-    [HttpPut]
+    [HttpPut(Name = "PutAuthor")]
     [Authorize(Policy = "OnlyForAdmin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

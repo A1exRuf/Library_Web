@@ -1,6 +1,10 @@
+using Core.Common;
+using Core.Entities;
 using Library_Web.Configuration;
 using Library_Web.Extensions;
 using Library_Web.Middleware;
+using Mapster;
+using UseCases.Books.Queries;
 
 namespace Library_Web;
 
@@ -19,6 +23,7 @@ public class Startup
         ServicesConfig.AddServices(services);
         JwtAuthConfig.AddJwtAuth(services, Configuration);
         CorsConfig.AddCors(services);
+        ConfigureMapster.Configure();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

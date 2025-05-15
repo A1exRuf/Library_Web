@@ -3,6 +3,7 @@ using Core.Abstractions;
 using Infrastructure.Authentication;
 using Infrastructure.Services;
 using Library_Web.Middleware;
+using Presentation.Services;
 
 namespace Library_Web.Configuration;
 
@@ -29,7 +30,8 @@ public static class ServicesConfig
 
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
-        services.AddTransient<ExceptionHandlingMiddleware>();
+        services.AddScoped<ILinkService, LinkService>();
 
+        services.AddTransient<ExceptionHandlingMiddleware>();
     }
 }

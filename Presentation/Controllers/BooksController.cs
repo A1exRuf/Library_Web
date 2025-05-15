@@ -12,10 +12,12 @@ using UseCases.Books.Queries.GetBooks;
 namespace Presentation.Controllers;
 public sealed class BooksController : ApiController
 {
-    [HttpGet("{bookId}")]
+    [HttpGet("{bookId}", Name = "GetBook")]
     [ProducesResponseType(typeof(BookResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetBook(Guid bookId, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetBook(
+        Guid bookId, 
+        CancellationToken cancellationToken)
     {
         var query = new GetBookByIdQuery(bookId);
 
@@ -24,7 +26,7 @@ public sealed class BooksController : ApiController
         return Ok(book);
     }
 
-    [HttpGet]
+    [HttpGet(Name = "GetBooks")]
     [ProducesResponseType(typeof(BookResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetBooks(
@@ -45,7 +47,7 @@ public sealed class BooksController : ApiController
         return Ok(books);
     }
 
-    [HttpPost]
+    [HttpPost(Name = "PostBook")]
     [Authorize(Policy = "OnlyForAdmin")]
     [ProducesResponseType(typeof(Guid), StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -69,7 +71,7 @@ public sealed class BooksController : ApiController
         return CreatedAtAction(nameof(GetBook), new { bookId }, bookId);
     }
 
-    [HttpPut("{bookId}")]
+    [HttpPut("{bookId}", Name = "PutBook")]
     [Authorize(Policy = "OnlyForAdmin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -94,7 +96,7 @@ public sealed class BooksController : ApiController
         return NoContent();
     }
 
-    [HttpDelete("{bookId}")]
+    [HttpDelete("{bookId}", Name = "DeleteBook")]
     [Authorize(Policy = "OnlyForAdmin")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
