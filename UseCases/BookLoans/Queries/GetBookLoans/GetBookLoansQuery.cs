@@ -1,8 +1,5 @@
-﻿using Core.Common;
-using UseCases.Abstractions.Messaging;
+﻿using UseCases.Abstractions.Messaging;
 
-namespace UseCases.BookLoans.Queries.GetBookLoanById;
+namespace UseCases.BookLoans.Queries.GetBookLoans;
 
-public record GetBookLoansQuery(
-    int Page,
-    int PageSize) : IQuery<PagedList<BookLoanResponse>>;
+public record GetBookLoansQuery() : IQuery<List<BookLoanResponse>>;

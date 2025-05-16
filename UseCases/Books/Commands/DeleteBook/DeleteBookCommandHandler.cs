@@ -1,4 +1,5 @@
 ﻿using Core.Abstractions;
+using Core.Entities;
 using Core.Exceptions;
 using UseCases.Abstractions.Messaging;
 
@@ -6,11 +7,14 @@ namespace UseCases.Books.Commands.DeleteBook;
 
 internal sealed class DeleteBookCommandHandler : ICommandHandler<DeleteBookCommand, bool>
 {
-    private readonly IBookRepository _bookRepository;
+    private readonly IRepository<Book> _bookRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IBlobService _blobService;
 
-    public DeleteBookCommandHandler(IBookRepository bookRepository, IBlobService blobService, IUnitOfWork unitOfWork)
+    public DeleteBookCommandHandler(
+        IRepository<Book> bookRepository, 
+        IBlobService blobService, 
+        IUnitOfWork unitOfWork)
     {
         _bookRepository = bookRepository;
         _blobService = blobService;
@@ -19,20 +23,23 @@ internal sealed class DeleteBookCommandHandler : ICommandHandler<DeleteBookComma
 
     public async Task<bool> Handle(DeleteBookCommand request, CancellationToken cancellationToken)
     {
-        var book = await _bookRepository.GetByIdAsync(request.BookId);
+        // Getting Image IRL
+        var book = await _bookRepository.GetAsync<DeleteBookDTO>(
+            x => x.Id == request.BookId,
+            asNoTracking: false,
+            cancellationToken) ?? throw 
+            new BookNotFoundException(request.BookId);
 
-        if (book == null)
-        {
-            throw new BookNotFoundException(request.BookId);
-        }
+        // Removing book from dbContext
+        bool result = await _bookRepository.RemoveByIdAsync(request.BookId, cancellationToken);
 
-        if (book.ImageUrl != null)
-        {
+        // Removing image
+        if (!result)
+            return false;
+        else if (book.ImageUrl != null)
             await _blobService.DeleteAsync(book.ImageUrl);
-        }
 
-        _bookRepository.Remove(book);
-
+        // Commiting changes
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return true;

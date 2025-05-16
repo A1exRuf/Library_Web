@@ -1,4 +1,5 @@
 ﻿using Core.Abstractions;
+using Core.Entities;
 using Core.Exceptions;
 using UseCases.Abstractions.Messaging;
 
@@ -6,10 +7,10 @@ namespace UseCases.Authors.Commands.UpdateAuthor;
 
 internal sealed class UpdateAuthorCommandHandler : ICommandHandler<UpdateAuthorCommand, bool>
 {
-    private readonly IAuthorRepository _authorRepository;
+    private readonly IRepository<Author> _authorRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public UpdateAuthorCommandHandler(IAuthorRepository authorRepository, IUnitOfWork unitOfWork)
+    public UpdateAuthorCommandHandler(IRepository<Author> authorRepository, IUnitOfWork unitOfWork)
     {
         _authorRepository = authorRepository;
         _unitOfWork = unitOfWork;
@@ -17,12 +18,10 @@ internal sealed class UpdateAuthorCommandHandler : ICommandHandler<UpdateAuthorC
 
     public async Task<bool> Handle(UpdateAuthorCommand request, CancellationToken cancellationToken)
     {
-        var author = await _authorRepository.GetByIdAsync(request.AuthorId);
-
-        if (author == null)
-        {
-            throw new AuthorNotFoundException(request.AuthorId);
-        }
+        var author = await _authorRepository.GetAsync(
+            x => x.Id == request.AuthorId,
+            asNoTracking: false,
+            cancellationToken) ?? throw new AuthorNotFoundException(request.AuthorId);
 
         author.FirstName = request.FirstName ?? author.FirstName;
         author.LastName = request.LastName ?? author.LastName;

@@ -25,12 +25,8 @@ internal sealed class GetUserByIdQueryHandler : IQueryHandler<GetUserByIdQuery, 
         var response = await _repository.GetAsync<UserResponse>(
             x => x.Id == request.UserId,
             asNoTracking: true,
-            cancellationToken);
-
-        if (response == null)
-        {
-            throw new UserNotFoundException(request.UserId);
-        }
+            cancellationToken) ?? throw 
+            new UserNotFoundException(request.UserId);
 
         AddLinksForUser(response);
 

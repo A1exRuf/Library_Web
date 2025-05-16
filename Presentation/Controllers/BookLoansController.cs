@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Xml.Linq;
 using UseCases.BookLoans.Commands.LoanBook;
 using UseCases.BookLoans.Queries;
 using UseCases.BookLoans.Queries.GetBookLoanById;
+using UseCases.BookLoans.Queries.GetBookLoans;
 using UseCases.Books.Commands.LoanBook;
 using UseCases.Books.Commands.ReturnBook;
 
@@ -29,12 +29,9 @@ public sealed class BookLoansController : ApiController
     [HttpGet(Name = "GetBookLoans")]
     [ProducesResponseType(typeof(BookLoanResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetBookLoans(
-        int page,
-        int pageSize,
-        CancellationToken cancellation)
+    public async Task<IActionResult> GetBookLoans(CancellationToken cancellation)
     {
-        var query = new GetBookLoansQuery(page, pageSize);
+        var query = new GetBookLoansQuery();
 
         var bookLoans = await Sender.Send(query, cancellation);
 

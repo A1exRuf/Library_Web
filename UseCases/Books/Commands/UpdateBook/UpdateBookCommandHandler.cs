@@ -1,4 +1,5 @@
 ﻿using Core.Abstractions;
+using Core.Entities;
 using Core.Exceptions;
 using UseCases.Abstractions.Messaging;
 
@@ -6,11 +7,14 @@ namespace UseCases.Books.Commands.UpdateBook;
 
 public sealed class UpdateBookCommandHandler : ICommandHandler<UpdateBookCommand, bool>
 {
-    private readonly IBookRepository _bookRepository;
+    private readonly IRepository<Book> _bookRepository;
     private readonly IBlobService _blobService;
     private readonly IUnitOfWork _unitOfWork;
 
-    public UpdateBookCommandHandler(IBookRepository bookRepository, IBlobService blobService,IUnitOfWork unitOfWork)
+    public UpdateBookCommandHandler(
+        IRepository<Book> bookRepository, 
+        IBlobService blobService,
+        IUnitOfWork unitOfWork)
     {
         _bookRepository = bookRepository;
         _blobService = blobService;
@@ -19,13 +23,13 @@ public sealed class UpdateBookCommandHandler : ICommandHandler<UpdateBookCommand
 
     public async Task<bool> Handle(UpdateBookCommand request, CancellationToken cancellationToken)
     {
-        var book = await _bookRepository.GetByIdAsync(request.BookId);
+        // Getting book
+        var book = await _bookRepository.GetAsync(
+            x => x.Id == request.BookId,
+            asNoTracking: false,
+            cancellationToken) ?? throw new BookNotFoundException(request.BookId);
 
-        if (book == null)
-        {
-            throw new BookNotFoundException(request.BookId);
-        }
-
+        // Updating image
         string? imageUrl = null;
 
         if (request.ImageStream != null)
@@ -37,6 +41,7 @@ public sealed class UpdateBookCommandHandler : ICommandHandler<UpdateBookCommand
             } 
         }
 
+        // Updating book
         book.Isbn = request.Isbn ?? book.Isbn;
         book.Title = request.Title ?? book.Title;
         book.Genree = request.Genree ?? book.Genree;

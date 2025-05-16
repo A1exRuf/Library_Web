@@ -1,16 +1,13 @@
 ﻿using Core.Abstractions;
+using Core.Entities;
 using FluentValidation;
 
 namespace UseCases.Authors.Commands.UpdateAuthor;
 
 public sealed class UpdateAuthorCommandValidator : AbstractValidator<UpdateAuthorCommand>
 {
-    private readonly IAuthorRepository _authorRepository;
-
-    public UpdateAuthorCommandValidator(IAuthorRepository authorRepository)
+    public UpdateAuthorCommandValidator()
     {
-        _authorRepository = authorRepository;
-
         RuleFor(x => x.AuthorId).NotEmpty();
 
         RuleFor(x => x.FirstName);

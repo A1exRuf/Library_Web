@@ -6,10 +6,12 @@ namespace UseCases.Authors.Commands.CreateAuthor;
 
 internal sealed class CreateAuthorCommandHandler : ICommandHandler<CreateAuthorCommand, Guid>
 {
-    private readonly IAuthorRepository _authorRepository;
+    private readonly IRepository<Author> _authorRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public CreateAuthorCommandHandler(IAuthorRepository authorRepository, IUnitOfWork unitOfWork)
+    public CreateAuthorCommandHandler(
+        IRepository<Author> authorRepository, 
+        IUnitOfWork unitOfWork)
     {
         _authorRepository = authorRepository;
         _unitOfWork = unitOfWork;
@@ -17,10 +19,14 @@ internal sealed class CreateAuthorCommandHandler : ICommandHandler<CreateAuthorC
 
     public async Task<Guid> Handle(CreateAuthorCommand request, CancellationToken cancellationToken)
     {
-        var author = new Author(Guid.NewGuid(), request.FirstName, request.LastName,
-            request.DateOfBirth, request.Country);
+        Author author = new(
+            Guid.NewGuid(), 
+            request.FirstName, 
+            request.LastName,
+            request.DateOfBirth, 
+            request.Country);
 
-        _authorRepository.Add(author);
+        await _authorRepository.AddAsync(author, cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

@@ -7,12 +7,14 @@ namespace UseCases.Users.Commands.Register;
 
 internal class RegisterCommandHandler : ICommandHandler<RegisterCommand, Guid>
 {
-    private readonly IUserRepository _userRepository;
+    private readonly IRepository<User> _userRepository;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IPasswordHasher _passwordHasher;
 
-    public RegisterCommandHandler(IUserRepository userRepository, 
-        IUnitOfWork unitOfWork, IPasswordHasher passwordHasher)
+    public RegisterCommandHandler(
+        IRepository<User> userRepository, 
+        IUnitOfWork unitOfWork, 
+        IPasswordHasher passwordHasher)
     {
         _userRepository = userRepository;
         _unitOfWork = unitOfWork;
@@ -20,17 +22,22 @@ internal class RegisterCommandHandler : ICommandHandler<RegisterCommand, Guid>
     }
 
     public async Task<Guid> Handle(RegisterCommand request, CancellationToken cancellationToken)
-    { 
-        if ( await _userRepository.EmailExistsAsync(request.Email) == true )
-        {
-            throw new EmailExistsException();
-        }
+    {
+        // Cheking if Email allready taken
+        bool emailTaken = await _userRepository
+            .ExistsAsync(x => x.Email == request.Email);
 
+        if (emailTaken)
+            throw new EmailExistsException();
+
+        // Creating new User
         var hashedPassword = _passwordHasher.HashPassword(request.Password);
 
         var user = new User(Guid.NewGuid(), request.Name, request.Email, hashedPassword, request.Role);
 
-        _userRepository.Add(user);
+        await _userRepository.AddAsync(
+            user,
+            cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

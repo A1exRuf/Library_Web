@@ -5,7 +5,7 @@ namespace UseCases.Books.Commands.UpdateBook;
 
 public sealed class UpdateBookCommandValidator : AbstractValidator<UpdateBookCommand>
 {
-    public UpdateBookCommandValidator(IBookRepository bookRepository)
+    public UpdateBookCommandValidator()
     {
         RuleFor(x => x.BookId);
 

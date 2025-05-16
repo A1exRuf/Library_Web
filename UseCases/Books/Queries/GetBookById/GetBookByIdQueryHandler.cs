@@ -7,14 +7,14 @@ namespace UseCases.Books.Queries.GetBookById;
 
 internal sealed class GetBookByIdQueryHandler : IQueryHandler<GetBookByIdQuery, BookResponse>
 {
-    private readonly IRepository<Book> _repository;
+    private readonly IRepository<Book> _bookRepository;
     private readonly ILinkService _linkService;
 
     public GetBookByIdQueryHandler(
-        IRepository<Book> repository, 
+        IRepository<Book> bookRepository, 
         ILinkService linkService)
     {
-        _repository = repository;
+        _bookRepository = bookRepository;
         _linkService = linkService;
     }
 
@@ -22,15 +22,11 @@ internal sealed class GetBookByIdQueryHandler : IQueryHandler<GetBookByIdQuery, 
         GetBookByIdQuery request,
         CancellationToken cancellationToken)
     {
-        var response = await _repository.GetAsync<BookResponse>(
+        var response = await _bookRepository.GetAsync<BookResponse>(
             x => x.Id == request.BookId,
             asNoTracking: true,
-            cancellationToken);
-
-        if (response == null)
-        {
-            throw new BookNotFoundException(request.BookId);
-        }
+            cancellationToken) ?? throw 
+            new BookNotFoundException(request.BookId);
 
         AddLinksForBook(response);
 

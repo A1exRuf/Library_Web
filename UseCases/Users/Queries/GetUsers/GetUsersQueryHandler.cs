@@ -1,53 +1,28 @@
 ﻿using Core.Abstractions;
 using Core.Common;
 using Core.Entities;
-using Mapster;
-using System.Linq.Expressions;
+using Core.Filters;
 using UseCases.Abstractions.Messaging;
 
 namespace UseCases.Users.Queries.GetUsers;
 
 public sealed class GetUsersQueryHandler : IQueryHandler<GetUsersQuery, PagedList<UserResponse>>
 {
-    private readonly IUserRepository _userRepository;
+    private readonly IRepository<User> _userRepository;
 
-    public GetUsersQueryHandler(IUserRepository userRepository) => _userRepository = userRepository;
+    public GetUsersQueryHandler(IRepository<User> userRepository) => _userRepository = userRepository;
 
     public async Task<PagedList<UserResponse>> Handle(GetUsersQuery request, CancellationToken cancellationToken)
     {
-        IQueryable<User> usersQuery = _userRepository.Query();
+        var filter = new UsersFilter { SearchTerm = request.SearchTerm };
 
-        if (!string.IsNullOrWhiteSpace(request.SearchTerm))
-        {
-            usersQuery = usersQuery.Where(b =>
-            b.Name.Contains(request.SearchTerm) ||
-            b.Email.ToLower().Contains(request.SearchTerm.ToLower()));
-        }
+        var response = await _userRepository.GetPagedListAsync<UserResponse, UsersFilter>(
+            request.Page,
+            request.PageSize,
+            filter,
+            x => x.Name,
+            cancellationToken: cancellationToken);
 
-        if (request.SortOrder?.ToLower() == "desc")
-        {
-            usersQuery = usersQuery.OrderByDescending(GetSortProperty(request));
-        }
-        else
-        {
-            usersQuery = usersQuery.OrderBy(GetSortProperty(request));
-        }
-
-        var userResponsesQuery = usersQuery
-            .Select(u => u.Adapt<UserResponse>());
-
-        var users = await _userRepository.GetPagedAsync(userResponsesQuery, request.Page, request.PageSize);
-
-        return users;
-    }
-
-    private static Expression<Func<User, object>> GetSortProperty(GetUsersQuery request)
-    {
-        return request.SortColumn?.ToLower() switch
-        {
-            "name" => b => b.Name,
-            "email" => b => b.Email,
-            _ => b => b.Id
-        };
+        return response;
     }
 }

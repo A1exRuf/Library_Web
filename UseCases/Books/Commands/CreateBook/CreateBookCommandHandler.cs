@@ -7,12 +7,16 @@ namespace UseCases.Books.Commands.CreateBook;
 
 internal sealed class CreateBookCommandHandler : ICommandHandler<CreateBookCommand, Guid>
 {
-    private readonly IAuthorRepository _authorRepository;
-    private readonly IBookRepository _bookRepository;
+    private readonly IRepository<Author> _authorRepository;
+    private readonly IRepository<Book> _bookRepository;
     private readonly IBlobService _blobService;
     private readonly IUnitOfWork _unitOfWork;
 
-    public CreateBookCommandHandler(IAuthorRepository authorRepository, IBookRepository bookRepository, IBlobService blobService, IUnitOfWork unitOfWork)
+    public CreateBookCommandHandler(
+        IRepository<Author> authorRepository, 
+        IRepository<Book> bookRepository, 
+        IBlobService blobService, 
+        IUnitOfWork unitOfWork)
     {
         _authorRepository = authorRepository;
         _bookRepository = bookRepository;
@@ -22,29 +26,41 @@ internal sealed class CreateBookCommandHandler : ICommandHandler<CreateBookComma
 
     public async Task<Guid> Handle(CreateBookCommand request, CancellationToken cancellationToken)
     {
-        var author = await _authorRepository.GetByIdAsync(request.AuthorId);
+        // Getting author of the book
+        var author = await _authorRepository.GetAsync(
+            x => x.Id == request.AuthorId,
+            asNoTracking: false,
+            cancellationToken) ?? throw 
+            new AuthorNotFoundException(request.AuthorId);
 
-        if (author == null)
-        {
-            throw new AuthorNotFoundException(request.AuthorId);
-        }
-
-        string? imageUrl = null;
-
+        // Initializing book ID
         Guid bookId = Guid.NewGuid();
+
+        // Uploading Image and getting it's URL
+        string? imageUrl = null;
 
         if (request.ImageStream != null)
         {
             using (request.ImageStream)
             {
                 string imageName = bookId + "_img";
-                imageUrl = await _blobService.UploadAsync(request.ImageStream, imageName, "bimages");
+                imageUrl = await _blobService.
+                    UploadAsync(request.ImageStream, imageName, "bimages");
             }
         }
 
-        var book = new Book(bookId, request.Isbn, request.Title, request.Genree, request.Description, request.AuthorId, author, imageUrl);
+        // Creating Book
+        var book = new Book(
+            bookId, 
+            request.Isbn, 
+            request.Title, 
+            request.Genree, 
+            request.Description, 
+            request.AuthorId, 
+            author, 
+            imageUrl);
 
-        _bookRepository.Add(book);
+        await _bookRepository.AddAsync(book, cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

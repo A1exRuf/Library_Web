@@ -25,12 +25,8 @@ internal sealed class GetBookLoanByIdQueryHandler : IQueryHandler<GetBookLoanByI
         var response = await _repository.GetAsync<BookLoanResponse>(
             x => x.Id == request.BookLoanId,
             asNoTracking: true,
-            cancellationToken);
-
-        if (response == null)
-        {
-            throw new BookLoanNotFoundException(request.BookLoanId);
-        }
+            cancellationToken) ?? throw 
+            new BookLoanNotFoundException(request.BookLoanId);
 
         AddLinksForBookLoan(response);
 
