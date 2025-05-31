@@ -1,6 +1,7 @@
 ﻿using Core.Abstractions;
 using Core.Entities;
 using Core.Exceptions;
+using Core.Filters;
 using UseCases.Abstractions.Messaging;
 
 namespace UseCases.Books.Commands.CreateBook;
@@ -28,7 +29,7 @@ internal sealed class CreateBookCommandHandler : ICommandHandler<CreateBookComma
     {
         // Getting author of the book
         var author = await _authorRepository.GetAsync(
-            x => x.Id == request.AuthorId,
+            new AuthorFilter { Id = request.AuthorId},
             asNoTracking: false,
             cancellationToken) ?? throw 
             new AuthorNotFoundException(request.AuthorId);

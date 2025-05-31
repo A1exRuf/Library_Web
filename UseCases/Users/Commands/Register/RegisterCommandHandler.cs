@@ -1,5 +1,6 @@
 ﻿using Core.Abstractions;
 using Core.Entities;
+using Core.Filters;
 using UseCases.Abstractions.Messaging;
 using UseCases.Exceptions;
 
@@ -25,7 +26,7 @@ internal class RegisterCommandHandler : ICommandHandler<RegisterCommand, Guid>
     {
         // Cheking if Email allready taken
         bool emailTaken = await _userRepository
-            .ExistsAsync(x => x.Email == request.Email);
+            .ExistsAsync( new UsersFilter { Email = request.Email });
 
         if (emailTaken)
             throw new EmailExistsException();

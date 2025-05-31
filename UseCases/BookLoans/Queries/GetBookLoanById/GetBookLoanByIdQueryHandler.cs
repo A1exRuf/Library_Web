@@ -1,6 +1,7 @@
 ﻿using Core.Abstractions;
 using Core.Entities;
 using Core.Exceptions;
+using Core.Filters;
 using UseCases.Abstractions.Messaging;
 
 namespace UseCases.BookLoans.Queries.GetBookLoanById;
@@ -22,8 +23,10 @@ internal sealed class GetBookLoanByIdQueryHandler : IQueryHandler<GetBookLoanByI
         GetBookLoanByIdQuery request,
         CancellationToken cancellationToken)
     {
+        BookLoanFilter filter = new() { Id = request.BookLoanId };
+
         var response = await _repository.GetAsync<BookLoanResponse>(
-            x => x.Id == request.BookLoanId,
+            filter,
             asNoTracking: true,
             cancellationToken) ?? throw 
             new BookLoanNotFoundException(request.BookLoanId);

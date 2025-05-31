@@ -3,6 +3,7 @@ using Core.Common;
 using Core.Primitives;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace Infrastructure.Services;
@@ -40,25 +41,26 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : Entity
         _context.Set<TEntity>().Update(entity);
     }
 
-    public Task<bool> ExistsAsync(
-        Expression<Func<TEntity, bool>> filter, 
+    public async Task<bool> ExistsAsync(
+        IFilter<TEntity> filter,
         CancellationToken cancellationToken = default)
     {
-        return _context.Set<TEntity>()
-            .Where(filter)
-            .AnyAsync(cancellationToken);
+        var query = _context.Set<TEntity>().AsQueryable();
+        query = filter.Apply(query);
+
+        var result = await query.AnyAsync(cancellationToken);
+
+        return result;
     }
 
     public async Task<TDto?> GetAsync<TDto>(
-        Expression<Func<TEntity, bool>> filter,
+        IFilter<TEntity> filter,
         bool asNoTracking = true,
         CancellationToken cancellationToken = default)
     {
         var query = _context.Set<TEntity>().AsQueryable();
-
         query = AddAsNoTracking(asNoTracking, query);
-
-        query = FilterQuery(filter, query);
+        query = filter.Apply(query);
 
         var data = await query
             .ProjectToType<TDto>()
@@ -68,15 +70,13 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : Entity
     }
 
     public async Task<TEntity?> GetAsync(
-        Expression<Func<TEntity, bool>> filter,
+        IFilter<TEntity> filter,
         bool asNoTracking = true,
         CancellationToken cancellationToken = default)
     {
         var query = _context.Set<TEntity>().AsQueryable();
-
         query = AddAsNoTracking(asNoTracking, query);
-
-        query = FilterQuery(filter, query);
+        query = filter.Apply(query);
 
         var data = await query.FirstOrDefaultAsync(cancellationToken);
 
@@ -84,50 +84,45 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : Entity
     }
 
     public async Task<List<TDto>> GetListAsync<TDto>(
-        Expression<Func<TEntity, bool>>? filter,
+        IFilter<TEntity> filter,
         Expression<Func<TEntity, object>>? orderBy = null,
         bool descending = false,
         bool asNoTracking = true, 
         CancellationToken cancellationToken = default)
     {
         var query = _context.Set<TEntity>().AsQueryable();
-
-        query = FilterQuery(filter, query);
-
+        query = AddAsNoTracking(asNoTracking, query);
+        query = filter.Apply(query);
         query = SortQuery(orderBy, descending, query);
 
-        query = AddAsNoTracking(asNoTracking, query);
-
-        var queryDTO = query.ProjectToType<TDto>();
-
-        var items = await queryDTO.ToListAsync(cancellationToken);
+        var items = await query
+            .ProjectToType<TDto>()
+            .ToListAsync(cancellationToken);
 
         return items;
     }
 
-    public async Task<PagedList<TDto>> GetPagedListAsync<TDto, TFilter>(
+    public async Task<PagedList<TDto>> GetPagedListAsync<TDto>(
         int page,
         int pageSize,
-        TFilter filter,
+        IFilter<TEntity> filter,
         Expression<Func<TEntity, object>>? orderBy = null,
         bool descending = false,
         bool asNoTracking = true,
-        CancellationToken cancellationToken = default) where TFilter : IFilter<TEntity>
+        CancellationToken cancellationToken = default)
     {
         var query = _context.Set<TEntity>().AsQueryable();
-
         query = filter.Apply(query);
-
         query = SortQuery(orderBy, descending, query);
-
         query = AddAsNoTracking(asNoTracking, query);
-
-        var queryDTO = query.ProjectToType<TDto>();
 
         int totalCount = await query.CountAsync(cancellationToken);
 
-        var items = await queryDTO
-            .Skip((page - 1) * pageSize).Take(pageSize).ToListAsync(cancellationToken);
+        var items = await query
+            .ProjectToType<TDto>()
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
 
         return new(items, page, pageSize, totalCount);
     }
@@ -144,16 +139,6 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : Entity
         else
         {
             query = query.OrderBy(x => x.Id);
-        }
-
-        return query;
-    }
-
-    private IQueryable<TEntity> FilterQuery(Expression<Func<TEntity, bool>>? filter, IQueryable<TEntity> query)
-    {
-        if (filter != null)
-        {
-            query = query.Where(filter);
         }
 
         return query;

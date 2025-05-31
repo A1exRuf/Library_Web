@@ -1,6 +1,7 @@
 ﻿using Core.Abstractions;
 using Core.Entities;
 using Core.Exceptions;
+using Core.Filters;
 using UseCases.Abstractions.Messaging;
 
 namespace UseCases.Books.Commands.DeleteBook;
@@ -25,7 +26,7 @@ internal sealed class DeleteBookCommandHandler : ICommandHandler<DeleteBookComma
     {
         // Getting Image IRL
         var book = await _bookRepository.GetAsync<DeleteBookDTO>(
-            x => x.Id == request.BookId,
+            new BooksFilter { Id = request.BookId },
             asNoTracking: false,
             cancellationToken) ?? throw 
             new BookNotFoundException(request.BookId);

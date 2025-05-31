@@ -17,33 +17,33 @@ public interface IRepository<TEntity> where TEntity : Entity
     void Update(TEntity entity);
 
     Task<bool> ExistsAsync(
-        Expression<Func<TEntity, bool>> filter,
+        IFilter<TEntity> filter,
         CancellationToken cancellationToken = default);
 
     Task<TDto?> GetAsync<TDto>(
-        Expression<Func<TEntity, bool>> filter,
+        IFilter<TEntity> filter,
         bool asNoTracking = true,
         CancellationToken cancellationToken = default
     );
 
     Task<TEntity?> GetAsync(
-        Expression<Func<TEntity, bool>> filter,
+        IFilter<TEntity> filter,
         bool asNoTracking = true,
         CancellationToken cancellationToken = default);
 
     Task<List<TDto>> GetListAsync<TDto>(
-        Expression<Func<TEntity, bool>>? filter = null,
+        IFilter<TEntity> filter,
         Expression<Func<TEntity, object>>? orderBy = null,
         bool descending = false,
         bool asNoTracking = true,
         CancellationToken cancellationToken = default);
 
-    Task<PagedList<TDto>> GetPagedListAsync<TDto, TFilter>(
+    Task<PagedList<TDto>> GetPagedListAsync<TDto>(
         int page,
         int pageSize,
-        TFilter filter,
+        IFilter<TEntity> filter,
         Expression<Func<TEntity, object>>? orderBy = null,
         bool descending = false,
         bool asNoTracking = true,
-        CancellationToken cancellationToken = default) where TFilter : IFilter<TEntity>;
+        CancellationToken cancellationToken = default);
 }

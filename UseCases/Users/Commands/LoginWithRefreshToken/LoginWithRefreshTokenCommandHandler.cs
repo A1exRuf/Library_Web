@@ -2,7 +2,6 @@
 using Core.Entities;
 using UseCases.Abstractions.Messaging;
 using UseCases.Exceptions;
-using UseCases.Users.Commands.Login;
 
 namespace UseCases.Users.Commands.LoginWithRefreshToken;
 

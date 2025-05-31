@@ -1,6 +1,7 @@
 ﻿using Core.Abstractions;
 using Core.Entities;
 using Core.Exceptions;
+using Core.Filters;
 using UseCases.Abstractions.Messaging;
 
 namespace UseCases.Users.Commands.UpdateUser;
@@ -24,8 +25,8 @@ internal class UpdateUserCommandHandler : ICommandHandler<UpdateUserCommand, boo
     public async Task<bool> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
     {
         // Getting user
-        var user = await _userRepository.GetAsync( 
-            x => x.Id == request.UserId,
+        var user = await _userRepository.GetAsync(
+            new UsersFilter { Id = request.UserId},
             asNoTracking: false,
             cancellationToken) ?? throw 
             new UserNotFoundException(request.UserId);

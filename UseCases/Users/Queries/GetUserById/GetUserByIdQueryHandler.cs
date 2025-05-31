@@ -1,6 +1,7 @@
 ﻿using Core.Abstractions;
 using Core.Entities;
 using Core.Exceptions;
+using Core.Filters;
 using UseCases.Abstractions.Messaging;
 
 namespace UseCases.Users.Queries.GetUserById;
@@ -22,8 +23,10 @@ internal sealed class GetUserByIdQueryHandler : IQueryHandler<GetUserByIdQuery, 
         GetUserByIdQuery request,
         CancellationToken cancellationToken)
     {
+        UsersFilter filter = new() { Id = request.UserId };
+
         var response = await _repository.GetAsync<UserResponse>(
-            x => x.Id == request.UserId,
+            filter,
             asNoTracking: true,
             cancellationToken) ?? throw 
             new UserNotFoundException(request.UserId);

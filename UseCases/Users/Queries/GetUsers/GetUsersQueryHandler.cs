@@ -16,7 +16,7 @@ public sealed class GetUsersQueryHandler : IQueryHandler<GetUsersQuery, PagedLis
     {
         var filter = new UsersFilter { SearchTerm = request.SearchTerm };
 
-        var response = await _userRepository.GetPagedListAsync<UserResponse, UsersFilter>(
+        var response = await _userRepository.GetPagedListAsync<UserResponse>(
             request.Page,
             request.PageSize,
             filter,

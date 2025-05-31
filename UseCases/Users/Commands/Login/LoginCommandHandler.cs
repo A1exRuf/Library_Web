@@ -1,6 +1,6 @@
 ﻿using Core.Abstractions;
 using Core.Entities;
-using System;
+using Core.Filters;
 using UseCases.Abstractions.Messaging;
 
 namespace UseCases.Users.Commands.Login;
@@ -31,7 +31,7 @@ internal sealed class LoginCommandHandler : ICommandHandler<LoginCommand, LoginR
     {
         // Getting user
         var user = await _userRepository.GetAsync(
-            x => x.Email == request.Email,
+            new UsersFilter { Email = request.Email },
             cancellationToken: cancellationToken);
 
         if (user == null || !_passwordHasher.VerifyPassword(user.PasswordHash, request.Password))

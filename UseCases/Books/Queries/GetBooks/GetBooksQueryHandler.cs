@@ -23,7 +23,7 @@ public sealed class GetBooksQueryHandler : IQueryHandler<GetBooksQuery, PagedLis
             Authors = request.AuthorId, 
             ShowUnavailable = request.ShowUnavailable };
 
-        var response = await _bookRepository.GetPagedListAsync<BookResponse, BooksFilter>(
+        var response = await _bookRepository.GetPagedListAsync<BookResponse>(
             request.Page,
             request.PageSize,
             filter,

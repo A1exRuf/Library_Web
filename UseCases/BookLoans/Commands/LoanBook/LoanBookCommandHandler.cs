@@ -1,6 +1,7 @@
 ﻿using Core.Abstractions;
 using Core.Entities;
 using Core.Exceptions;
+using Core.Filters;
 using UseCases.Abstractions.Messaging;
 using UseCases.Exceptions;
 
@@ -34,14 +35,14 @@ public sealed class LoanBookCommandHandler : ICommandHandler<LoanBookCommand, Gu
         Guid userId = _currentUserService.UserId ?? throw new AuthenticationException();
 
         var user = await _userRepository.GetAsync(
-            x => x.Id == userId,
+            new UsersFilter { Id = userId },
             asNoTracking: false,
             cancellationToken) ?? throw 
             new UserNotFoundException(userId);
 
         // Getting a book
         var book = await _bookRepository.GetAsync(
-            x => x.Id == x.Id,
+            new BooksFilter { Id = request.BookId },
             asNoTracking: false,
             cancellationToken) ?? throw 
             new BookNotFoundException(request.BookId);

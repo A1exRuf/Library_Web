@@ -1,6 +1,6 @@
 ﻿using Core.Abstractions;
 using Core.Entities;
-using Mapster;
+using Core.Filters;
 using UseCases.Abstractions.Messaging;
 using UseCases.Authors.Queries.GetAuthors;
 
@@ -16,8 +16,10 @@ internal sealed class GetAuthorsQueryHandler : IQueryHandler<GetAuthorsQuery, Li
         GetAuthorsQuery request,
         CancellationToken cancellationToken)
     {
+        AuthorFilter filter = new() { };
+
         var authors = await _authorRepository.GetListAsync<AuthorResponse>(
-            null, 
+            filter, 
             asNoTracking: true, 
             cancellationToken: cancellationToken);
 

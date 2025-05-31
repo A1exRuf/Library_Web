@@ -1,6 +1,7 @@
 ﻿using Core.Abstractions;
 using Core.Entities;
 using Core.Exceptions;
+using Core.Filters;
 using UseCases.Abstractions.Messaging;
 
 namespace UseCases.Books.Commands.ReturnBook;
@@ -25,13 +26,13 @@ public sealed class ReturnBookCommandHandler : ICommandHandler<ReturnBookCommand
     {
         // Getting a BookLoan
         var bookLoan = await _bookLoanRepository.GetAsync(
-            x => x.Id == request.BookLoanId,
+            new BookLoanFilter { Id = request.BookLoanId },
             asNoTracking: false,
             cancellationToken) ?? throw new BookLoanNotFoundException(request.BookLoanId);
 
         // Getting a borrowed Book
         var book = await _bookRepository.GetAsync(
-            x => x.Id == bookLoan.BookId,
+            new BooksFilter { Id = bookLoan.BookId },
             asNoTracking: false,
             cancellationToken) ?? throw new BookNotFoundException(bookLoan.BookId);
 

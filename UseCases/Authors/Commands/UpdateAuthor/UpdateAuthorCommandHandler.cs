@@ -1,6 +1,7 @@
 ﻿using Core.Abstractions;
 using Core.Entities;
 using Core.Exceptions;
+using Core.Filters;
 using UseCases.Abstractions.Messaging;
 
 namespace UseCases.Authors.Commands.UpdateAuthor;
@@ -19,7 +20,7 @@ internal sealed class UpdateAuthorCommandHandler : ICommandHandler<UpdateAuthorC
     public async Task<bool> Handle(UpdateAuthorCommand request, CancellationToken cancellationToken)
     {
         var author = await _authorRepository.GetAsync(
-            x => x.Id == request.AuthorId,
+            new AuthorFilter { Id = request.AuthorId },
             asNoTracking: false,
             cancellationToken) ?? throw new AuthorNotFoundException(request.AuthorId);
 

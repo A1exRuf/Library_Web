@@ -1,6 +1,7 @@
 ﻿using Core.Abstractions;
 using Core.Entities;
 using Core.Exceptions;
+using Core.Filters;
 using UseCases.Abstractions.Messaging;
 
 namespace UseCases.Books.Queries.GetBookById;
@@ -22,8 +23,10 @@ internal sealed class GetBookByIdQueryHandler : IQueryHandler<GetBookByIdQuery, 
         GetBookByIdQuery request,
         CancellationToken cancellationToken)
     {
+        BooksFilter filter = new() { Id = request.BookId };
+
         var response = await _bookRepository.GetAsync<BookResponse>(
-            x => x.Id == request.BookId,
+            filter,
             asNoTracking: true,
             cancellationToken) ?? throw 
             new BookNotFoundException(request.BookId);

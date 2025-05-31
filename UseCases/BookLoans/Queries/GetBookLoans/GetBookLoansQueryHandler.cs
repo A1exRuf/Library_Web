@@ -1,5 +1,6 @@
 ﻿using Core.Abstractions;
 using Core.Entities;
+using Core.Filters;
 using UseCases.Abstractions.Messaging;
 using UseCases.Exceptions;
 
@@ -26,8 +27,10 @@ internal sealed class GetBookLoansQueryHandler : IQueryHandler<GetBookLoansQuery
             ?? throw new AuthenticationException();
 
         // Getting list of BookLoans
+        BookLoanFilter filter = new() { UserId = userId };
+
         var bookLoans = await _bookLoanRepository.GetListAsync<BookLoanResponse>(
-            x => x.User.Id == userId,
+            filter,
             asNoTracking: true,
             cancellationToken: cancellationToken);
 

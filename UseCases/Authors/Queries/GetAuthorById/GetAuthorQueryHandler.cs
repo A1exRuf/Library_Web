@@ -1,21 +1,21 @@
 ﻿using Core.Abstractions;
 using Core.Entities;
 using Core.Exceptions;
+using Core.Filters;
 using UseCases.Abstractions.Messaging;
 
 namespace UseCases.Authors.Queries.GetAuthorById;
 
 internal sealed class GetAuthorQueryHandler : IQueryHandler<GetAuthorByIdQuery, AuthorResponse>
 {
-    private readonly IRepository<Author> _repository;
+    private readonly IRepository<Author> _authorRepository;
     private readonly ILinkService _linkService;
-
 
     public GetAuthorQueryHandler(
         IRepository<Author> repository,
         ILinkService linkService)
     {
-        _repository = repository;
+        _authorRepository = repository;
         _linkService = linkService;
     }
 
@@ -23,8 +23,10 @@ internal sealed class GetAuthorQueryHandler : IQueryHandler<GetAuthorByIdQuery, 
         GetAuthorByIdQuery request, 
         CancellationToken cancellationToken)
     {
-        var response = await _repository.GetAsync<AuthorResponse>(
-            x => x.Id == request.AuthorId,
+        AuthorFilter filter = new() { Id = request.AuthorId };
+
+        var response = await _authorRepository.GetAsync<AuthorResponse>(
+            filter,
             asNoTracking: true, 
             cancellationToken);
 
