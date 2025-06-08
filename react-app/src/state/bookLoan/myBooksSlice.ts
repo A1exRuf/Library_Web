@@ -4,37 +4,22 @@ import apiClient from "../../api/apiClient";
 
 interface myBooksState {
     items: bookLoan[]
-    page: number,
-    pageSize: number,
-    totalCount: number,
-    hasNextPage: boolean,
-    hasPreviousPage: boolean,
     loading: boolean,
     error: string | undefined,
 }
 
 const initialState: myBooksState = {
     items: [],
-    page: 1,
-    pageSize: 10,
-    totalCount: 0,
-    hasNextPage: false,
-    hasPreviousPage: false,
     loading: false,
     error: undefined
 }
 
 // Fetch MyBooks
 export const fetchMyBooks = createAsyncThunk('myBooks/fetchMyBooks',
-    async (page: number, { rejectWithValue }) => {
+    async (_, { rejectWithValue }) => {
         try {
             const response = await apiClient
-                .get('BookLoans', {
-                    params: {
-                        page: page,
-                        pageSize: 10
-                    }
-                })
+                .get('BookLoans')
 
             return response.data
         } catch (error: any) {
@@ -75,12 +60,7 @@ const myBooksSlice = createSlice({
             state.error = undefined;
         })
         builder.addCase(fetchMyBooks.fulfilled, (state, action) => {
-            state.items = action.payload.items;
-            state.page = action.payload.page;
-            state.pageSize = action.payload.pageSize;
-            state.totalCount = action.payload.totalCount;
-            state.hasNextPage = action.payload.hasNextPage;
-            state.hasPreviousPage = action.payload.hasPreviousPage;
+            state.items = action.payload;
             state.loading = false;
             state.error = undefined;
         })

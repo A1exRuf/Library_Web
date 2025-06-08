@@ -16,7 +16,7 @@ const initialState: authorListState = {
 
 export const fetchAuthors = createAsyncThunk('authors/fetchAuthors', async () => {
     const response = await apiClient
-        .get('authors/authors')
+        .get('authors')
 
     return response.data
 })

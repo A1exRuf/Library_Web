@@ -12,7 +12,7 @@ function MyBooksPage() {
   const dispatch = useDispatch<AppDispath>();
 
   useEffect(() => {
-    dispatch(fetchMyBooks(1));
+    dispatch(fetchMyBooks());
   }, []);
 
   return (
